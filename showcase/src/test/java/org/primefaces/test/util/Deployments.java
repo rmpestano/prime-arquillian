@@ -46,6 +46,8 @@ public class Deployments {
         war.addAsResource("test-ehcache.xml", "ehcache.xml");
         war.addAsResource("test-translate.properties", "translate.properties");
         war.addAsResource("test-twitter4j.properties", "twitter4j.properties");
+        war.addAsResource("test-build.properties", "/org/primefaces/examples/build.properties");
+
 
         return war;
     }
