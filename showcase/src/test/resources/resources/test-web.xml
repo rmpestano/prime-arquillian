@@ -1,48 +1,130 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+<web-app version="2.5"
+         xmlns="http://java.sun.com/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" >
+
+    <context-param>
+        <param-name>com.sun.faces.numberOfViewsInSession</param-name>
+        <param-value>5</param-value>
+    </context-param>
+    <context-param>
+        <param-name>com.sun.faces.serializeServerState</param-name>
+        <param-value>false</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>org.apache.myfaces.NUMBER_OF_VIEWS_IN_SESSION</param-name>
+        <param-value>5</param-value>
+    </context-param>
+    <context-param>
+        <param-name>org.apache.myfaces.SERIALIZE_STATE_IN_SESSION</param-name>
+        <param-value>false</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>javax.faces.STATE_SAVING_METHOD</param-name>
+        <param-value>server</param-value>
+    </context-param>
     <context-param>
         <param-name>javax.faces.PROJECT_STAGE</param-name>
         <param-value>Production</param-value>
     </context-param>
+    <context-param>
+        <param-name>javax.faces.DATETIMECONVERTER_DEFAULT_TIMEZONE_IS_SYSTEM_TIMEZONE</param-name>
+        <param-value>true</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>primefaces.PRIVATE_CAPTCHA_KEY</param-name>
+        <param-value>6LfwZwoAAAAAAEhRyntKF1PBzysAJLzqp2v-GMRR</param-value>
+    </context-param>
+    <context-param>
+        <param-name>primefaces.PUBLIC_CAPTCHA_KEY</param-name>
+        <param-value>6LfwZwoAAAAAAI-oUHpdvRnkMfu9fXQHxc0P7IBu</param-value>
+    </context-param>
+    <context-param>
+        <param-name>primefaces.THEME</param-name>
+        <param-value>#{guestPreferences.theme}</param-value>
+    </context-param>
+    <context-param>
+        <param-name>primefaces.PUSH_SERVER_URL</param-name>
+        <param-value>http://127.0.0.1:8080</param-value>
+    </context-param>
+    <context-param>
+        <param-name>primefaces.CLIENT_SIDE_VALIDATION</param-name>
+        <param-value>true</param-value>
+    </context-param>
+    <context-param>
+        <param-name>primefaces.UPLOADER</param-name>
+        <param-value>commons</param-value>
+    </context-param>
+
+    <!--<context-param>
+        <param-name>primefaces.CACHE_PROVIDER</param-name>
+        <param-value>org.primefaces.cache.EHCacheProvider</param-value>
+    </context-param>-->
+
+    <listener>
+        <listener-class>${jsf-listener}</listener-class>
+    </listener>
+
+    <filter>
+        <filter-name>Character Encoding Filter</filter-name>
+        <filter-class>org.primefaces.examples.filter.CharacterEncodingFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>Character Encoding Filter</filter-name>
+        <servlet-name>Faces Servlet</servlet-name>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>PrimeFaces FileUpload Filter</filter-name>
+        <filter-class>org.primefaces.webapp.filter.FileUploadFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>PrimeFaces FileUpload Filter</filter-name>
+        <servlet-name>Faces Servlet</servlet-name>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>Browser Stats Filter</filter-name>
+        <filter-class>org.primefaces.examples.filter.UserAgentListener</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>Browser Stats Filter</filter-name>
+        <url-pattern>/push/chart.jsf</url-pattern>
+    </filter-mapping>
+
     <servlet>
         <servlet-name>Faces Servlet</servlet-name>
         <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
-        <load-on-startup>1</load-on-startup>
     </servlet>
-    <context-param>
-        <param-name>javax.faces.FACELETS_SKIP_COMMENTS</param-name>
-        <param-value>true</param-value>
-    </context-param>
-     <context-param>
-        <param-name>STACK_SIZE</param-name>
-        <param-value>6</param-value>
-    </context-param>
-    <context-param>
-        <param-name>INITIAL_PAGE</param-name>
-        <param-value>home.faces</param-value>
-    </context-param>
-     <context-param>
-        <param-name>ERROR_PAGE</param-name>
-        <param-value>error.faces</param-value>
-    </context-param>
 
-     <context-param>
-        <param-name>primefaces.THEME</param-name>
-        <param-value>#{themeMBean.theme}</param-value>
-    </context-param>
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
-        <url-pattern>*.faces</url-pattern>
+        <url-pattern>*.jsf</url-pattern>
     </servlet-mapping>
-    <session-config>
-        <session-timeout>30</session-timeout>
-    </session-config>
+
+    <servlet>
+        <servlet-name>Push Servlet</servlet-name>
+        <servlet-class>org.primefaces.push.PushServlet</servlet-class>
+        <load-on-startup>0</load-on-startup>
+        <async-supported>true</async-supported>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>Push Servlet</servlet-name>
+        <url-pattern>/primepush/*</url-pattern>
+    </servlet-mapping>
+
     <error-page>
-      <exception-type>org.jboss.weld.context.NonexistentConversationException</exception-type>
-      <location>/error.xhtml</location>
-   </error-page>
+        <exception-type>java.lang.Throwable</exception-type>
+        <location>/ui/error/error.jsf</location>
+    </error-page>
     <error-page>
-      <exception-type>javax.faces.application.ViewExpiredException</exception-type>
-      <location>/home.xhtml</location>
-   </error-page>
+        <exception-type>javax.faces.application.ViewExpiredException</exception-type>
+        <location>/ui/error/viewExpired.jsf</location>
+    </error-page>
+
 </web-app>
