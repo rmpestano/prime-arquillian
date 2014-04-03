@@ -1,0 +1,310 @@
+[INFO] Scanning for projects...
+[WARNING] 
+[WARNING] Some problems were encountered while building the effective model for org.primefaces:primefaces:jar:5.0-SNAPSHOT
+[WARNING] The expression ${version} is deprecated. Please use ${project.version} instead.
+[WARNING] 
+[WARNING] Some problems were encountered while building the effective model for org.primefaces:showcase:war:5.0-SNAPSHOT
+[WARNING] The expression ${version} is deprecated. Please use ${project.version} instead.
+[WARNING] 
+[WARNING] Some problems were encountered while building the effective model for org.primefaces:prime-arquillian:pom:5.0-SNAPSHOT
+[WARNING] The expression ${version} is deprecated. Please use ${project.version} instead.
+[WARNING] 
+[WARNING] It is highly recommended to fix these problems because they threaten the stability of your build.
+[WARNING] 
+[WARNING] For this reason, future Maven versions might no longer support building such malformed projects.
+[WARNING] 
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Build Order:
+[INFO] 
+[INFO] prime-arquillian
+[INFO] primefaces
+[INFO] showcase
+[INFO] 
+[INFO] Using the builder org.apache.maven.lifecycle.internal.builder.singlethreaded.SingleThreadedBuilder with a thread count of 1
+[INFO]                                                                         
+[INFO] ------------------------------------------------------------------------
+[INFO] Building prime-arquillian 5.0-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO] 
+[INFO] --- maven-dependency-plugin:2.8:tree (default-cli) @ prime-arquillian ---
+[INFO] org.primefaces:prime-arquillian:pom:5.0-SNAPSHOT
+[INFO]                                                                         
+[INFO] ------------------------------------------------------------------------
+[INFO] Building primefaces 5.0-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO] 
+[INFO] --- maven-dependency-plugin:2.8:tree (default-cli) @ primefaces ---
+[INFO] org.primefaces:primefaces:jar:5.0-SNAPSHOT
+[INFO] +- org.glassfish:javax.faces:jar:2.2.0:provided
+[INFO] +- org.glassfish:javax.servlet:jar:3.0:provided
+[INFO] +- javax.validation:validation-api:jar:1.0.0.GA:provided
+[INFO] +- javax.el:el-api:jar:2.2:provided
+[INFO] +- org.apache.poi:poi:jar:3.7:provided
+[INFO] +- com.lowagie:itext:jar:2.1.7:provided
+[INFO] |  +- bouncycastle:bcmail-jdk14:jar:138:provided
+[INFO] |  +- bouncycastle:bcprov-jdk14:jar:138:provided
+[INFO] |  \- org.bouncycastle:bctsp-jdk14:jar:1.38:provided
+[INFO] |     +- org.bouncycastle:bcprov-jdk14:jar:1.38:provided
+[INFO] |     \- org.bouncycastle:bcmail-jdk14:jar:1.38:provided
+[INFO] +- commons-fileupload:commons-fileupload:jar:1.3:provided
+[INFO] |  \- commons-io:commons-io:jar:2.2:provided
+[INFO] +- rome:rome:jar:1.0:provided
+[INFO] |  \- jdom:jdom:jar:1.0:provided
+[INFO] +- javax.xml.bind:jaxb-api:jar:2.0:provided
+[INFO] |  +- javax.xml.bind:jsr173_api:jar:1.0:provided
+[INFO] |  \- javax.activation:activation:jar:1.1:provided
+[INFO] +- junit:junit:jar:4.8.2:test
+[INFO] +- org.easymock:easymock:jar:2.4:test
+[INFO] +- org.apache.shale:shale-test:jar:1.0.5:test
+[INFO] +- org.atmosphere:atmosphere-runtime:jar:2.1.0:provided
+[INFO] |  \- org.slf4j:slf4j-api:jar:1.6.1:provided
+[INFO] +- javax.inject:javax.inject:jar:1:provided
+[INFO] +- com.hazelcast:hazelcast:jar:2.6.5:provided
+[INFO] \- net.sf.ehcache:ehcache:jar:2.7.4:provided
+[INFO]                                                                         
+[INFO] ------------------------------------------------------------------------
+[INFO] Building showcase 5.0-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+Downloading: http://repository.primefaces.org/org/primefaces/primefaces/5.0-SNAPSHOT/maven-metadata.xml
+Downloading: http://repository.apache.org/snapshots/org/primefaces/primefaces/5.0-SNAPSHOT/maven-metadata.xml
+[INFO] 
+[INFO] --- maven-dependency-plugin:2.8:tree (default-cli) @ showcase ---
+[INFO] org.primefaces:showcase:war:5.0-SNAPSHOT
+[INFO] +- javax.servlet:servlet-api:jar:2.5:provided
+[INFO] +- commons-logging:commons-logging:jar:1.1.1:compile
+[INFO] +- commons-lang:commons-lang:jar:2.6:compile
+[INFO] +- javax.servlet:jstl:jar:1.2:compile
+[INFO] +- org.apache.poi:poi:jar:3.7:compile
+[INFO] +- com.lowagie:itext:jar:2.1.7:compile
+[INFO] +- javax.el:el-api:jar:2.2:provided
+[INFO] +- org.hibernate:hibernate-validator:jar:5.0.1.Final:compile
+[INFO] |  +- javax.validation:validation-api:jar:1.1.0.Final:compile
+[INFO] |  +- org.jboss.logging:jboss-logging:jar:3.1.1.GA:compile
+[INFO] |  \- com.fasterxml:classmate:jar:0.8.0:compile
+[INFO] +- commons-fileupload:commons-fileupload:jar:1.3:compile
+[INFO] +- commons-io:commons-io:jar:2.2:compile
+[INFO] +- rome:rome:jar:1.0:compile
+[INFO] |  \- jdom:jdom:jar:1.0:compile
+[INFO] +- org.twitter4j:twitter4j-core:jar:3.0.5:compile
+[INFO] +- net.sourceforge.barbecue:barbecue:jar:1.5-beta1:compile
+[INFO] +- jfree:jfreechart:jar:1.0.0:compile
+[INFO] |  \- jfree:jcommon:jar:1.0.0:compile
+[INFO] +- org.atmosphere:atmosphere-runtime:jar:2.1.0:compile
+[INFO] |  \- org.slf4j:slf4j-api:jar:1.6.1:compile
+[INFO] +- javax.inject:javax.inject:jar:1:compile
+[INFO] +- org.slf4j:slf4j-simple:jar:1.6.1:compile
+[INFO] +- org.primefaces.themes:all-themes:jar:1.0.10:compile
+[INFO] +- org.hamcrest:hamcrest-all:jar:1.1:test
+[INFO] +- junit:junit:jar:4.8.2:test
+[INFO] +- org.jboss.arquillian.junit:arquillian-junit-container:jar:1.1.4.Final:test
+[INFO] |  +- org.jboss.arquillian.junit:arquillian-junit-core:jar:1.1.4.Final:test
+[INFO] |  +- org.jboss.arquillian.test:arquillian-test-api:jar:1.1.4.Final:test
+[INFO] |  +- org.jboss.arquillian.test:arquillian-test-spi:jar:1.1.4.Final:test
+[INFO] |  +- org.jboss.arquillian.container:arquillian-container-test-api:jar:1.1.4.Final:test
+[INFO] |  |  \- org.jboss.shrinkwrap:shrinkwrap-api:jar:1.2.2:test
+[INFO] |  +- org.jboss.arquillian.container:arquillian-container-test-spi:jar:1.1.4.Final:test
+[INFO] |  +- org.jboss.arquillian.core:arquillian-core-impl-base:jar:1.1.4.Final:test
+[INFO] |  +- org.jboss.arquillian.test:arquillian-test-impl-base:jar:1.1.4.Final:test
+[INFO] |  +- org.jboss.arquillian.container:arquillian-container-impl-base:jar:1.1.4.Final:test
+[INFO] |  |  +- org.jboss.arquillian.config:arquillian-config-api:jar:1.1.4.Final:test
+[INFO] |  |  \- org.jboss.arquillian.config:arquillian-config-impl-base:jar:1.1.4.Final:test
+[INFO] |  +- org.jboss.arquillian.container:arquillian-container-test-impl-base:jar:1.1.4.Final:test
+[INFO] |  \- org.jboss.shrinkwrap:shrinkwrap-impl-base:jar:1.2.2:test
+[INFO] |     \- org.jboss.shrinkwrap:shrinkwrap-spi:jar:1.2.2:test
+[INFO] +- org.jboss.shrinkwrap.resolver:shrinkwrap-resolver-depchain:pom:2.1.0:test
+[INFO] |  +- org.jboss.shrinkwrap.resolver:shrinkwrap-resolver-api:jar:2.1.0:test
+[INFO] |  +- org.jboss.shrinkwrap.resolver:shrinkwrap-resolver-spi:jar:2.1.0:test
+[INFO] |  +- org.jboss.shrinkwrap.resolver:shrinkwrap-resolver-api-maven:jar:2.1.0:test
+[INFO] |  +- org.jboss.shrinkwrap.resolver:shrinkwrap-resolver-spi-maven:jar:2.1.0:test
+[INFO] |  +- org.jboss.shrinkwrap.resolver:shrinkwrap-resolver-api-maven-archive:jar:2.1.0:test
+[INFO] |  +- org.jboss.shrinkwrap.resolver:shrinkwrap-resolver-impl-maven:jar:2.1.0:test
+[INFO] |  |  +- org.eclipse.aether:aether-api:jar:0.9.0.M2:test
+[INFO] |  |  +- org.eclipse.aether:aether-impl:jar:0.9.0.M2:test
+[INFO] |  |  +- org.eclipse.aether:aether-spi:jar:0.9.0.M2:test
+[INFO] |  |  +- org.eclipse.aether:aether-util:jar:0.9.0.M2:test
+[INFO] |  |  +- org.eclipse.aether:aether-connector-wagon:jar:0.9.0.M2:test
+[INFO] |  |  +- org.apache.maven:maven-aether-provider:jar:3.1.1:test
+[INFO] |  |  +- org.apache.maven:maven-model:jar:3.1.1:test
+[INFO] |  |  +- org.apache.maven:maven-model-builder:jar:3.1.1:test
+[INFO] |  |  |  \- org.codehaus.plexus:plexus-component-annotations:jar:1.5.5:test
+[INFO] |  |  +- org.apache.maven:maven-repository-metadata:jar:3.1.1:test
+[INFO] |  |  +- org.apache.maven:maven-settings:jar:3.1.1:test
+[INFO] |  |  +- org.apache.maven:maven-settings-builder:jar:3.1.1:test
+[INFO] |  |  +- org.codehaus.plexus:plexus-interpolation:jar:1.19:test
+[INFO] |  |  +- org.codehaus.plexus:plexus-utils:jar:3.0.15:test
+[INFO] |  |  +- org.sonatype.plexus:plexus-sec-dispatcher:jar:1.3:test
+[INFO] |  |  |  \- org.sonatype.plexus:plexus-cipher:jar:1.4:test
+[INFO] |  |  +- org.apache.maven.wagon:wagon-provider-api:jar:2.6:test
+[INFO] |  |  +- org.apache.maven.wagon:wagon-file:jar:2.6:test
+[INFO] |  |  \- org.apache.maven.wagon:wagon-http-lightweight:jar:2.6:test
+[INFO] |  |     \- org.apache.maven.wagon:wagon-http-shared:jar:2.6:test
+[INFO] |  |        \- org.jsoup:jsoup:jar:1.7.2:test
+[INFO] |  \- org.jboss.shrinkwrap.resolver:shrinkwrap-resolver-impl-maven-archive:jar:2.1.0:test
+[INFO] |     +- org.jboss.shrinkwrap.resolver:shrinkwrap-resolver-spi-maven-archive:jar:2.1.0:test
+[INFO] |     +- org.eclipse.sisu:org.eclipse.sisu.plexus:jar:0.0.0.M5:test
+[INFO] |     |  +- javax.enterprise:cdi-api:jar:1.0:test
+[INFO] |     |  |  \- javax.annotation:jsr250-api:jar:1.0:test
+[INFO] |     |  +- com.google.guava:guava:jar:10.0.1:test
+[INFO] |     |  |  \- com.google.code.findbugs:jsr305:jar:1.3.9:test
+[INFO] |     |  +- org.sonatype.sisu:sisu-guice:jar:no_aop:3.1.0:test
+[INFO] |     |  |  \- aopalliance:aopalliance:jar:1.0:test
+[INFO] |     |  \- org.eclipse.sisu:org.eclipse.sisu.inject:jar:0.0.0.M5:test
+[INFO] |     \- org.codehaus.plexus:plexus-compiler-javac:jar:2.3:test
+[INFO] |        \- org.codehaus.plexus:plexus-compiler-api:jar:2.3:test
+[INFO] +- org.jboss.arquillian.graphene:graphene-webdriver:pom:2.0.2.Final:test
+[INFO] |  +- org.jboss.arquillian.graphene:graphene-webdriver-api:jar:2.0.2.Final:test
+[INFO] |  +- org.jboss.arquillian.graphene:graphene-webdriver-spi:jar:2.0.2.Final:test
+[INFO] |  +- org.jboss.arquillian.graphene:graphene-webdriver-impl:jar:2.0.2.Final:test
+[INFO] |  |  +- org.jboss.arquillian.extension:arquillian-drone-impl:jar:1.3.0.Final:test
+[INFO] |  |  \- org.jboss.arquillian.extension:arquillian-drone-configuration:jar:1.3.0.Final:test
+[INFO] |  +- org.jboss.arquillian.extension:arquillian-drone-webdriver-depchain:pom:1.3.0.Final:test
+[INFO] |  |  +- org.jboss.arquillian.extension:arquillian-drone-api:jar:1.3.0.Final:test
+[INFO] |  |  +- org.jboss.arquillian.extension:arquillian-drone-spi:jar:1.3.0.Final:test
+[INFO] |  |  +- org.jboss.arquillian.extension:arquillian-drone-webdriver:jar:1.3.0.Final:test
+[INFO] |  |  +- org.seleniumhq.selenium:selenium-api:jar:2.40.0:test
+[INFO] |  |  |  \- org.json:json:jar:20080701:test
+[INFO] |  |  +- org.seleniumhq.selenium:selenium-support:jar:2.40.0:test
+[INFO] |  |  +- org.seleniumhq.selenium:selenium-chrome-driver:jar:2.40.0:test
+[INFO] |  |  +- org.seleniumhq.selenium:selenium-firefox-driver:jar:2.40.0:test
+[INFO] |  |  |  \- org.apache.commons:commons-exec:jar:1.1:test
+[INFO] |  |  +- org.seleniumhq.selenium:selenium-htmlunit-driver:jar:2.40.0:test
+[INFO] |  |  |  +- net.sourceforge.htmlunit:htmlunit:jar:2.13:test
+[INFO] |  |  |  |  +- xalan:xalan:jar:2.7.1:test
+[INFO] |  |  |  |  |  \- xalan:serializer:jar:2.7.1:test
+[INFO] |  |  |  |  +- org.apache.commons:commons-lang3:jar:3.1:test
+[INFO] |  |  |  |  +- org.apache.httpcomponents:httpmime:jar:4.3.1:test
+[INFO] |  |  |  |  +- net.sourceforge.htmlunit:htmlunit-core-js:jar:2.13:test
+[INFO] |  |  |  |  +- xerces:xercesImpl:jar:2.11.0:test
+[INFO] |  |  |  |  +- net.sourceforge.nekohtml:nekohtml:jar:1.9.19:test
+[INFO] |  |  |  |  +- net.sourceforge.cssparser:cssparser:jar:0.9.11:test
+[INFO] |  |  |  |  |  \- org.w3c.css:sac:jar:1.3:test
+[INFO] |  |  |  |  \- org.eclipse.jetty:jetty-websocket:jar:8.1.12.v20130726:test
+[INFO] |  |  |  |     +- org.eclipse.jetty:jetty-util:jar:8.1.12.v20130726:test
+[INFO] |  |  |  |     +- org.eclipse.jetty:jetty-io:jar:8.1.12.v20130726:test
+[INFO] |  |  |  |     \- org.eclipse.jetty:jetty-http:jar:8.1.12.v20130726:test
+[INFO] |  |  |  \- org.apache.httpcomponents:httpclient:jar:4.3.1:test
+[INFO] |  |  |     \- org.apache.httpcomponents:httpcore:jar:4.3:test
+[INFO] |  |  +- org.seleniumhq.selenium:selenium-ie-driver:jar:2.40.0:test
+[INFO] |  |  |  +- net.java.dev.jna:jna:jar:3.4.0:test
+[INFO] |  |  |  \- net.java.dev.jna:platform:jar:3.4.0:test
+[INFO] |  |  +- org.seleniumhq.selenium:selenium-remote-driver:jar:2.40.0:test
+[INFO] |  |  |  \- cglib:cglib-nodep:jar:2.1_3:test
+[INFO] |  |  \- com.opera:operadriver:jar:1.5:test
+[INFO] |  |     +- com.opera:operalaunchers:jar:1.1:test
+[INFO] |  |     +- com.google.protobuf:protobuf-java:jar:2.4.1:test
+[INFO] |  |     +- commons-jxpath:commons-jxpath:jar:1.3:test
+[INFO] |  |     \- org.ini4j:ini4j:jar:0.5.2:test
+[INFO] |  \- org.seleniumhq.selenium:selenium-java:jar:2.40.0:test
+[INFO] |     +- org.seleniumhq.selenium:selenium-safari-driver:jar:2.40.0:test
+[INFO] |     \- org.webbitserver:webbit:jar:0.4.14:test
+[INFO] |        \- io.netty:netty:jar:3.5.2.Final:test
+[INFO] +- org.jboss.arquillian.extension:arquillian-phantom-driver:jar:1.1.2.Final:test
+[INFO] |  \- com.github.detro.ghostdriver:phantomjsdriver:jar:1.1.0:test
+[INFO] |     \- org.seleniumhq.selenium:selenium-server:jar:2.40.0:test
+[INFO] |        +- org.bouncycastle:bcprov-jdk15on:jar:1.48:test
+[INFO] |        +- org.bouncycastle:bcpkix-jdk15on:jar:1.48:test
+[INFO] |        +- mx4j:mx4j-tools:jar:3.0.1:test
+[INFO] |        +- org.mortbay.jetty:servlet-api-2.5:jar:6.1.9:test
+[INFO] |        +- org.seleniumhq.selenium:jetty-repacked:jar:7.6.1:test
+[INFO] |        +- net.jcip:jcip-annotations:jar:1.0:test
+[INFO] |        +- org.yaml:snakeyaml:jar:1.8:test
+[INFO] |        \- commons-codec:commons-codec:jar:1.8:test
+[INFO] +- org.jboss.arquillian.jbehave:arquillian-jbehave-core:jar:1.0.2:test
+[INFO] |  +- org.jboss.arquillian.core:arquillian-core-spi:jar:1.1.4.Final:test
+[INFO] |  +- org.jbehave:jbehave-core:zip:resources:3.7:test
+[INFO] |  |  +- junit:junit-dep:jar:4.8.2:test
+[INFO] |  |  +- org.hamcrest:hamcrest-core:jar:1.1:test
+[INFO] |  |  +- org.hamcrest:hamcrest-library:jar:1.1:test
+[INFO] |  |  +- org.hamcrest:hamcrest-integration:jar:1.1:test
+[INFO] |  |  +- org.freemarker:freemarker:jar:2.3.16:test
+[INFO] |  |  +- com.thoughtworks.paranamer:paranamer:jar:2.4:test
+[INFO] |  |  \- com.thoughtworks.xstream:xstream:jar:1.3.1:test
+[INFO] |  |     \- xpp3:xpp3_min:jar:1.1.4c:test
+[INFO] |  +- org.jbehave:jbehave-core:jar:3.7:test
+[INFO] |  \- org.jbehave.site:jbehave-site-resources:zip:3.1.1:test
+[INFO] +- org.jboss.spec.javax.annotation:jboss-annotations-api_1.1_spec:jar:1.0.1.Final:test
+[INFO] +- org.jboss.spec.javax.ejb:jboss-ejb-api_3.1_spec:jar:1.0.2.Final:test
+[INFO] +- org.jboss.arquillian.protocol:arquillian-protocol-servlet:jar:1.1.4.Final:test
+[INFO] |  +- org.jboss.arquillian.container:arquillian-container-spi:jar:1.1.4.Final:test
+[INFO] |  |  \- org.jboss.shrinkwrap.descriptors:shrinkwrap-descriptors-api-base:jar:2.0.0-alpha-5:test
+[INFO] |  \- org.jboss.shrinkwrap.descriptors:shrinkwrap-descriptors-spi:jar:2.0.0-alpha-5:test
+[INFO] |     \- org.easytesting:fest-assert:jar:1.4:test
+[INFO] |        \- org.easytesting:fest-util:jar:1.1.6:test
+[INFO] +- commons-collections:commons-collections:jar:3.2.1:compile
+[INFO] +- xml-apis:xml-apis:jar:1.4.01:test
+[INFO] +- org.slf4j:slf4j-log4j12:jar:1.7.5:test
+[INFO] |  \- log4j:log4j:jar:1.2.17:test
+[INFO] +- javax:javaee-api:jar:6.0:provided
+[INFO] +- org.wildfly:wildfly-arquillian-container-managed:jar:8.0.0.Final:test
+[INFO] |  +- org.wildfly:wildfly-arquillian-common:jar:8.0.0.Final:test
+[INFO] |  |  +- org.jboss.arquillian.testenricher:arquillian-testenricher-cdi:jar:1.1.4.Final:test
+[INFO] |  |  +- org.jboss.arquillian.testenricher:arquillian-testenricher-ejb:jar:1.1.4.Final:test
+[INFO] |  |  +- org.jboss.arquillian.testenricher:arquillian-testenricher-initialcontext:jar:1.1.4.Final:test
+[INFO] |  |  +- org.jboss.arquillian.testenricher:arquillian-testenricher-osgi:jar:2.1.0.CR2:test
+[INFO] |  |  +- org.jboss.arquillian.testenricher:arquillian-testenricher-resource:jar:1.1.4.Final:test
+[INFO] |  |  +- org.wildfly:wildfly-arquillian-testenricher-msc:jar:8.0.0.Final:test
+[INFO] |  |  |  +- org.wildfly:wildfly-server:jar:8.0.0.Final:test
+[INFO] |  |  |  |  +- org.wildfly:wildfly-controller:jar:8.0.0.Final:test
+[INFO] |  |  |  |  |  +- org.wildfly:wildfly-core-security:jar:8.0.0.Final:test
+[INFO] |  |  |  |  |  \- org.jboss:staxmapper:jar:1.1.0.Final:test
+[INFO] |  |  |  |  +- org.wildfly:wildfly-domain-http-interface:jar:8.0.0.Final:test
+[INFO] |  |  |  |  |  \- org.wildfly:wildfly-domain-management:jar:8.0.0.Final:test
+[INFO] |  |  |  |  +- org.wildfly:wildfly-deployment-repository:jar:8.0.0.Final:test
+[INFO] |  |  |  |  +- org.wildfly:wildfly-patching:jar:8.0.0.Final:test
+[INFO] |  |  |  |  |  \- org.wildfly:wildfly-cli:jar:8.0.0.Final:test
+[INFO] |  |  |  |  |     +- org.jboss.aesh:aesh:jar:0.33.11:test
+[INFO] |  |  |  |  |     |  \- org.fusesource.jansi:jansi:jar:1.9:test
+[INFO] |  |  |  |  |     +- org.picketbox:picketbox:jar:4.0.20.Final:test
+[INFO] |  |  |  |  |     \- sun.jdk:jconsole:jar:jdk:system
+[INFO] |  |  |  |  +- org.wildfly:wildfly-platform-mbean:jar:8.0.0.Final:test
+[INFO] |  |  |  |  +- org.wildfly:wildfly-process-controller:jar:8.0.0.Final:test
+[INFO] |  |  |  |  +- org.wildfly:wildfly-remoting:jar:8.0.0.Final:test
+[INFO] |  |  |  |  |  \- org.wildfly:wildfly-io:jar:8.0.0.Final:test
+[INFO] |  |  |  |  +- org.wildfly:wildfly-network:jar:8.0.0.Final:test
+[INFO] |  |  |  |  +- org.wildfly:wildfly-version:jar:8.0.0.Final:test
+[INFO] |  |  |  |  +- org.jboss:jandex:jar:1.1.0.Final:test
+[INFO] |  |  |  |  +- org.jboss.invocation:jboss-invocation:jar:1.2.1.Final:test
+[INFO] |  |  |  |  +- org.jboss.logmanager:jboss-logmanager:jar:1.5.2.Final:test
+[INFO] |  |  |  |  +- org.jboss.modules:jboss-modules:jar:1.3.0.Final:test
+[INFO] |  |  |  |  +- org.jboss.stdio:jboss-stdio:jar:1.0.2.GA:test
+[INFO] |  |  |  |  +- org.jboss:jboss-vfs:jar:3.2.2.Final:test
+[INFO] |  |  |  |  \- io.undertow:undertow-core:jar:1.0.0.Final:test
+[INFO] |  |  |  \- org.jboss.msc:jboss-msc:jar:1.2.0.Final:test
+[INFO] |  |  +- org.wildfly:wildfly-controller-client:jar:8.0.0.Final:test
+[INFO] |  |  |  +- org.wildfly:wildfly-protocol:jar:8.0.0.Final:test
+[INFO] |  |  |  +- org.jboss:jboss-dmr:jar:1.2.0.Final:test
+[INFO] |  |  |  \- org.jboss.threads:jboss-threads:jar:2.1.1.Final:test
+[INFO] |  |  +- org.wildfly:wildfly-jmx:jar:8.0.0.Final:test
+[INFO] |  |  |  +- org.jboss:jboss-common-core:jar:2.2.22.GA:test
+[INFO] |  |  |  \- org.wildfly:wildfly-naming:jar:8.0.0.Final:test
+[INFO] |  |  |     \- org.jboss:jboss-remote-naming:jar:2.0.0.Final:test
+[INFO] |  |  |        \- org.jboss:jboss-ejb-client:jar:2.0.0.Final:test
+[INFO] |  |  \- org.osgi:org.osgi.core:jar:5.0.0:test
+[INFO] |  +- org.wildfly:wildfly-arquillian-protocol-jmx:jar:8.0.0.Final:test
+[INFO] |  |  +- org.wildfly.security:wildfly-security-manager:jar:1.0.0.Final:test
+[INFO] |  |  +- org.jboss.arquillian.protocol:arquillian-protocol-jmx:jar:1.1.4.Final:test
+[INFO] |  |  \- org.jboss.osgi.metadata:jbosgi-metadata:jar:3.0.1.Final:test
+[INFO] |  +- org.jboss.xnio:xnio-api:jar:3.2.0.Final:test
+[INFO] |  +- org.jboss.xnio:xnio-nio:jar:3.2.0.Final:test
+[INFO] |  +- org.jboss.marshalling:jboss-marshalling:jar:1.4.3.Final:test
+[INFO] |  +- org.jboss.marshalling:jboss-marshalling-river:jar:1.4.3.Final:test
+[INFO] |  +- org.jboss.remoting:jboss-remoting:jar:4.0.0.Final:test
+[INFO] |  +- org.jboss.remotingjmx:remoting-jmx:jar:2.0.0.Final:test
+[INFO] |  +- org.jboss.sasl:jboss-sasl:jar:1.0.4.Final:test
+[INFO] |  +- org.jboss.arquillian.core:arquillian-core-api:jar:1.1.4.Final:test
+[INFO] |  \- org.wildfly:wildfly-build-config:jar:8.0.0.Final:test
+[INFO] +- org.primefaces:primefaces:jar:5.0-SNAPSHOT:compile
+[INFO] \- org.glassfish:javax.faces:jar:2.2.5:provided
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Summary:
+[INFO] 
+[INFO] prime-arquillian .................................. SUCCESS [  1.036 s]
+[INFO] primefaces ........................................ SUCCESS [  0.522 s]
+[INFO] showcase .......................................... SUCCESS [  3.075 s]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 5.137 s
+[INFO] Finished at: 2014-04-03T11:28:27-03:00
+[INFO] Final Memory: 35M/353M
+[INFO] ------------------------------------------------------------------------
