@@ -1,4 +1,4 @@
-package org.conventions.archetype.test.ft;
+package org.primefaces.test.ft;
 
 import junit.framework.Assert;
 import org.jboss.arquillian.drone.api.annotation.Drone;

@@ -1,6 +1,5 @@
-package org.conventions.archetype.test.ft.pages.role;
+package oorg.primefaces.test.ft.pages.role;
 
-import org.conventions.archetype.test.ft.BasePage;
 import org.jboss.arquillian.graphene.GrapheneElement;
 import org.jboss.arquillian.graphene.findby.FindByJQuery;
 import org.jboss.arquillian.graphene.page.Location;
@@ -10,7 +9,7 @@ import org.jboss.arquillian.graphene.page.Location;
  */
 
 @Location("/ui/datatableHome.xhtml")
-public class DatatableHome extends BasePage {
+public class DatatableHome extends org.primefaces.test.ft.BasePage {
 
     @FindByJQuery("div[id$=table]")
     private GrapheneElement datatable;
