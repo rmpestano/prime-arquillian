@@ -9,4 +9,4 @@
 3. activate server profile(wildfly-managed or jboss-managed) in your IDE or when firing the mvn
 4. cd into showcase submodule and run mvn test
   1. note that first time you will need to cd into primefaces and do a mvn clean install to install primefaces-5.0-SNAPSHOT into your local maven repository
-  2. also note that you can run org/primefaces/test/ft/MainFt.java via IDE with Run/Debug as JUnit test  
+  2. also note that you can run org/primefaces/test/ft/ShowcaseFt.java via IDE with Run/Debug as JUnit test  
