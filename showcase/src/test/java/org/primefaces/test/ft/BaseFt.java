@@ -38,8 +38,6 @@ public class BaseFt {
     @ArquillianResource
     protected URL baseUrl;
 
-    @FindByJQuery("a[id$=logout]")
-    protected GrapheneElement logoutButton;
 
 
     @Deployment(testable = false)
@@ -53,10 +51,6 @@ public class BaseFt {
     }
 
 
-
-    public void logout() {
-        guardHttp(logoutButton).click();
-    }
 
     public void goToPage(BasePage page) {
         //Graphene.goTo(page.getClass());

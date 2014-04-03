@@ -17,7 +17,7 @@ import java.util.List;
 public abstract class BasePage implements Serializable {
 
     @Drone
-    private WebDriver browser;
+    protected WebDriver browser;
 
     public String getLocation() {
         if (!getClass().isAnnotationPresent(Location.class)) {
@@ -35,7 +35,7 @@ public abstract class BasePage implements Serializable {
         Assert.assertEquals(msg.trim(), growl.getText().trim());
     }
 
-    protected void selecionaItem(GrapheneElement selectOne, String desc) {
+    protected void selectItem(GrapheneElement selectOne, String desc) {
         this.selectItem(selectOne, desc, false);
     }
 
@@ -58,4 +58,6 @@ public abstract class BasePage implements Serializable {
     public List<WebElement> getTableRowsWithTDs(String tableId){
         return browser.findElements(By.xpath("//tbody[contains(@id,'" +tableId +"')]//tr[@role='row']//td[@role='gridcell']"));
     }
+
+    public abstract boolean isPresent();
 }

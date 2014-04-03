@@ -12,21 +12,6 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <prime.version>${version}</prime.version>
-        <selenium.version>2.40.0</selenium.version>
-        <drone.version>1.3.0.Final</drone.version>
-        <arquillian.version>1.1.4.Final</arquillian.version>
-        <graphene.version>2.0.2.Final</graphene.version>
-        <recorder.version>1.0.0.Alpha2</recorder.version>
-        <wildfly.version>8.0.0.Final</wildfly.version>
-        <jboss.version>7.2.0.Final</jboss.version>
-        <arquillian.serverHome>/home/wildfly-8.0.0.Final</arquillian.serverHome>
-        <arquillian.browser>firefox</arquillian.browser>
-        <arquillian.debug>false</arquillian.debug>
-        <arquillian.remote>false</arquillian.remote>
-        <arquillian.remoteReusable>false</arquillian.remoteReusable>
-        <arquillian.chromeDriver>c:\chromedriver.exe</arquillian.chromeDriver>
-        <arquillian.localAddress>localhost</arquillian.localAddress>
-        <arquillian.remoteAddress>http://localhost:1035/wd/hub</arquillian.remoteAddress>
     </properties>
 
     <modules>
@@ -35,97 +20,8 @@
     </modules>
 
 
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.jboss.arquillian</groupId>
-                <artifactId>arquillian-bom</artifactId>
-                <version>${arquillian.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.jboss.arquillian.selenium</groupId>
-                <artifactId>selenium-bom</artifactId>
-                <version>${selenium.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.jboss.arquillian.extension</groupId>
-                <artifactId>arquillian-drone-bom</artifactId>
-                <version>${drone.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
-    <profiles>
-        <profile>
-            <id>wildfly-managed</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <properties>
-                <arquillian.testContainer>jboss-managed</arquillian.testContainer>
-            </properties>
-            <dependencies>
-                <dependency>
-                    <groupId>org.wildfly</groupId>
-                    <artifactId>wildfly-arquillian-container-managed</artifactId>
-                    <version>${wildfly.version}</version>
-                    <scope>test</scope>
-                </dependency>
-            </dependencies>
-        </profile>
-        <profile>
-            <id>jboss-managed</id>
-            <properties>
-                <!--referenced by arquillian.launch and used in arquillian.xml to choice which container arquillian will use-->
-                <arquillian.testContainer>jboss-managed</arquillian.testContainer>
-            </properties>
-            <dependencies>
-                <dependency>
-                    <groupId>org.jboss.as</groupId>
-                    <artifactId>jboss-as-arquillian-container-managed</artifactId>
-                    <scope>test</scope>
-                    <version>${jboss.version}</version>
-                </dependency>
-            </dependencies>
-        </profile>
 
-        <!-- selenium web drivers -->
-        <profile>
-            <id>webdriver-firefox</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <properties>
-                <arquillian.browser>firefox</arquillian.browser>
-            </properties>
-        </profile>
 
-        <profile>
-            <id>webdriver-phantomjs</id>
-            <properties>
-                <arquillian.browser>phantomjs</arquillian.browser>
-            </properties>
-        </profile>
-
-        <profile>
-            <id>webdriver-chrome</id>
-            <properties>
-                <arquillian.browser>chrome</arquillian.browser>
-            </properties>
-        </profile>
-
-        <profile>
-            <id>opera</id>
-            <properties>
-                <arquillian.browser>opera</arquillian.browser>
-            </properties>
-        </profile>
-    </profiles>
     <repositories>
         <repository>
             <id>arquillian jbehave UNofficial maven repo</id>
