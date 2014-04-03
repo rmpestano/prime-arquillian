@@ -1,0 +1,147 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="../templates/ui.xhtml">
+
+    <ui:define name="head">
+
+        <script type="text/javascript">
+            function handleComplete(xhr, status, args) {
+                if(args.validationFailed) {
+                    PrimeFaces.debug("Validation Failed");
+                } 
+                else {
+                    PrimeFaces.debug("Save:" + args.saved);
+                    PrimeFaces.debug("FirstName: " + args.user.firstname + ", Lastname: " + args.user.lastname);
+                }
+            }
+        </script>
+    </ui:define>
+
+    <ui:define name="content">
+
+
+        <h1 class="title ui-widget-header ui-corner-all">Request Context</h1>
+        <div class="entry">
+            <p>RequestContext is a feature with various handy utilities.</p>
+            <ul>
+                <li>Update component(s) programmatically.</li>
+                <li>Execute javascript from beans.</li>
+                <li>Add ajax callback parameters.</li>
+                <li>ScrollTo a specific component after ajax update.</li>
+            </ul>
+
+            <h:form id="form">
+
+                <p:panel id="panel" header="New User" style="margin-bottom:10px;">
+                    <p:messages />
+                    <h:panelGrid columns="2">
+                        <h:outputLabel for="firstname" value="Firstname: *" />
+                        <p:inputText id="firstname" value="#{userController.user.firstname}" required="true"/>
+
+                        <h:outputLabel for="surname" value="Lastname: *" />
+                        <p:inputText id="surname" value="#{userController.user.lastname}" required="true"/>
+                    </h:panelGrid>
+                </p:panel>
+
+                <p:commandButton value="Save" actionListener="#{userController.saveUser}" oncomplete="handleComplete(xhr, status, args)" />
+
+                <p:log />
+                
+            </h:form>
+
+            <h3>Source</h3>
+            <p:tabView>
+                <p:tab title="callbackParams.xhtml">
+                    <pre name="code" class="brush:xml">
+&lt;h:form&gt;
+	&lt;p:panel id="panel" header="New User"&gt;
+		&lt;p:messages /&gt;
+		&lt;h:panelGrid columns="2"&gt;
+			&lt;h:outputLabel for="firstname" value="Firstname: *" /&gt;
+			&lt;p:inputText id="firstname" value="\#{userController.user.firstname}" required="true"/&gt;
+			
+			&lt;h:outputLabel for="surname" value="Lastname: *"  /&gt;
+			&lt;p:inputText id="surname" value="\#{userController.user.lastname}" required="true"/&gt;
+		&lt;/h:panelGrid&gt;
+	&lt;/p:panel&gt;
+
+	&lt;p:commandButton value="Save" actionListener="\#{userController.saveUser}" oncomplete="handleComplete(xhr, status, args)" /&gt;
+
+    &lt;p:log /&gt;
+&lt;/h:form&gt;
+                    </pre>
+                    
+                    <pre name="code" class="javascript">
+&lt;script type="text/javascript"&gt;
+function handleComplete(xhr, status, args) {
+	if(args.validationFailed) {
+		PrimeFaces.debug("Validation Failed");
+	} 
+    else {
+		PrimeFaces.debug("Save:" + args.saved);
+		PrimeFaces.debug("FirstName: " + args.user.firstname + ", Lastname: " + args.user.lastname); 
+	}
+}
+&lt;/script&gt;
+                    </pre>
+                </p:tab>
+                
+                <p:tab title="UserController.java">
+                    <pre name="code" class="brush:java">
+package org.primefaces.examples.view;
+
+import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
+
+import org.primefaces.context.RequestContext;
+import org.primefaces.examples.domain.User;
+
+public class UserController {
+
+	private User user = new User();
+
+    @PostConstruct
+    public void init() {
+        if(!FacesContext.getCurrentInstance().isPostback()) {
+            RequestContext.getCurrentInstance().execute("alert('This onload script is added from backing bean.')");
+        }
+    }
+
+	public User getUser() {
+		return user;
+	}
+	public void setUser(User user) {
+		this.user = user;
+	}
+	
+	public void saveUser(ActionEvent actionEvent) {
+		RequestContext context = RequestContext.getCurrentInstance();
+		context.addCallbackParam("saved", true);    //basic parameter
+		context.addCallbackParam("user", user);     //pojo as json
+        
+        //execute javascript oncomplete
+        context.execute("PrimeFaces.info('Hello from the Backing Bean');");
+        
+        //update panel
+        context.update("form:panel");
+
+        //scroll to panel
+        context.scrollTo("form:panel")
+        
+        //add facesmessage
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Success", "Success"));
+	}
+}
+                    </pre>
+                </p:tab>
+            </p:tabView>
+            
+        </div>
+
+    </ui:define>
+</ui:composition>

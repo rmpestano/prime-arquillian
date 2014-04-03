@@ -1,0 +1,95 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="../templates/ui.xhtml">
+
+    <ui:define name="content">
+
+
+        <h1 class="title ui-widget-header ui-corner-all">CommandLink</h1>
+        <div class="entry">
+            <p>CommandLink extends the standard h:commandLink with ajax, partial processing and confirmation features.</p>
+
+            <h:form id="form">
+
+                <p:panel id="panel" header="New Person" style="margin-bottom:10px;">
+                    <p:messages id="messages" />
+                    <h:panelGrid columns="3">
+                        <h:outputLabel for="firstname" value="Firstname: *" />
+                        <p:inputText id="firstname" value="#{pprBean.firstname}" required="true" label="Firstname">
+                            <f:validateLength minimum="2" />
+                        </p:inputText>
+                        <p:message for="firstname" />
+
+                        <h:outputLabel for="surname" value="Surname: *" />
+                        <p:inputText id="surname" value="#{pprBean.surname}" required="true" label="Surname"/>
+                        <p:message for="surname" />
+                    </h:panelGrid>
+                </p:panel>
+
+                <p:commandLink id="ajax" update="panel,display" actionListener="#{pprBean.savePerson}" style="margin-right:20px;">
+                    <h:outputText value="Ajax Submit" />
+                </p:commandLink>
+
+                <p:commandLink id="nonAjax" actionListener="#{pprBean.savePerson}" style="margin-right:20px;" ajax="false">
+                    <h:outputText value="Non-Ajax Submit" />
+                </p:commandLink>
+
+                <p:panel id="display" header="Information" style="margin-top:10px;">
+                    <h:panelGrid columns="2">
+                        <h:outputText value="Firstname: " />
+                        <h:outputText id="txt1" value="#{pprBean.firstname}" />
+
+                        <h:outputText value="Surname: " />
+                        <h:outputText id="txt2" value="#{pprBean.surname}" />
+                    </h:panelGrid>
+                </p:panel>
+
+            </h:form>
+
+            <h3>Source</h3>
+            <pre name="code" class="brush:xml">
+&lt;h:form&gt;
+
+	&lt;p:panel id="panel" header="New Person" style="margin-bottom:10px;"&gt;
+		&lt;p:messages id="messages"/&gt;
+		&lt;h:panelGrid columns="3"&gt;
+			&lt;h:outputLabel for="firstname" value="Firstname: *" /&gt;
+			&lt;p:inputText id="firstname" value="\#{pprBean.firstname}" required="true" label="Firstname"&gt;
+				&lt;f:validateLength minimum="2" /&gt;
+			&lt;/p:inputText&gt;
+			&lt;p:message for="firstname" /&gt;
+			
+			&lt;h:outputLabel for="surname" value="Surname: *" /&gt;
+			&lt;p:inputText id="surname" value="\#{pprBean.surname}" required="true" label="Surname"/&gt;
+			&lt;p:message for="surname" /&gt;
+		&lt;/h:panelGrid&gt;
+	&lt;/p:panel&gt;
+
+	&lt;p:commandLink id="ajax" update="panel,display" actionListener="\#{pprBean.savePerson}" style="margin-right:20px;"&gt;
+		&lt;h:outputText value="Ajax Submit" /&gt;
+	&lt;/p:commandLink&gt;
+
+	&lt;p:commandLink id="nonAjax" actionListener="\#{pprBean.savePerson}" style="margin-right:20px;" ajax="false"&gt;
+		&lt;h:outputText value="Non-Ajax Submit" /&gt;
+	&lt;/p:commandLink&gt;
+	
+	&lt;p:panel id="display" header="Information" style="margin-top:10px;"&gt;
+		&lt;h:panelGrid columns="2"&gt;
+			&lt;h:outputText value="Firstname: " /&gt;
+			&lt;h:outputText id="txt1" value="\#{pprBean.firstname}" /&gt;
+			
+			&lt;h:outputText value="Surname: " /&gt;
+			&lt;h:outputText id="txt2" value="\#{pprBean.surname}" /&gt;
+		&lt;/h:panelGrid&gt;
+	&lt;/p:panel&gt;
+	
+&lt;/h:form&gt;
+            </pre>
+
+        </div>
+
+    </ui:define>
+</ui:composition>

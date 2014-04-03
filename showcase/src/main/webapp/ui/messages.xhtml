@@ -1,0 +1,150 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="../templates/ui.xhtml">
+
+	<ui:define name="content">
+
+		<h1 class="title ui-widget-header ui-corner-all">Messages</h1>
+		<div class="entry">
+			<p>Messages and Message components extends standard message components with theming, auto updates, closing and different display modes.</p>
+            
+            <p:tooltip />
+            
+			<h3>Messages</h3>	
+			<h:form id="form1">
+                <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
+				
+				<p:commandButton id="infoButton" value="Info" actionListener="#{messagesController.addInfo}"/>
+				<p:commandButton id="warnButton" value="Warn" actionListener="#{messagesController.addWarn}"/>
+				<p:commandButton id="errorButton" value="Error" actionListener="#{messagesController.addError}"/>
+				<p:commandButton id="fatalButton" value="Fatal" actionListener="#{messagesController.addFatal}"/>
+			</h:form>
+			
+			<h3>Message</h3>
+			<h:form id="form2">
+                <h:panelGrid id="grid" columns="3" cellpadding="4">
+					<h:outputText value="Default: *" />
+					<p:inputText id="default" required="true" />
+					<p:message for="default" />
+
+                    <h:outputText value="Text: *" />
+					<p:inputText id="txt" required="true" />
+                    <p:message for="txt" display="text" />
+
+                    <h:outputText value="Icon: *" />
+					<p:inputText id="icon" required="true" />
+					<p:message for="icon" display="icon" />
+                    
+                    <h:outputText value="Tooltip:" />
+					<p:inputText id="tt" required="true" />
+					<p:message for="tt" display="tooltip" />
+				</h:panelGrid>
+				
+				<p:commandButton id="submitButton" value="Submit" update="grid"/>
+			</h:form>
+
+			<h3>Prerendered Markup</h3>
+            <div class="ui-messages ui-widget">
+                <div class="ui-messages-info ui-corner-all">
+                    <span class="ui-messages-info-icon"></span>
+                    <ul>
+                        <li>
+                            <span class="ui-messages-info-summary">What we do in life</span>
+                            <span class="ui-messages-info-detail">echoes in eternity!</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+			<h3>Source</h3>
+            <p:tabView>
+                <p:tab title="messages.xhtml">
+<pre name="code" class="brush:xml">
+&lt;p:tooltip /&gt;
+            
+&lt;h3&gt;Messages&lt;/h3&gt;	
+&lt;h:form id="form1"&gt;
+    &lt;p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" /&gt;
+
+    &lt;p:commandButton id="infoButton" value="Info" actionListener="\#{messagesController.addInfo}"/&gt;
+    &lt;p:commandButton id="warnButton" value="Warn" actionListener="\#{messagesController.addWarn}"/&gt;
+    &lt;p:commandButton id="errorButton" value="Error" actionListener="\#{messagesController.addError}"/&gt;
+    &lt;p:commandButton id="fatalButton" value="Fatal" actionListener="\#{messagesController.addFatal}"/&gt;
+&lt;/h:form&gt;
+
+&lt;h3&gt;Message&lt;/h3&gt;
+&lt;h:form id="form2"&gt;
+    &lt;h:panelGrid id="grid" columns="3" cellpadding="4"&gt;
+        &lt;h:outputText value="Default: *" /&gt;
+        &lt;p:inputText id="default" required="true" /&gt;
+        &lt;p:message for="default" /&gt;
+
+        &lt;h:outputText value="Text: *" /&gt;
+        &lt;p:inputText id="txt" required="true" /&gt;
+        &lt;p:message for="txt" display="text" /&gt;
+
+        &lt;h:outputText value="Icon: *" /&gt;
+        &lt;p:inputText id="icon" required="true" /&gt;
+        &lt;p:message for="icon" display="icon" /&gt;
+
+        &lt;h:outputText value="Tooltip:" /&gt;
+        &lt;p:inputText id="tt" required="true" /&gt;
+        &lt;p:message for="tt" display="tooltip" /&gt;
+    &lt;/h:panelGrid&gt;
+
+    &lt;p:commandButton id="submitButton" value="Submit" update="grid"/&gt;
+&lt;/h:form&gt;
+
+&lt;h3&gt;Prerendered Markup&lt;/h3&gt;
+&lt;div class="ui-messages ui-widget"&gt;
+    &lt;div class="ui-messages-info ui-corner-all"&gt;
+        &lt;span class="ui-messages-info-icon"&gt;&lt;/span&gt;
+        &lt;ul&gt;
+            &lt;li&gt;
+                &lt;span class="ui-messages-info-summary"&gt;What we do in life&lt;/span&gt;
+                &lt;span class="ui-messages-info-detail"&gt;echoes in eternity!&lt;/span&gt;
+            &lt;/li&gt;
+        &lt;/ul&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+			</pre>
+                </p:tab>
+
+                <p:tab title="MessagesController.java">
+<pre name="code" class="brush:java">
+package org.primefaces.examples.view;
+
+import javax.faces.event.ActionEvent;
+import javax.faces.context.FacesContext;
+import javax.faces.application.FacesContext;
+
+public class MessagesController {
+
+	public void addInfo(ActionEvent actionEvent) {
+		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,"Sample info message", "PrimeFaces rocks!"));
+	}
+
+	public void addWarn(ActionEvent actionEvent) {
+		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,"Sample warn message", "Watch out for PrimeFaces!"));
+	}
+
+	public void addError(ActionEvent actionEvent) {
+		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,"Sample error message", "PrimeFaces makes no mistakes"));
+	}
+
+	public void addFatal(ActionEvent actionEvent) {
+		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL,"Sample fatal message", "Fatal Error in System"));
+	}
+}
+			</pre>
+                </p:tab>
+            </p:tabView>
+
+			
+		</div>
+
+	</ui:define>
+</ui:composition>

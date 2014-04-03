@@ -1,0 +1,69 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="../templates/ui.xhtml">
+	
+	<ui:define name="head">
+		<style type="text/css">
+			.photo {
+				width:400px;
+				height:250px;
+			}
+		</style>
+	</ui:define>
+	
+	<ui:define name="content">
+	
+		<h1 class="title ui-widget-header ui-corner-all">Carousel - SlideShow</h1>
+		<div class="entry">
+			<p>Using autoPlay feature, carousel can be used to display a slideshow.</p>
+		
+            <h3>Horizontal</h3>
+			<p:carousel id="slideShow" autoPlayInterval="4000" numVisible="1" 
+					effect="easeInStrong" circular="true" pageLinks="4" itemStyleClass="photo">
+				<p:graphicImage value="/images/nature1.jpg"/>
+				<p:graphicImage value="/images/nature2.jpg"/>
+				<p:graphicImage value="/images/nature3.jpg"/>
+				<p:graphicImage value="/images/nature4.jpg"/>
+			</p:carousel>
+            
+            <h3>Vertical</h3>
+			<p:carousel autoPlayInterval="4000" numVisible="1" 
+					effect="easeInStrong" circular="true" vertical="true" itemStyleClass="photo">
+				<p:graphicImage value="/images/nature1.jpg"/>
+				<p:graphicImage value="/images/nature2.jpg"/>
+				<p:graphicImage value="/images/nature3.jpg"/>
+				<p:graphicImage value="/images/nature4.jpg"/>
+			</p:carousel>
+		
+			
+			<h3>Source</h3>
+			<p:tabView>
+				<p:tab title="carouselSlideshow.xhtml">
+					<pre name="code" class="brush:xml">
+&lt;h3&gt;Horizontal&lt;/h3&gt;
+&lt;p:carousel itemStyleClass="carItem" pageLinks="4" autoPlayInterval="4000" 
+        numVisible="1" effect="easeInStrong" circular="true"&gt;
+    &lt;p:graphicImage value="/images/nature1.jpg"/&gt;
+    &lt;p:graphicImage value="/images/nature2.jpg"/&gt;
+    &lt;p:graphicImage value="/images/nature3.jpg"/&gt;
+    &lt;p:graphicImage value="/images/nature4.jpg"/&gt;
+&lt;/p:carousel&gt;
+
+&lt;h3&gt;Vertical&lt;/h3&gt;
+&lt;p:carousel itemStyleClass="carItem" autoPlayInterval="4000" 
+        numVisible="1" effect="easeInStrong" vertical="true" circular="true"&gt;
+    &lt;p:graphicImage value="/images/nature1.jpg"/&gt;
+    &lt;p:graphicImage value="/images/nature2.jpg"/&gt;
+    &lt;p:graphicImage value="/images/nature3.jpg"/&gt;
+    &lt;p:graphicImage value="/images/nature4.jpg"/&gt;
+&lt;/p:carousel&gt;
+					</pre>
+				</p:tab>
+			</p:tabView>
+		
+		</div>
+	</ui:define>
+</ui:composition>

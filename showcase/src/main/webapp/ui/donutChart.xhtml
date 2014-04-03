@@ -1,0 +1,85 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="../templates/ui.xhtml">
+    
+    <ui:define name="content">
+
+        <h1 class="title ui-widget-header ui-corner-all">Donut Chart</h1>
+        <div class="entry">
+            <p>DonutChart is created with a DonutChartModel.</p>
+
+            <p:chart type="donut" model="#{chartBean.donutModel1}" style="width:400px;height:300px" />
+
+            <br /><br />
+            
+            <p:chart type="donut" model="#{chartBean.donutModel2}" style="width:400px;height:300px" />
+                
+            <h3>Source</h3>
+            <p:tabView>
+                <p:tab title="donutChart.xhtml">
+                    <pre name="code" class="brush:xml">
+&lt;p:chart type="donut" model="\#{chartBean.donutModel1}" style="width:400px;height:300px" /&gt;
+
+&lt;p:chart type="donut" model="\#{chartBean.donutModel2}" style="width:400px;height:300px" /&gt;
+                    </pre>
+                </p:tab>
+
+                <p:tab title="ChartBean.java">
+            <pre name="code" class="brush:java">
+package org.primefaces.examples.view;
+
+import java.io.Serializable;
+
+import org.primefaces.model.chart.DonutChartModel;
+
+public class ChartBean implements Serializable {
+
+    private DonutChartModel donutModel;
+    
+    public ChartBean() {
+        createDonutModel();
+    }
+    
+    public DonutChartModel getDonutModel() {
+        return donutModel;
+    }
+ 
+    private void createDonutModel() {
+        donutModel = new DonutChartModel();
+        
+        Map&lt;String, Number&gt; circle1 = new LinkedHashMap&lt;String, Number&gt;();
+        circle1.put("Brand 1", 150);
+        circle1.put("Brand 2", 400);
+        circle1.put("Brand 3", 200);
+        circle1.put("Brand 4", 10);
+        donutModel.addCircle(circle1);
+        
+        Map&lt;String, Number&gt; circle2 = new LinkedHashMap&lt;String, Number&gt;();
+        circle2.put("Brand 1", 540);
+        circle2.put("Brand 2", 125);
+        circle2.put("Brand 3", 702);
+        circle2.put("Brand 4", 421);
+        donutModel.addCircle(circle2);
+        
+        Map&lt;String, Number&gt; circle3 = new LinkedHashMap&lt;String, Number&gt;();
+        circle3.put("Brand 1", 40);
+        circle3.put("Brand 2", 325);
+        circle3.put("Brand 3", 402);
+        circle3.put("Brand 4", 421);
+        donutModel.addCircle(circle3);
+    }
+}
+            </pre>
+                </p:tab>
+            </p:tabView>
+           
+
+        </div>
+
+
+
+    </ui:define>
+</ui:composition>

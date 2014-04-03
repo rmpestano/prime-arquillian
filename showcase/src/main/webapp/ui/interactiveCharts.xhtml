@@ -1,0 +1,140 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="../templates/ui.xhtml">
+    
+    <ui:define name="head">
+        <style type="text/css">
+            .left {
+                text-align: left;
+            }
+            
+            .right div {
+                text-align: right;
+            }
+        </style>
+	</ui:define>
+
+    <ui:define name="content">
+
+        <h1 class="title ui-widget-header ui-corner-all">Chart - Interactive</h1>
+        <div class="entry">
+            <p>Charts are interactive components, information about selected series and items can be passed via ajax to a JSF backing bean using ItemSelectEvent.</p>
+
+            <h:form>
+                <p:growl id="growl" showDetail="true" />
+
+                <h:panelGrid columns="2" columnClasses="left,right" style="width:100%">
+                    <p:chart type="pie" model="#{chartBean.pieModel}" style="width:400px;height:300px">
+                        <p:ajax event="itemSelect" listener="#{chartBean.itemSelect}" update="growl" />
+                    </p:chart>
+
+                    <p:chart type="bar" model="#{chartBean.barModel}" style="width:400px;height:300px">
+                        <p:ajax event="itemSelect" listener="#{chartBean.itemSelect}" update="growl" />
+                    </p:chart>  
+                </h:panelGrid>
+                
+            </h:form>
+
+            <h3>Source</h3>
+            <p:tabView>
+                <p:tab title="interactiveCharts.xhtml">
+                    <pre name="code" class="brush:xml">
+&lt;h:form&gt;
+    &lt;p:growl id="growl" showDetail="true" /&gt;
+
+    &lt;h:panelGrid columns="2" columnClasses="left,right" style="width:100%"&gt;
+        &lt;p:chart type="pie" model="\#{chartBean.pieModel}" style="width:400px;height:300px"&gt;
+            &lt;p:ajax event="itemSelect" listener="\#{chartBean.itemSelect}" update="growl" /&gt;
+        &lt;/p:chart&gt;
+
+        &lt;p:chart type="bar" model="\#{chartBean.barModel}" style="width:400px;height:300px"&gt;
+            &lt;p:ajax event="itemSelect" listener="\#{chartBean.itemSelect}" update="growl" /&gt;
+        &lt;/p:chart&gt;  
+    &lt;/h:panelGrid&gt;
+
+&lt;/h:form&gt;
+                    </pre>
+                </p:tab>
+
+                <p:tab title="ChartBean.java">
+                    <pre name="code" class="brush:java">
+package org.primefaces.examples.view;
+
+import java.io.Serializable;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+
+import org.primefaces.event.ItemSelectEvent;
+import org.primefaces.model.chart.CartesianChartModel;
+import org.primefaces.model.chart.PieChartModel;
+
+public class ChartBean implements Serializable {
+
+    private CartesianChartModel categoryModel;
+
+    private PieChartModel pieModel;
+
+	public ChartBean() {
+        createCategoryModel();
+        createPieModel();
+	}
+
+	public void itemSelect(ItemSelectEvent event) {
+        FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Item selected",
+                        "Item Index: " + event.getItemIndex() + ", Series Index:" + event.getSeriesIndex());
+
+		FacesContext.getCurrentInstance().addMessage(null, msg);
+	}
+
+    public CartesianChartModel getCategoryModel() {
+        return categoryModel;
+    }
+
+    public PieChartModel getPieModel() {
+        return pieModel;
+    }
+
+    private void createCategoryModel() {
+        categoryModel = new CartesianChartModel();
+
+        ChartSeries boys = new ChartSeries();
+        boys.setLabel("Boys");
+
+        boys.set("2004", 120);
+        boys.set("2005", 100);
+        boys.set("2006", 44);
+        boys.set("2007", 150);
+        boys.set("2008", 25);
+
+        ChartSeries girls = new ChartSeries();
+        girls.setLabel("Girls");
+
+        girls.set("2004", 52);
+        girls.set("2005", 60);
+        girls.set("2006", 110);
+        girls.set("2007", 135);
+        girls.set("2008", 120);
+
+        categoryModel.addSeries(boys);
+        categoryModel.addSeries(girls);
+    }
+
+    private void createPieModel() {
+        pieModel = new PieChartModel();
+
+        pieModel.set("Brand 1", 540);
+        pieModel.set("Brand 2", 325);
+        pieModel.set("Brand 3", 702);
+        pieModel.set("Brand 4", 421);
+    }
+}
+                    </pre>
+                </p:tab>
+            </p:tabView>
+        </div>
+
+    </ui:define>
+</ui:composition>

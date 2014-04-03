@@ -1,0 +1,84 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="../templates/ui.xhtml">
+        
+	<ui:define name="content">
+
+		<h1 class="title ui-widget-header ui-corner-all">InputTextarea</h1>
+		<div class="entry">
+			<p>InputTextarea extends standard InputTextarea with autoComplete, autoResize, remaining characters counter and theming features.</p>
+            
+            <h:form>
+                
+                <h3>AutoComplete</h3>
+                <p>Following inputTextarea send a query for each word that has at least 4 characters to the complete method. Try typing "PrimeFaces".</p>
+                <p:inputTextarea rows="10" cols="50" completeMethod="#{autoCompleteBean.completeArea}" queryDelay="750" minQueryLength="4" />
+                
+                <h3>AutoResize</h3>
+                <p:inputTextarea rows="6" cols="33" />
+
+                <h3>Remaining Chars</h3>
+                <p:inputTextarea rows="5" cols="30" counter="display" maxlength="10" counterTemplate="{0} characters remaining." autoResize="false"/>
+                <br />
+                <h:outputText id="display" />
+
+            </h:form>
+            
+			<h3>Source</h3>
+			<p:tabView>
+				<p:tab title="inputTextarea.xhtml">
+					<pre name="code" class="brush:xml">
+&lt;h3&gt;AutoComplete&lt;/h3&gt;
+&lt;p&gt;Following inputTextarea send a query for each word that has at least 4 characters to the complete method. Try typing "PrimeFaces".&lt;/p&gt;
+&lt;p:inputTextarea rows="10" cols="50" completeMethod="\#{autoCompleteBean.completeArea}" queryDelay="750" minQueryLength="4" /&gt;
+                          
+&lt;h3&gt;AutoResize&lt;/h3&gt;
+&lt;p:inputTextarea rows="6" cols="33" /&gt;
+
+&lt;h3&gt;Remaining Chars&lt;/h3&gt;
+&lt;p:inputTextarea rows="5" cols="30" counter="counter" maxlength="10"     
+    counterTemplate="{0} characters remaining." autoResize="false"/&gt;
+
+&lt;h:outputText id="counter" /&gt;
+					</pre>
+				</p:tab>
+                
+                <p:tab title="autoCompleteBean.java">
+					<pre name="code" class="brush:java">
+package org.primefaces.examples.view;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class AutoCompleteBean {
+    
+    public List&lt;String&gt; completeArea(String query) {
+		List&lt;String&gt; results = new ArrayList&lt;String&gt;();
+		
+		if(query.equals("PrimeFaces")) {
+            results.add("PrimeFaces Rocks!!!");
+            results.add("PrimeFaces has 100+ components.");
+            results.add("PrimeFaces is lightweight.");
+            results.add("PrimeFaces is easy to use.");
+            results.add("PrimeFaces is developed with passion!");
+        }
+        else {
+            for(int i = 0; i &lt; 10; i++) {
+            	results.add(query + i);
+            }
+        }
+		
+		return results;
+	}
+}
+					</pre>
+				</p:tab>
+			</p:tabView>
+
+		</div>
+
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<component>
+   <tag>notificationBar</tag>
+   <tagClass>org.primefaces.component.notificationbar.NotificationBarTag</tagClass>
+   <componentClass>org.primefaces.component.notificationbar.NotificationBar</componentClass>
+   <componentType>org.primefaces.component.NotificationBar</componentType>
+   <componentFamily>org.primefaces.component</componentFamily>
+   <rendererType>org.primefaces.component.NotificationBarRenderer</rendererType>
+   <rendererClass>org.primefaces.component.notificationbar.NotificationBarRenderer</rendererClass>
+   <parent>javax.faces.component.UIComponentBase</parent>
+   <description>NotificationBar displayes a multipurpose fixed positioned panel for notification. Any group of JSF content can be placed inside notificationbar.</description>
+   <interfaces>
+      <interface>
+         <name>org.primefaces.component.api.Widget</name>
+      </interface>
+   </interfaces>
+   <attributes>
+      <attribute>
+         <name>id</name>
+         <required>false</required>
+         <type>java.lang.String</type>
+         <ignoreInComponent>true</ignoreInComponent>
+         <literal>true</literal>
+         <description>Unique identifier of the component in a namingContainer.</description>
+      </attribute>
+      <attribute>
+         <name>rendered</name>
+         <required>false</required>
+         <type>java.lang.Boolean</type>
+         <ignoreInComponent>true</ignoreInComponent>
+         <description>Boolean value to specify the rendering of the component, when set to false component will not be rendered.</description>
+      </attribute>
+      <attribute>
+         <name>binding</name>
+         <required>false</required>
+         <type>javax.faces.component.UIComponent</type>
+         <ignoreInComponent>true</ignoreInComponent>
+         <description>An el expression referring to a server side UIComponent instance in a backing bean.</description>
+      </attribute>
+      <attribute>
+         <name>widgetVar</name>
+         <required>false</required>
+         <type>java.lang.String</type>
+         <ignoreInComponent>false</ignoreInComponent>
+         <description>Name of the client side widget.</description>
+      </attribute>
+      <attribute>
+         <name>style</name>
+         <required>false</required>
+         <type>java.lang.String</type>
+         <description>Style of the container element.</description>
+      </attribute>
+      <attribute>
+         <name>styleClass</name>
+         <required>false</required>
+         <type>java.lang.String</type>
+         <description>StyleClass of the container element.</description>
+      </attribute>
+      <attribute>
+         <name>position</name>
+         <required>false</required>
+         <type>java.lang.String</type>
+         <defaultValue>top</defaultValue>
+         <description>Position of the bar, "top" or "bottom". Default is top.</description>
+      </attribute>
+      <attribute>
+         <name>effect</name>
+         <required>false</required>
+         <type>java.lang.String</type>
+         <defaultValue>fade</defaultValue>
+         <description>Name of the effect, "fade", "slide" or "none". Default is fade.</description>
+      </attribute>
+      <attribute>
+         <name>effectSpeed</name>
+         <required>false</required>
+         <type>java.lang.String</type>
+         <defaultValue>normal</defaultValue>
+         <description>Speed of the effect, "slow", "normal" or "fast". Default is normal.</description>
+      </attribute>
+      <attribute>
+         <name>autoDisplay</name>
+         <required>false</required>
+         <type>java.lang.Boolean</type>
+         <defaultValue>false</defaultValue>
+         <description/>
+      </attribute>
+   </attributes>
+   <resources>
+      <resource>
+         <name>primefaces.css</name>
+      </resource>
+      <resource>
+         <name>jquery/jquery.js</name>
+      </resource>
+      <resource>
+         <name>primefaces.js</name>
+      </resource>
+   </resources>
+</component>

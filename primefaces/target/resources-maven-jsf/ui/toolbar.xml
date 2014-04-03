@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<component>
+   <tag>toolbar</tag>
+   <tagClass>org.primefaces.component.toolbar.ToolbarTag</tagClass>
+   <componentClass>org.primefaces.component.toolbar.Toolbar</componentClass>
+   <componentType>org.primefaces.component.Toolbar</componentType>
+   <componentFamily>org.primefaces.component</componentFamily>
+   <rendererType>org.primefaces.component.ToolbarRenderer</rendererType>
+   <rendererClass>org.primefaces.component.toolbar.ToolbarRenderer</rendererClass>
+   <parent>javax.faces.component.UIComponentBase</parent>
+   <description>Toolbar is a horizontal grouping component for commands and other content.</description>
+   <attributes>
+      <attribute>
+         <name>id</name>
+         <required>false</required>
+         <type>java.lang.String</type>
+         <ignoreInComponent>true</ignoreInComponent>
+         <literal>true</literal>
+         <description>Unique identifier of the component in a namingContainer.</description>
+      </attribute>
+      <attribute>
+         <name>rendered</name>
+         <required>false</required>
+         <type>java.lang.Boolean</type>
+         <ignoreInComponent>true</ignoreInComponent>
+         <description>Boolean value to specify the rendering of the component, when set to false component will not be rendered.</description>
+      </attribute>
+      <attribute>
+         <name>binding</name>
+         <required>false</required>
+         <type>javax.faces.component.UIComponent</type>
+         <ignoreInComponent>true</ignoreInComponent>
+         <description>An el expression referring to a server side UIComponent instance in a backing bean.</description>
+      </attribute>
+      <attribute>
+         <name>style</name>
+         <required>false</required>
+         <type>java.lang.String</type>
+         <description>Inline style of the container element.</description>
+      </attribute>
+      <attribute>
+         <name>styleClass</name>
+         <required>false</required>
+         <type>java.lang.String</type>
+         <description>Style class of the container element.</description>
+      </attribute>
+   </attributes>
+   <resources>
+      <resource>
+         <name>primefaces.css</name>
+      </resource>
+   </resources>
+</component>

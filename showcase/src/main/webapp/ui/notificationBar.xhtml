@@ -1,0 +1,54 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="../templates/ui.xhtml">
+	
+	<ui:define name="head">
+		<style type="text/css">
+			body {
+				padding:0;
+				margin:0;
+			}
+			
+			.top {
+				filter:alpha(opacity=80);
+				opacity:0.8;
+				padding:50px 0 0 50px;
+			}
+		</style>
+	
+	</ui:define>
+	
+	<ui:define name="content">
+
+		<h1 class="title ui-widget-header ui-corner-all">Notification Bar</h1>
+		<div class="entry">
+			<p>NotificationBar displays a multipurpose fixed positioned panel for notification either on top or bottom of the page. Any group of JSF components
+			can be placed inside notification bar.</p>
+            
+            <p:notificationBar id="notification" position="top" effect="slide" widgetVar="bar" styleClass="top">
+                <h:outputText value="What PrimeFaces has so far is just the beginning!" style="font-size:36px;" />
+            </p:notificationBar>
+            
+            <p:commandButton id="showbtn" value="Show" onclick="PF('bar').show()" type="button" />
+            <p:commandButton id="hidebtn" value="Hide" onclick="PF('bar').hide()" type="button" />
+
+			<h3>Source</h3>
+            <p:tabView>
+				<p:tab title="notificationBar.xhtml">
+			<pre name="code" class="brush:xml">
+&lt;p:notificationBar position="top" effect="slide" widgetVar="bar" styleClass="top"&gt;
+    &lt;h:outputText value="What PrimeFaces has so far is just the beginning!" style="color:#FFCC00;font-size:36px;" /&gt;
+&lt;/p:notificationBar&gt;
+
+&lt;p:commandButton value="Show" onclick="PF('bar').show()" type="button" /&gt;
+&lt;p:commandButton value="Hide" onclick="PF('bar').hide()" type="button" /&gt;
+            </pre>
+                </p:tab>
+            </p:tabView>
+		</div>
+
+	</ui:define>
+</ui:composition>

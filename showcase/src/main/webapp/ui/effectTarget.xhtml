@@ -1,0 +1,45 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="../templates/ui.xhtml">
+
+    <ui:define name="content">
+
+        <h1 class="title ui-widget-header ui-corner-all">Effect Target</h1>
+        <div class="entry">
+            <p>By default, effects apply to their parents, this can be configured with the for attribute that represents an effect target.</p>
+
+            <h:outputLink id="lnk" value="javascript:void(0)">
+                <h:outputText value="Show the Barca Temple" />
+                <p:effect type="puff" event="click" for="img">
+                    <f:param name="mode" value="'show'" />
+                </p:effect>
+            </h:outputLink>
+
+            <br />
+
+            <p:graphicImage id="img" value="/images/barca/camp_nou.jpg" style="display:none"/>
+
+            <h3>Source</h3>
+            <p:tabView>
+                <p:tab title="effectTarget.xhtml">
+                    <pre name="code" class="brush:xml">
+&lt;h:outputLink id="lnk" value="javascript:void(0)"&gt;
+	&lt;h:outputText value="Show the Barca Temple" /&gt;
+	&lt;p:effect type="puff" event="click" for="img"&gt;
+		&lt;f:param name="mode" value="'show'" /&gt;
+	&lt;/p:effect&gt;
+&lt;/h:outputLink&gt;
+
+&lt;h:graphicImage id="img" value="/ui/barca/campnou.jpg" style="display:none"/&gt;
+                     </pre>
+                </p:tab>
+            </p:tabView>
+
+
+        </div>
+
+    </ui:define>
+</ui:composition>

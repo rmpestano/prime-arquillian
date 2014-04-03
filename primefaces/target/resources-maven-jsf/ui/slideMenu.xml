@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<component>
+   <tag>slideMenu</tag>
+   <tagClass>org.primefaces.component.slidemenu.SlideMenuTag</tagClass>
+   <componentClass>org.primefaces.component.slidemenu.SlideMenu</componentClass>
+   <componentType>org.primefaces.component.SlideMenu</componentType>
+   <componentFamily>org.primefaces.component</componentFamily>
+   <rendererType>org.primefaces.component.SlideMenuRenderer</rendererType>
+   <rendererClass>org.primefaces.component.slidemenu.SlideMenuRenderer</rendererClass>
+   <parent>org.primefaces.component.menu.AbstractMenu</parent>
+   <description>SlideMenu displays submenus with a slide animation.</description>
+   <interfaces>
+      <interface>
+         <name>org.primefaces.component.api.Widget</name>
+      </interface>
+      <interface>
+         <name>org.primefaces.component.menu.OverlayMenu</name>
+      </interface>
+   </interfaces>
+   <attributes>
+      <attribute>
+         <name>id</name>
+         <required>false</required>
+         <type>java.lang.String</type>
+         <ignoreInComponent>true</ignoreInComponent>
+         <literal>true</literal>
+         <description>Unique identifier of the component in a namingContainer.</description>
+      </attribute>
+      <attribute>
+         <name>rendered</name>
+         <required>false</required>
+         <type>java.lang.Boolean</type>
+         <ignoreInComponent>true</ignoreInComponent>
+         <description>Boolean value to specify the rendering of the component, when set to false component will not be rendered.</description>
+      </attribute>
+      <attribute>
+         <name>binding</name>
+         <required>false</required>
+         <type>javax.faces.component.UIComponent</type>
+         <ignoreInComponent>true</ignoreInComponent>
+         <description>An el expression referring to a server side UIComponent instance in a backing bean.</description>
+      </attribute>
+      <attribute>
+         <name>widgetVar</name>
+         <required>false</required>
+         <type>java.lang.String</type>
+         <ignoreInComponent>false</ignoreInComponent>
+         <description>Name of the client side widget.</description>
+      </attribute>
+      <attribute>
+         <name>model</name>
+         <required>false</required>
+         <type>org.primefaces.model.menu.MenuModel</type>
+         <description>A menu model instance to create menu programmatically.</description>
+      </attribute>
+      <attribute>
+         <name>style</name>
+         <required>false</required>
+         <type>java.lang.String</type>
+         <description>Inline style of the main container element.</description>
+      </attribute>
+      <attribute>
+         <name>styleClass</name>
+         <required>false</required>
+         <type>java.lang.String</type>
+         <description>Style class of the main container element.</description>
+      </attribute>
+      <attribute>
+         <name>backLabel</name>
+         <required>false</required>
+         <type>java.lang.String</type>
+         <defaultValue>Back</defaultValue>
+         <description>Text for back link, only applies to sliding menus. Default is "Back"</description>
+      </attribute>
+      <attribute>
+         <name>trigger</name>
+         <required>false</required>
+         <type>java.lang.String</type>
+         <description>Id of component whose click event will show the dynamic positioned menu.</description>
+      </attribute>
+      <attribute>
+         <name>my</name>
+         <required>false</required>
+         <type>java.lang.String</type>
+         <description>Corner of menu to align with trigger element.</description>
+      </attribute>
+      <attribute>
+         <name>at</name>
+         <required>false</required>
+         <type>java.lang.String</type>
+         <description>Corner of trigger to align with menu element.</description>
+      </attribute>
+      <attribute>
+         <name>overlay</name>
+         <required>false</required>
+         <type>java.lang.Boolean</type>
+         <defaultValue>false</defaultValue>
+         <description>Defines positioning, when enabled menu is displayed with absolute positioning relative to the trigger. 
+            Default is false, meaning static positioning.</description>
+      </attribute>
+      <attribute>
+         <name>triggerEvent</name>
+         <required>false</required>
+         <type>java.lang.String</type>
+         <defaultValue>click</defaultValue>
+         <description>Event name of component that will show the dynamic positioned menu. Default is click.</description>
+      </attribute>
+   </attributes>
+   <resources>
+      <resource>
+         <name>primefaces.css</name>
+      </resource>
+      <resource>
+         <name>jquery/jquery.js</name>
+      </resource>
+      <resource>
+         <name>jquery/jquery-plugins.js</name>
+      </resource>
+      <resource>
+         <name>primefaces.js</name>
+      </resource>
+   </resources>
+</component>

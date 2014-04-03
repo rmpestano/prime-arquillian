@@ -1,0 +1,383 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<component>
+   <tag>inputTextarea</tag>
+   <tagClass>org.primefaces.component.inputtextarea.InputTextarea</tagClass>
+   <componentHandlerClass>org.primefaces.component.inputtextarea.InputTextareaHandler</componentHandlerClass>
+   <componentClass>org.primefaces.component.inputtextarea.InputTextarea</componentClass>
+   <componentType>org.primefaces.component.InputTextarea</componentType>
+   <componentFamily>org.primefaces.component</componentFamily>
+   <rendererType>org.primefaces.component.InputTextareaRenderer</rendererType>
+   <rendererClass>org.primefaces.component.inputtextarea.InputTextareaRenderer</rendererClass>
+   <parent>javax.faces.component.html.HtmlInputTextarea</parent>
+   <description>InputTextarea is an extension to standard inputTextara with skinning capabilities and auto growing.</description>
+   <interfaces>
+      <interface>
+         <name>org.primefaces.component.api.Widget</name>
+      </interface>
+      <interface>
+         <name>org.primefaces.component.api.MixedClientBehaviorHolder</name>
+      </interface>
+   </interfaces>
+   <attributes>
+      <attribute>
+         <name>id</name>
+         <required>false</required>
+         <type>java.lang.String</type>
+         <ignoreInComponent>true</ignoreInComponent>
+         <literal>true</literal>
+         <description>Unique identifier of the component in a namingContainer.</description>
+      </attribute>
+      <attribute>
+         <name>rendered</name>
+         <required>false</required>
+         <type>java.lang.Boolean</type>
+         <ignoreInComponent>true</ignoreInComponent>
+         <description>Boolean value to specify the rendering of the component, when set to false component will not be rendered.</description>
+      </attribute>
+      <attribute>
+         <name>binding</name>
+         <required>false</required>
+         <type>javax.faces.component.UIComponent</type>
+         <ignoreInComponent>true</ignoreInComponent>
+         <description>An el expression referring to a server side UIComponent instance in a backing bean.</description>
+      </attribute>
+      <attribute>
+         <name>value</name>
+         <required>false</required>
+         <type>java.lang.Object</type>
+         <ignoreInComponent>true</ignoreInComponent>
+         <description>Value of the component.</description>
+      </attribute>
+      <attribute>
+         <name>converter</name>
+         <required>false</required>
+         <type>java.faces.convert.Converter</type>
+         <ignoreInComponent>true</ignoreInComponent>
+         <description>An el expression or a literal text that defines a converter for the component. When it's an EL expression, it's resolved to a converter instance. 
+    In case it's a static text, it must refer to a converter id.</description>
+      </attribute>
+      <attribute>
+         <name>immediate</name>
+         <required>false</required>
+         <type>java.lang.Boolean</type>
+         <ignoreInComponent>true</ignoreInComponent>
+         <description>When set true, process validations logic is executed at apply request values phase for this component. Default is false.</description>
+      </attribute>
+      <attribute>
+         <name>required</name>
+         <required>false</required>
+         <type>java.lang.Boolean</type>
+         <ignoreInComponent>true</ignoreInComponent>
+         <description>Marks component as required.</description>
+      </attribute>
+      <attribute>
+         <name>validator</name>
+         <required>false</required>
+         <type>javax.faces.validator.Validator</type>
+         <ignoreInComponent>true</ignoreInComponent>
+         <description>A method expression referring to a method validationg the input.</description>
+      </attribute>
+      <attribute>
+         <name>valueChangeListener</name>
+         <required>false</required>
+         <type>javax.faces.event.ValueChangeListener</type>
+         <ignoreInComponent>true</ignoreInComponent>
+         <method-signature>void valueChange(javax.faces.event.ValueChangeEvent)</method-signature>
+         <description>A method binding expression referring to a method for handling a valuchangeevent.</description>
+      </attribute>
+      <attribute>
+         <name>requiredMessage</name>
+         <required>false</required>
+         <type>java.lang.String</type>
+         <ignoreInComponent>true</ignoreInComponent>
+         <description>Message to display when required field validation fails.</description>
+      </attribute>
+      <attribute>
+         <name>converterMessage</name>
+         <required>false</required>
+         <type>java.lang.String</type>
+         <ignoreInComponent>true</ignoreInComponent>
+         <description>Message to display when conversion fails.</description>
+      </attribute>
+      <attribute>
+         <name>validatorMessage</name>
+         <required>false</required>
+         <type>java.lang.String</type>
+         <ignoreInComponent>true</ignoreInComponent>
+         <description>Message to display when validation fails.</description>
+      </attribute>
+      <!-- Components having these attributes must extend from HtmlInputTextArea so all the attributes are defined as ignoreInComponet 
+	which will ignore code generation in component class since they are already defined in parent HtmlInputText
+-->
+      <attribute>
+         <name>accesskey</name>
+         <required>false</required>
+         <type>java.lang.String</type>
+         <ignoreInComponent>true</ignoreInComponent>
+         <description>Access key to transfer focus to the input element.</description>
+      </attribute>
+      <attribute>
+         <name>cols</name>
+         <required>false</required>
+         <type>int</type>
+         <ignoreInComponent>true</ignoreInComponent>
+         <description>Specifies the visible width of input element.</description>
+      </attribute>
+      <attribute>
+         <name>dir</name>
+         <required/>
+         <type>java.lang.String</type>
+         <ignoreInComponent>true</ignoreInComponent>
+         <description>Direction indication for text that does not inherit directionality.</description>
+      </attribute>
+      <attribute>
+         <name>disabled</name>
+         <required/>
+         <type>boolean</type>
+         <ignoreInComponent>true</ignoreInComponent>
+         <description>Disables the input element, default is false.</description>
+      </attribute>
+      <attribute>
+         <name>label</name>
+         <required/>
+         <type>java.lang.String</type>
+         <ignoreInComponent>true</ignoreInComponent>
+         <description>A localized user presentable name.</description>
+      </attribute>
+      <attribute>
+         <name>lang</name>
+         <required/>
+         <type>java.lang.String</type>
+         <ignoreInComponent>true</ignoreInComponent>
+         <description>A localized user presentable name.</description>
+      </attribute>
+      <attribute>
+         <name>onblur</name>
+         <required/>
+         <type>java.lang.String</type>
+         <ignoreInComponent>true</ignoreInComponent>
+         <description>Client side callback to execute when input element loses focus.</description>
+      </attribute>
+      <attribute>
+         <name>onchange</name>
+         <required/>
+         <type>java.lang.String</type>
+         <ignoreInComponent>true</ignoreInComponent>
+         <description>Client side callback to execute when input element loses focus and its value has been modified since gaining focus.</description>
+      </attribute>
+      <attribute>
+         <name>onclick</name>
+         <required/>
+         <type>java.lang.String</type>
+         <ignoreInComponent>true</ignoreInComponent>
+         <description>Client side callback to execute when input element is clicked.</description>
+      </attribute>
+      <attribute>
+         <name>ondblclick</name>
+         <required/>
+         <type>java.lang.String</type>
+         <ignoreInComponent>true</ignoreInComponent>
+         <description>Client side callback to execute when input element is double clicked.</description>
+      </attribute>
+      <attribute>
+         <name>onfocus</name>
+         <required/>
+         <type>java.lang.String</type>
+         <ignoreInComponent>true</ignoreInComponent>
+         <description>Client side callback to execute when input element receives focus.</description>
+      </attribute>
+      <attribute>
+         <name>onkeydown</name>
+         <required/>
+         <type>java.lang.String</type>
+         <ignoreInComponent>true</ignoreInComponent>
+         <description>Client side callback to execute when a key is pressed down over input element.</description>
+      </attribute>
+      <attribute>
+         <name>onkeypress</name>
+         <required/>
+         <type>java.lang.String</type>
+         <ignoreInComponent>true</ignoreInComponent>
+         <description>Client side callback to execute when a key is pressed and released over input element.</description>
+      </attribute>
+      <attribute>
+         <name>onkeyup</name>
+         <required/>
+         <type>java.lang.String</type>
+         <ignoreInComponent>true</ignoreInComponent>
+         <description>Client side callback to execute when a key is released over input element.</description>
+      </attribute>
+      <attribute>
+         <name>onmousedown</name>
+         <required/>
+         <type>java.lang.String</type>
+         <ignoreInComponent>true</ignoreInComponent>
+         <description>Client side callback to execute when a pointer input element is pressed down over input element.</description>
+      </attribute>
+      <attribute>
+         <name>onmousemove</name>
+         <required/>
+         <type>java.lang.String</type>
+         <ignoreInComponent>true</ignoreInComponent>
+         <description>Client side callback to execute when a pointer input element is moved within input element.</description>
+      </attribute>
+      <attribute>
+         <name>onmouseout</name>
+         <required/>
+         <type>java.lang.String</type>
+         <ignoreInComponent>true</ignoreInComponent>
+         <description>Client side callback to execute when a pointer input element is moved away from input element.</description>
+      </attribute>
+      <attribute>
+         <name>onmouseover</name>
+         <required/>
+         <type>java.lang.String</type>
+         <ignoreInComponent>true</ignoreInComponent>
+         <description>Client side callback to execute when a pointer input element is moved onto input element.</description>
+      </attribute>
+      <attribute>
+         <name>onmouseup</name>
+         <required/>
+         <type>java.lang.String</type>
+         <ignoreInComponent>true</ignoreInComponent>
+         <description>Client side callback to execute when a pointer input element is released over input element.</description>
+      </attribute>
+      <attribute>
+         <name>onselect</name>
+         <required/>
+         <type>java.lang.String</type>
+         <ignoreInComponent>true</ignoreInComponent>
+         <description>Client side callback to execute when text within input element is selected by user.</description>
+      </attribute>
+      <attribute>
+         <name>readonly</name>
+         <required/>
+         <type>boolean</type>
+         <ignoreInComponent>true</ignoreInComponent>
+         <description>Flag indicating that this input element will prevent changes by the user.</description>
+      </attribute>
+      <attribute>
+         <name>rows</name>
+         <required>false</required>
+         <type>int</type>
+         <ignoreInComponent>true</ignoreInComponent>
+         <description>Specifies the visible height of input element.</description>
+      </attribute>
+      <attribute>
+         <name>style</name>
+         <required/>
+         <type>java.lang.String</type>
+         <ignoreInComponent>true</ignoreInComponent>
+         <description>Inline style of the input element.</description>
+      </attribute>
+      <attribute>
+         <name>styleClass</name>
+         <required/>
+         <type>java.lang.String</type>
+         <ignoreInComponent>true</ignoreInComponent>
+         <description>Style class of the input element.</description>
+      </attribute>
+      <attribute>
+         <name>tabindex</name>
+         <required/>
+         <type>java.lang.String</type>
+         <ignoreInComponent>true</ignoreInComponent>
+         <description>Advisory tooltip information.</description>
+      </attribute>
+      <attribute>
+         <name>title</name>
+         <required/>
+         <type>java.lang.String</type>
+         <ignoreInComponent>true</ignoreInComponent>
+         <description>Advisory tooltip information.</description>
+      </attribute>
+      <attribute>
+         <name>placeholder</name>
+         <required>false</required>
+         <type>java.lang.String</type>
+         <description>The placeholder attribute specifies a short hint that describes the expected value of an input field.</description>
+      </attribute>
+      <attribute>
+         <name>widgetVar</name>
+         <required>false</required>
+         <type>java.lang.String</type>
+         <ignoreInComponent>false</ignoreInComponent>
+         <description>Name of the client side widget.</description>
+      </attribute>
+      <attribute>
+         <name>autoResize</name>
+         <required>false</required>
+         <type>java.lang.Boolean</type>
+         <defaultValue>true</defaultValue>
+         <description>Allows to expand height automatically when text input overflows.</description>
+      </attribute>
+      <attribute>
+         <name>maxlength</name>
+         <required>false</required>
+         <type>java.lang.Integer</type>
+         <defaultValue>java.lang.Integer.MAX_VALUE</defaultValue>
+         <description>Sets maximum character number of text area container. Default is 0, means no limit.</description>
+      </attribute>
+      <attribute>
+         <name>counter</name>
+         <required>false</required>
+         <type>java.lang.String</type>
+         <description>Id of the label component to display remaining characters.</description>
+      </attribute>
+      <attribute>
+         <name>counterTemplate</name>
+         <required>false</required>
+         <type>java.lang.String</type>
+         <description>Template text to display in counter, default value is "{0}".</description>
+      </attribute>
+      <attribute>
+         <name>completeMethod</name>
+         <required>false</required>
+         <type>javax.el.MethodExpression</type>
+         <method-signature>java.util.List completeMethod(java.lang.String)</method-signature>
+         <description>Method providing suggestions.</description>
+      </attribute>
+      <attribute>
+         <name>minQueryLength</name>
+         <required>false</required>
+         <type>java.lang.Integer</type>
+         <defaultValue>3</defaultValue>
+         <description>Number of characters of a word to be typed before starting to query. Default is 3.</description>
+      </attribute>
+      <attribute>
+         <name>queryDelay</name>
+         <required>false</required>
+         <type>java.lang.Integer</type>
+         <defaultValue>700</defaultValue>
+         <description>Delay to wait in milliseconds before sending each query to the server. Default is 700</description>
+      </attribute>
+      <attribute>
+         <name>scrollHeight</name>
+         <required>false</required>
+         <type>java.lang.Integer</type>
+         <defaultValue>java.lang.Integer.MAX_VALUE</defaultValue>
+         <description>Defines the height of the viewport for autocomplete suggestions.</description>
+      </attribute>
+      <attribute>
+         <name>addLine</name>
+         <required>false</required>
+         <type>java.lang.Boolean</type>
+         <defaultValue>false</defaultValue>
+         <description>Adds a new line at start as a workaround to SGML specification B.3.1.</description>
+      </attribute>
+   </attributes>
+   <resources>
+      <resource>
+         <name>primefaces.css</name>
+      </resource>
+      <resource>
+         <name>jquery/jquery.js</name>
+      </resource>
+      <resource>
+         <name>jquery/jquery-plugins.js</name>
+      </resource>
+      <resource>
+         <name>primefaces.js</name>
+      </resource>
+   </resources>
+</component>

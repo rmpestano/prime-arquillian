@@ -1,0 +1,192 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+    template="../templates/ui.xhtml">
+    
+        
+    <ui:define name="head">
+        <style type="text/css">
+
+        </style>
+        
+        <script type="text/javascript">
+//<![CDATA[
+
+//]]>
+        </script>
+    </ui:define>
+        
+	<ui:define name="content">
+		<h1 class="title ui-widget-header ui-corner-all">TreeTable - Checkbox</h1>
+
+		<div class="entry">
+			<p>Another option in addition to single and multiple selection is the checkbox based selection.</p>
+			
+			<h:form id="form">
+                	
+                <p:treeTable value="#{treeCheckboxBean.root}" var="document" id="multiSelect"
+                             selection="#{treeCheckboxBean.selectedNodes}" selectionMode="checkbox">
+
+                    <f:facet name="header">
+                        Checkbox Selection
+                    </f:facet>
+                    
+					<p:column style="width:150px">
+						<f:facet name="header">
+							Name
+						</f:facet>
+						<h:outputText value="#{document.name}" />
+					</p:column>
+					
+					<p:column style="width:100px">
+						<f:facet name="header">
+							Size
+						</f:facet>
+						<h:outputText value="#{document.size}" />
+					</p:column>
+					
+					<p:column style="width:100px">
+						<f:facet name="header">
+							Type
+						</f:facet>
+						<h:outputText value="#{document.type}" />
+					</p:column>
+                    
+                    <f:facet name="footer">
+                        <p:commandButton value="View" icon="ui-icon-search" update=":form:documentPanel" oncomplete="PF('documentDialog').show()"/>
+                    </f:facet>
+				</p:treeTable>
+				
+				<p:dialog id="dialog" header="Document Detail" showEffect="fade" widgetVar="documentDialog" modal="true">
+					<p:outputPanel id="documentPanel">                        
+                        <p:dataList value="#{treeCheckboxBean.selectedNodes}" var="selectedNode" rendered="#{not empty treeCheckboxBean.selectedNodes}">
+                            #{selectedNode.data.name}
+                        </p:dataList>
+					</p:outputPanel>
+				</p:dialog>
+				
+			</h:form>
+			
+			<h3>Source</h3>
+			<p:tabView>
+				<p:tab title="treeTableCheckbox.xhtml">
+					<pre name="code" class="brush:xml">
+&lt;h:form id="form"&gt;
+                	
+    &lt;p:treeTable value="\#{treeCheckboxBean.root}" var="document" id="multiSelect"
+                 selection="\#{treeCheckboxBean.selectedNodes}" selectionMode="checkbox"&gt;
+
+        &lt;f:facet name="header"&gt;
+            Checkbox Selection
+        &lt;/f:facet&gt;
+
+        &lt;p:column style="width:150px"&gt;
+            &lt;f:facet name="header"&gt;
+                Name
+            &lt;/f:facet&gt;
+            &lt;h:outputText value="\#{document.name}" /&gt;
+        &lt;/p:column&gt;
+
+        &lt;p:column style="width:100px"&gt;
+            &lt;f:facet name="header"&gt;
+                Size
+            &lt;/f:facet&gt;
+            &lt;h:outputText value="\#{document.size}" /&gt;
+        &lt;/p:column&gt;
+
+        &lt;p:column style="width:100px"&gt;
+            &lt;f:facet name="header"&gt;
+                Type
+            &lt;/f:facet&gt;
+            &lt;h:outputText value="\#{document.type}" /&gt;
+        &lt;/p:column&gt;
+
+        &lt;f:facet name="footer"&gt;
+            &lt;p:commandButton value="View" icon="ui-icon-search" update=":form:documentPanel" oncomplete="PF('documentDialog').show()"/&gt;
+        &lt;/f:facet&gt;
+    &lt;/p:treeTable&gt;
+
+    &lt;p:dialog id="dialog" header="Document Detail" showEffect="fade" widgetVar="documentDialog" modal="true"&gt;
+        &lt;p:outputPanel id="documentPanel"&gt;                        
+            &lt;p:dataList value="\#{treeCheckboxBean.selectedNodes}" var="selectedNode" rendered="\#{not empty treeCheckboxBean.selectedNodes}"&gt;
+                \#{selectedNode.data.name}
+            &lt;/p:dataList&gt;
+        &lt;/p:outputPanel&gt;
+    &lt;/p:dialog&gt;
+
+&lt;/h:form&gt;			
+					</pre> 
+				</p:tab>
+				
+				<p:tab title="TreeCheckboxBean.java">
+					<pre name="code" class="brush:java">
+package org.primefaces.examples.view;
+
+import java.io.Serializable;
+import java.util.logging.Logger;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+
+import org.primefaces.model.TreeNode;
+
+import org.primefaces.examples.domain.Document;
+import org.primefaces.model.CheckboxTreeNode;
+
+public class TreeCheckboxBean implements Serializable {
+	
+	private TreeNode root;
+        
+    private TreeNode[] selectedNodes;
+	
+	public TreeCheckboxBean() {
+		root = new CheckboxTreeNode(new Document("Files", "-", "Folder"), null);
+		
+		TreeNode documents = new CheckboxTreeNode(new Document("Documents", "-", "Folder"), root);
+		TreeNode pictures = new CheckboxTreeNode(new Document("Pictures", "-", "Folder"), root);
+		TreeNode movies = new CheckboxTreeNode(new Document("Movies", "-", "Folder"), root);
+		
+		TreeNode work = new CheckboxTreeNode(new Document("Work", "-", "Folder"), documents);
+		TreeNode primefaces = new CheckboxTreeNode(new Document("PrimeFaces", "-", "Folder"), documents);
+		
+		//Documents
+		TreeNode expenses = new CheckboxTreeNode("document", new Document("Expenses.doc", "30 KB", "Word Document"), work);
+		TreeNode resume = new CheckboxTreeNode("document", new Document("Resume.doc", "10 KB", "Word Document"), work);
+		TreeNode refdoc = new CheckboxTreeNode("document", new Document("RefDoc.pages", "40 KB", "Pages Document"), primefaces);
+		
+		//Pictures
+		TreeNode barca = new CheckboxTreeNode("picture", new Document("barcelona.jpg", "30 KB", "JPEG Image"), pictures);
+		TreeNode primelogo = new CheckboxTreeNode("picture", new Document("logo.jpg", "45 KB", "JPEG Image"), pictures);
+		TreeNode optimus = new CheckboxTreeNode("picture", new Document("optimusprime.png", "96 KB", "PNG Image"), pictures);
+		
+		//Movies
+		TreeNode pacino = new CheckboxTreeNode(new Document("Al Pacino", "-", "Folder"), movies);
+		TreeNode deniro = new CheckboxTreeNode(new Document("Robert De Niro", "-", "Folder"), movies);
+		
+		TreeNode scarface = new CheckboxTreeNode("mp3", new Document("Scarface", "15 GB", "Movie File"), pacino);
+		TreeNode carlitosWay = new CheckboxTreeNode("mp3", new Document("Carlitos' Way", "24 GB", "Movie File"), pacino);
+		
+		TreeNode goodfellas = new CheckboxTreeNode("mp3", new Document("Goodfellas", "23 GB", "Movie File"), deniro);
+		TreeNode untouchables = new CheckboxTreeNode("mp3", new Document("Untouchables", "17 GB", "Movie File"), deniro);
+	}
+	
+	public TreeNode getRoot() {
+		return root;
+	}
+    
+    public TreeNode[] getSelectedNodes() {
+        return selectedNodes;
+    }
+
+    public void setSelectedNodes(TreeNode[] selectedNodes) {
+        this.selectedNodes = selectedNodes;
+    }
+}
+					</pre>
+				</p:tab>
+			</p:tabView>
+		</div>
+
+	</ui:define>
+</ui:composition>

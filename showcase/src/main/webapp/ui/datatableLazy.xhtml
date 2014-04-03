@@ -1,0 +1,312 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="../templates/ui.xhtml">
+
+    <ui:define name="content">
+        <h1 class="title ui-widget-header ui-corner-all">DataTable - Lazy Loading</h1>
+        <div class="entry">
+            <p>DataTable has built-in support to deal with huge datasets. In order to enable lazy loading, a LazyDataModel needs to be implemented
+                to query the datasource when pagination, sorting, filtering or live scrolling happens.
+                This example demonstrates uses an in-memory list to mimic a real datasource like a database.</p>
+
+            <h:form id="form">
+
+                <p:dataTable var="car" value="#{tableBean.lazyModel}" paginator="true" rows="10"
+                             paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                             rowsPerPageTemplate="5,10,15" selectionMode="single" selection="#{tableBean.selectedCar}" id="carTable" lazy="true">
+
+                    <p:ajax event="rowSelect" listener="#{tableBean.onRowSelect}" update=":form:display" oncomplete="PF('carDialog').show()" />
+                    
+                    <p:column headerText="Model" sortBy="model" filterBy="#{car.model}">
+                        <h:outputText value="#{car.model}" />
+                    </p:column>
+
+                    <p:column headerText="Year" sortBy="year" filterBy="#{car.year}">
+                        <h:outputText value="#{car.year}" />
+                    </p:column>
+
+                    <p:column headerText="Manufacturer" sortBy="manufacturer" filterBy="#{car.manufacturer}">
+                        <h:outputText value="#{car.manufacturer}" />
+                    </p:column>
+
+                    <p:column headerText="Color" sortBy="color" filterBy="#{car.color}">
+                        <h:outputText value="#{car.color}" />
+                    </p:column>
+                </p:dataTable>
+
+                <p:dialog header="Car Detail" widgetVar="carDialog" resizable="false"
+                          showEffect="explode" hideEffect="explode">
+
+                    <h:panelGrid id="display" columns="2" cellpadding="4">
+
+                        <f:facet name="header">
+                            <p:graphicImage value="/resources/images/cars/#{tableBean.selectedCar.manufacturer}.gif"/>
+                        </f:facet>
+
+                        <h:outputText value="Model:" />
+                        <h:outputText value="#{tableBean.selectedCar.model}" style="font-weight:bold"/>
+
+                        <h:outputText value="Year:" />
+                        <h:outputText value="#{tableBean.selectedCar.year}" style="font-weight:bold"/>
+
+                        <h:outputText value="Manufacturer:" />
+                        <h:outputText value="#{tableBean.selectedCar.manufacturer}" style="font-weight:bold"/>
+
+                        <h:outputText value="Color:" />
+                        <h:outputText value="#{tableBean.selectedCar.color}" style="font-weight:bold"/>
+                    </h:panelGrid>
+                </p:dialog>
+
+            </h:form>
+
+            <h3>Source</h3>
+            <p:tabView>
+                <p:tab title="datatableLazy.xhtml">
+                    <pre name="code" class="brush:xml">
+&lt;h:form id="form"&gt;
+
+    &lt;p:dataTable var="car" value="\#{tableBean.lazyModel}" paginator="true" rows="10"
+                 paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                 rowsPerPageTemplate="5,10,15" selectionMode="single" selection="\#{tableBean.selectedCar}" id="carTable" lazy="true"&gt;
+
+        &lt;p:ajax event="rowSelect" listener="\#{tableBean.onRowSelect}" update=":form:display" oncomplete="PF('carDialog').show()" /&gt;
+
+        &lt;p:column headerText="Model" sortBy="model" filterBy="\#{car.model}"&gt;
+            &lt;h:outputText value="\#{car.model}" /&gt;
+        &lt;/p:column&gt;
+
+        &lt;p:column headerText="Year" sortBy="year" filterBy="\#{car.year}"&gt;
+            &lt;h:outputText value="\#{car.year}" /&gt;
+        &lt;/p:column&gt;
+
+        &lt;p:column headerText="Manufacturer" sortBy="manufacturer" filterBy="\#{car.manufacturer}"&gt;
+            &lt;h:outputText value="\#{car.manufacturer}" /&gt;
+        &lt;/p:column&gt;
+
+        &lt;p:column headerText="Color" sortBy="color" filterBy="\#{car.color}"&gt;
+            &lt;h:outputText value="\#{car.color}" /&gt;
+        &lt;/p:column&gt;
+    &lt;/p:dataTable&gt;
+
+    &lt;p:dialog header="Car Detail" widgetVar="carDialog" resizable="false"
+              showEffect="explode" hideEffect="explode"&gt;
+
+        &lt;h:panelGrid id="display" columns="2" cellpadding="4"&gt;
+
+            &lt;f:facet name="header"&gt;
+                &lt;p:graphicImage value="/images/cars/\#{tableBean.selectedCar.manufacturer}.jpg"/&gt;
+            &lt;/f:facet&gt;
+
+            &lt;h:outputText value="Model:" /&gt;
+            &lt;h:outputText value="\#{tableBean.selectedCar.model}" style="font-weight:bold"/&gt;
+
+            &lt;h:outputText value="Year:" /&gt;
+            &lt;h:outputText value="\#{tableBean.selectedCar.year}" style="font-weight:bold"/&gt;
+
+            &lt;h:outputText value="Manufacturer:" /&gt;
+            &lt;h:outputText value="\#{tableBean.selectedCar.manufacturer}" style="font-weight:bold"/&gt;
+
+            &lt;h:outputText value="Color:" /&gt;
+            &lt;h:outputText value="\#{tableBean.selectedCar.color}" style="font-weight:bold"/&gt;
+        &lt;/h:panelGrid&gt;
+    &lt;/p:dialog&gt;
+
+&lt;/h:form&gt;
+                    </pre>
+                </p:tab>
+
+                <p:tab title="TableBean.java">
+                    <pre name="code" class="brush:java">
+package org.primefaces.examples.view;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
+
+import javax.servlet.ServletContext;
+
+import org.primefaces.examples.domain.Car;
+import org.primefaces.model.LazyDataModel;
+
+public class TableBean {
+	
+	private LazyDataModel&lt;Car&gt; lazyModel;
+
+    private Car selectedCar;
+
+    private List&lt;Car&gt; cars;
+
+    static {
+		colors = new String[10];
+		colors[0] = "Black";
+		colors[1] = "White";
+		colors[2] = "Green";
+		colors[3] = "Red";
+		colors[4] = "Blue";
+		colors[5] = "Orange";
+		colors[6] = "Silver";
+		colors[7] = "Yellow";
+		colors[8] = "Brown";
+		colors[9] = "Maroon";
+		
+		manufacturers = new String[10];
+		manufacturers[0] = "Mercedes";
+		manufacturers[1] = "BMW";
+		manufacturers[2] = "Volvo";
+		manufacturers[3] = "Audi";
+		manufacturers[4] = "Renault";
+		manufacturers[5] = "Opel";
+		manufacturers[6] = "Volkswagen";
+		manufacturers[7] = "Chrysler";
+		manufacturers[8] = "Ferrari";
+		manufacturers[9] = "Ford";
+	}
+
+	public TableBean() {
+        populateRandomCars(cars, 50);
+        lazyModel = new LazyCarDataModel(cars);
+	}
+
+    public Car getSelectedCar() {
+		return selectedCar;
+	}
+
+	public void setSelectedCar(Car selectedCar) {
+		this.selectedCar = selectedCar;
+	}
+	
+	public LazyDataModel&lt;Car&gt; getLazyModel() {
+		return lazyModel;
+	}
+
+	private void populateRandomCars(List&lt;Car&gt; list, int size) {
+		for(int i = 0 ; i &lt; size ; i++) {
+			list.add(new Car(getRandomModel(), getRandomYear(), getRandomManufacturer(), getRandomColor()));
+		}
+	}
+
+	private String getRandomColor() {
+		return colors[(int) (Math.random() * 10)];
+	}
+
+	private String getRandomManufacturer() {
+		return manufacturers[(int) (Math.random() * 10)];
+	}
+
+	private int getRandomYear() {
+		return (int) (Math.random() * 50 + 1960);
+	}
+}
+                    </pre>
+                </p:tab>
+                
+                <p:tab title="LazyCarDataModel.java">
+                    <pre name="code" class="brush:java">
+package org.primefaces.examples.view;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import org.primefaces.examples.domain.Car;
+import org.primefaces.model.LazyDataModel;
+import org.primefaces.model.SortOrder;
+
+/**
+ * Dummy implementation of LazyDataModel that uses a list to mimic a real datasource like a database.
+ */
+public class LazyCarDataModel extends LazyDataModel&lt;Car&gt; {
+    
+    private List&lt;Car&gt; datasource;
+    
+    public LazyCarDataModel(List&lt;Car&gt; datasource) {
+        this.datasource = datasource;
+    }
+    
+    @Override
+    public Car getRowData(String rowKey) {
+        for(Car car : datasource) {
+            if(car.getModel().equals(rowKey))
+                return car;
+        }
+
+        return null;
+    }
+
+    @Override
+    public Object getRowKey(Car car) {
+        return car.getModel();
+    }
+
+    @Override
+    public List&lt;Car&gt; load(int first, int pageSize, String sortField, SortOrder sortOrder, Map&lt;String,String&gt; filters) {
+        List&lt;Car&gt; data = new ArrayList&lt;Car&gt;();
+
+        //filter
+        for(Car car : datasource) {
+            boolean match = true;
+
+            for(Iterator&lt;String&gt; it = filters.keySet().iterator(); it.hasNext();) {
+                try {
+                    String filterProperty = it.next();
+                    String filterValue = filters.get(filterProperty);
+                    String fieldValue = String.valueOf(car.getClass().getField(filterProperty).get(car));
+
+                    if(filterValue == null || fieldValue.startsWith(filterValue)) {
+                        match = true;
+                    }
+                    else {
+                        match = false;
+                        break;
+                    }
+                } catch(Exception e) {
+                    match = false;
+                } 
+            }
+
+            if(match) {
+                data.add(car);
+            }
+        }
+
+        //sort
+        if(sortField != null) {
+            Collections.sort(data, new LazySorter(sortField, sortOrder));
+        }
+
+        //rowCount
+        int dataSize = data.size();
+        this.setRowCount(dataSize);
+
+        //paginate
+        if(dataSize &gt; pageSize) {
+            try {
+                return data.subList(first, first + pageSize);
+            }
+            catch(IndexOutOfBoundsException e) {
+                return data.subList(first, first + (dataSize % pageSize));
+            }
+        }
+        else {
+            return data;
+        }
+    }
+}
+                    </pre>
+                </p:tab>
+            </p:tabView>
+
+
+
+
+        </div>
+
+
+    </ui:define>
+</ui:composition>

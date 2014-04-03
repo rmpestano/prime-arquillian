@@ -1,0 +1,65 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="../templates/ui.xhtml">
+
+    <ui:define name="content">
+
+        <h1 class="title ui-widget-header ui-corner-all">Resizable - AJAX</h1>
+        <div class="entry">
+            <p>When resizing is completed, a backing bean listener can be invoked via ajax behavior.</p>
+
+            <h:form prependId="false">
+                <p:growl id="growl" showDetail="true" />
+
+                <p:graphicImage id="campnou" value="/images/barca/camp_nou.jpg" />
+
+                <p:resizable for="campnou" animate="true" ghost="true">
+                    <p:ajax listener="#{resizeBean.onResize}" update="growl" />
+                </p:resizable>
+            </h:form>
+
+            <h3>Source</h3>
+            <p:tabView>
+                <p:tab title="resizeAjax.xhtml">
+                    <pre name="code" class="brush:xml">
+&lt;h:form&gt;
+    &lt;p:growl id="growl" showDetail="true" /&gt;
+
+    &lt;p:graphicImage id="campnou" value="/images/barca/camp_nou.jpg" /&gt;
+
+    &lt;p:resizable for="campnou" animate="true" ghost="true"&gt;
+        &lt;p:ajax listener="\#{resizeBean.onResize}" update="growl" /&gt;
+    &lt;/p:resizable&gt;
+&lt;/h:form&gt;
+                    </pre>
+                </p:tab>
+
+                <p:tab title="ResizeBean.java">
+                    <pre name="code" class="brush:java">
+package org.primefaces.examples.view;
+
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+import org.primefaces.event.ResizeEvent;
+
+public class ResizeBean {
+
+    public void onResize(ResizeEvent event) {
+        FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
+                        "Image resized", "Width:" + event.getWidth() + ",Height:" + event.getHeight());
+
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+}
+                    </pre>
+                </p:tab>
+            </p:tabView>
+
+
+        </div>
+
+    </ui:define>
+</ui:composition>

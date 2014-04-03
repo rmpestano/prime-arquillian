@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<component>
+   <tag>idleMonitor</tag>
+   <tagClass>org.primefaces.component.idlemonitor.IdleMonitorTag</tagClass>
+   <componentClass>org.primefaces.component.idlemonitor.IdleMonitor</componentClass>
+   <componentType>org.primefaces.component.IdleMonitor</componentType>
+   <componentFamily>org.primefaces.component</componentFamily>
+   <rendererType>org.primefaces.component.IdleMonitorRenderer</rendererType>
+   <rendererClass>org.primefaces.component.idlemonitor.IdleMonitorRenderer</rendererClass>
+   <parent>javax.faces.component.UIComponentBase</parent>
+   <description>IdleMonitor watches user actions on a page and notify several callbacks in case they go idle or active again.</description>
+   <interfaces>
+      <interface>
+         <name>org.primefaces.component.api.Widget</name>
+      </interface>
+      <interface>
+         <name>javax.faces.component.behavior.ClientBehaviorHolder</name>
+      </interface>
+   </interfaces>
+   <attributes>
+      <attribute>
+         <name>id</name>
+         <required>false</required>
+         <type>java.lang.String</type>
+         <ignoreInComponent>true</ignoreInComponent>
+         <literal>true</literal>
+         <description>Unique identifier of the component in a namingContainer.</description>
+      </attribute>
+      <attribute>
+         <name>rendered</name>
+         <required>false</required>
+         <type>java.lang.Boolean</type>
+         <ignoreInComponent>true</ignoreInComponent>
+         <description>Boolean value to specify the rendering of the component, when set to false component will not be rendered.</description>
+      </attribute>
+      <attribute>
+         <name>binding</name>
+         <required>false</required>
+         <type>javax.faces.component.UIComponent</type>
+         <ignoreInComponent>true</ignoreInComponent>
+         <description>An el expression referring to a server side UIComponent instance in a backing bean.</description>
+      </attribute>
+      <attribute>
+         <name>widgetVar</name>
+         <required>false</required>
+         <type>java.lang.String</type>
+         <ignoreInComponent>false</ignoreInComponent>
+         <description>Name of the client side widget.</description>
+      </attribute>
+      <attribute>
+         <name>timeout</name>
+         <required>false</required>
+         <type>java.lang.Integer</type>
+         <defaultValue>300000</defaultValue>
+         <description>Time to wait in milliseconds until deciding if the user is idle. Default is 5 minutes.</description>
+      </attribute>
+      <attribute>
+         <name>onidle</name>
+         <required>false</required>
+         <type>java.lang.String</type>
+         <description>Client side callback to execute when user goes idle.</description>
+      </attribute>
+      <attribute>
+         <name>onactive</name>
+         <required>false</required>
+         <type>java.lang.String</type>
+         <description>Client side callback to execute when user goes idle.</description>
+      </attribute>
+   </attributes>
+   <resources>
+      <resource>
+         <name>jquery/jquery.js</name>
+      </resource>
+      <resource>
+         <name>primefaces.js</name>
+      </resource>
+      <resource>
+         <name>idlemonitor/idlemonitor.js</name>
+      </resource>
+   </resources>
+</component>

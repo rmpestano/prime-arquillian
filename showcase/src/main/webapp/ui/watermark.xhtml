@@ -1,0 +1,86 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="../templates/ui.xhtml">
+
+	<ui:define name="content">
+		<h1 class="title ui-widget-header ui-corner-all">Watermark</h1>
+		
+		<div class="entry">
+			<p>Watermark displays a hint about input fields by using native placeholder 
+            in supported browsers and a javascript solution in others  browser compatibility.</p>
+	
+			<h:form id="form">
+			
+				<p:messages id="messages" showDetail="true"/>
+	
+				<h:panelGrid columns="3">
+	
+					<h:outputLabel value="Search: "/>
+					<p:inputText id="keyword" value="#{watermarkBean.keyword}" required="true" label="Keyword"/>
+					<p:watermark for="keyword" value="Search with a keyword" id="watermark" />
+				
+				</h:panelGrid>
+				
+				<br />
+				
+				<p:commandButton id="regular" actionListener="#{watermarkBean.search}" value="Regular" ajax="false" /> 
+				<p:commandButton id="ajax" actionListener="#{watermarkBean.search}" value="Ajax" onclick="PrimeFaces.cleanWatermarks();" oncomplete="PrimeFaces.showWatermarks();" update="messages" />
+	
+			</h:form>
+
+			<h3>Source</h3>
+            <p:tabView>
+                <p:tab title="watermark.xhtml">
+			<pre name="code" class="brush:xml">
+&lt;h:form&gt;
+
+	&lt;p:messages showDetail="true"/&gt;
+
+	&lt;h:panelGrid columns="3"&gt;
+
+		&lt;h:outputLabel value="Search: "/&gt;
+		&lt;p:inputText id="keyword" value="\#{watermarkBean.keyword}" required="true" label="Keyword" /&gt;
+		&lt;p:watermark for="keyword" value="Search with a keyword" /&gt;
+
+	&lt;/h:panelGrid&gt;
+
+	&lt;p:commandButton actionListener="\#{watermarkBean.search}" value="Regular" ajax="false" /&gt;
+	&lt;p:commandButton actionListener="\#{watermarkBean.search}" value="Ajax" onclick="PrimeFaces.cleanWatermarks();" oncomplete="PrimeFaces.showWatermarks();"  /&gt;
+
+&lt;/h:form&gt;
+			</pre>
+                </p:tab>
+
+                <p:tab title="WatermarkBean.java">
+			<pre name="code" class="brush:java">
+package org.primefaces.examples.view;
+
+public class WatermarkBean {
+
+	private String keyword;
+
+	public String getKeyword() {
+		return keyword;
+	}
+
+	public void setKeyword(String keyword) {
+		this.keyword = keyword;
+	}
+
+	public void search() {
+		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,"No results found with ", "'" + keyword + "'"));
+	}
+}
+			</pre>
+                </p:tab>
+            </p:tabView>
+
+			
+
+		</div>
+
+	</ui:define>
+</ui:composition>

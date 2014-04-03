@@ -1,0 +1,110 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="../templates/ui.xhtml">
+	
+	<ui:define name="content">
+
+		<h1 class="title ui-widget-header ui-corner-all">AutoComplete - Instant Selection</h1>
+		<div class="entry">
+			<p>AutoComplete supports instant ajax selection out of the box.</p>
+		
+			<h:form id="form">
+				<p:growl id="messages"/>
+				
+				<p:panel header="Selection">
+					<h:panelGrid columns="2" cellpadding="5">
+						<h:outputLabel value="Simple: " for="acSimple" />
+						<p:autoComplete id="acSimple" value="#{autoCompleteBean.txt1}" completeMethod="#{autoCompleteBean.complete}">
+                            <p:ajax event="itemSelect" listener="#{autoCompleteBean.handleSelect}" update="messages" />
+                        </p:autoComplete>
+						
+						<h:outputLabel value="Pojo: " for="acPojo" />
+						<p:autoComplete id="acPojo" value="#{autoCompleteBean.selectedPlayer1}" completeMethod="#{autoCompleteBean.completePlayer}"
+										var="player" itemLabel="#{player.name}" itemValue="#{player}" converter="player" forceSelection="true">
+                            <p:ajax event="itemSelect" listener="#{autoCompleteBean.handleSelect}" update="messages" />
+                        </p:autoComplete>
+					
+					</h:panelGrid>
+					
+					<p:commandButton value="Submit" id="submit" update="display" oncomplete="PF('dialog').show()" />
+				</p:panel>
+
+				<p:dialog header="Values" widgetVar="dialog"
+						showEffect="bounce" hideEffect="fold" width="200">
+						
+               		<h:panelGrid id="display" columns="2" cellpadding="5">
+						<h:outputText value="Simple: " />
+						<h:outputText id="txt1" value="#{autoCompleteBean.txt1}" /> 
+						
+						<h:outputText value="Pojo: " />
+						<h:outputText id="txt2" value="#{autoCompleteBean.selectedPlayer1}" /> 
+					</h:panelGrid>
+					
+                </p:dialog>
+				
+			</h:form>
+
+			<br />
+			<h3>Source</h3>
+            <p:tabView>
+                <p:tab title="autoCompleteSelect.xhtml">
+                    <pre name="code" class="brush:xml">
+&lt;h:form id="form"&gt;
+    &lt;p:growl id="messages"/&gt;
+
+    &lt;p:panel header="Selection"&gt;
+        &lt;h:panelGrid columns="2" cellpadding="5"&gt;
+            &lt;h:outputLabel value="Simple: " for="acSimple" /&gt;
+            &lt;p:autoComplete id="acSimple" value="\#{autoCompleteBean.txt1}" completeMethod="\#{autoCompleteBean.complete}"&gt;
+                &lt;p:ajax event="itemSelect" listener="\#{autoCompleteBean.handleSelect}" update="messages" /&gt;
+            &lt;/p:autoComplete&gt;
+
+            &lt;h:outputLabel value="Pojo: " for="acPojo" /&gt;
+            &lt;p:autoComplete id="acPojo" value="\#{autoCompleteBean.selectedPlayer}" completeMethod="\#{autoCompleteBean.completePlayer}"
+                            var="player" itemLabel="\#{player.name}" itemValue="\#{player}" converter="player" forceSelection="true"&gt;
+                &lt;p:ajax event="itemSelect" listener="\#{autoCompleteBean.handleSelect}" update="messages" /&gt;
+            &lt;/p:autoComplete&gt;
+
+        &lt;/h:panelGrid&gt;
+
+        &lt;p:commandButton value="Submit" id="submit" update="display" oncomplete="PF('dialog').show()" /&gt;
+    &lt;/p:panel&gt;
+
+    &lt;p:dialog header="Values" widgetVar="dialog"
+            showEffect="bounce" hideEffect="fold" width="200"&gt;
+
+        &lt;h:panelGrid id="display" columns="2" cellpadding="5"&gt;
+            &lt;h:outputText value="Simple: " /&gt;
+            &lt;h:outputText id="txt1" value="\#{autoCompleteBean.txt1}" /&gt; 
+
+            &lt;h:outputText value="Pojo: " /&gt;
+            &lt;h:outputText id="txt2" value="\#{autoCompleteBean.selectedPlayer}" /&gt; 
+        &lt;/h:panelGrid&gt;
+
+    &lt;/p:dialog&gt;
+
+&lt;/h:form&gt;
+                    </pre>
+                </p:tab>
+
+                <p:tab title="AutoCompleteBean.java">
+			<pre name="code" class="brush:java">
+...
+
+public void handleSelect(SelectEvent event) {
+	FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Selected:" + event.getObject().toString(), null);
+		
+	FacesContext.getCurrentInstance().addMessage(null, message);
+}
+
+...
+			</pre>
+                </p:tab>
+            </p:tabView>
+		</div>
+
+	</ui:define>
+</ui:composition>

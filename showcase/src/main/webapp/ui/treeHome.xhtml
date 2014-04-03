@@ -1,0 +1,34 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="../templates/ui.xhtml">
+
+	<ui:define name="content">
+	
+		<h1 class="title ui-widget-header ui-corner-all">Tree</h1>
+		<div class="entry">
+			
+			<p:menu styleClass="homeMenu">
+				<p:submenu label="Examples">
+					<p:menuitem url="/ui/tree.jsf" value="Basic Tree" />
+                    <p:menuitem url="/ui/treeIcons.jsf" value="Icons" />
+					<p:menuitem url="/ui/treeAjax.jsf" value="Ajax Tree" />
+					<p:menuitem url="/ui/treeSelectionSingle.jsf" value="Single Selection" />
+					<p:menuitem url="/ui/treeSelectionMultiple.jsf" value="Multiple Selection" />
+					<p:menuitem url="/ui/treeSelectionCheckbox.jsf" value="Checkbox Selection" />
+                    <p:menuitem url="/ui/treeEvents.jsf" value="Event Listeners" />
+                    <p:menuitem url="/ui/treeContextMenu.jsf" value="ContextMenu" />
+                    <p:menuitem url="/ui/treeAnimate.jsf" value="Animate" />
+                    <p:menuitem url="/ui/treeHorizontal.jsf" value="Horizontal Tree" />
+                    <p:menuitem url="/ui/treeDragDrop.jsf" value="Drag and Drop" />
+                    <p:menuitem url="/ui/treeRTL.jsf" value="RTL" />
+				</p:submenu>
+			</p:menu>
+			
+			<span class="homeText">Tree is used to display any data hierarchy or navigation purposes. Tree is featuring client side or server side node display with ajax, 
+			styling options, ajax expand, collapse and select events, built-in checkbox based selection and more.</span>
+		</div>
+	</ui:define>
+</ui:composition>

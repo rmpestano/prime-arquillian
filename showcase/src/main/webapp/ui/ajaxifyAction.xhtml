@@ -1,0 +1,79 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="../templates/ui.xhtml">
+
+	<ui:define name="content">
+
+
+		<h1 class="title ui-widget-header ui-corner-all">AJAX - Listener</h1>
+		<div class="entry">
+			<p>p:ajax component can also execute a listener on a JSF bean. This examples counts the number of keyups.</p>
+
+			<h:form id="form">
+			
+				<h:panelGrid columns="3">
+					<h:outputText value="Keyup: " />
+					
+					<p:inputText id="counter">
+						<p:ajax event="keyup" update="out" listener="#{counterBean.increment}"/>
+					</p:inputText>
+					
+					<h:outputText id="out" value="#{counterBean.count}" />
+				</h:panelGrid>
+				
+			</h:form>
+					
+			<h3>Source</h3>
+			<p:tabView>
+				<p:tab title="ajaxifyAction.xhtml">
+					<pre name="code" class="brush:xml">
+&lt;h:form id="form"&gt;
+			
+	&lt;h:panelGrid columns="3"&gt;
+		&lt;h:outputText value="Keyup: " /&gt;
+		
+		&lt;p:inputText id="counter"&gt;
+			&lt;p:ajax event="keyup" update="out" 
+					listener="\#{counterBean.increment}"/&gt;
+		&lt;/p:inputText&gt;
+		
+		&lt;h:outputText id="out" value="\#{counterBean.count}" /&gt;
+	&lt;/h:panelGrid&gt;
+	
+&lt;/h:form&gt;
+					</pre>
+				</p:tab>
+				
+				<p:tab title="CounterBean.java">
+					<pre name="code" class="brush:java">
+package org.primefaces.examples.view;
+
+import java.io.Serializable;
+
+public class CounterBean implements Serializable{
+
+	private int count;
+
+	public int getCount() {
+		return count;
+	}
+
+	public void setCount(int count) {
+		this.count = count;
+	}
+	
+	public void increment() {
+		count++;
+	}
+}
+</pre>
+				</p:tab>
+			</p:tabView>
+						
+		</div>
+
+	</ui:define>
+</ui:composition>

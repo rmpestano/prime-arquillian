@@ -1,0 +1,63 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="../templates/ui.xhtml">
+	
+	<ui:define name="content">
+	
+		<h1 class="title ui-widget-header ui-corner-all">IdleMonitor - Ajax Behaviors</h1>
+		<div class="entry">
+			<p>IdleMonitor can also invoke server side events with ajax behaviors in case user goes idle or active.</p>
+
+            <p:growl id="messages" showDetail="true" sticky="true" />
+
+            <p:idleMonitor timeout="5000">
+                <p:ajax event="idle" listener="#{idleMonitorController.idleListener}" update="messages" />
+                <p:ajax event="active" listener="#{idleMonitorController.activeListener}" update="messages" />
+            </p:idleMonitor>
+			
+			<h3>Source</h3>
+			<p:tabView>
+				<p:tab title="idleMonitorEvents.xhtml">
+					<pre name="code" class="brush:xml">
+&lt;p:growl id="messages" showDetail="true" sticky="true" /&gt;
+
+&lt;p:idleMonitor timeout="5000"&gt;
+    &lt;p:ajax event="idle" listener="\#{idleMonitorController.idleListener}" update="messages" /&gt;
+    &lt;p:ajax event="active" listener="\#{idleMonitorController.activeListener}" update="messages" /&gt;
+&lt;/p:idleMonitor&gt;
+</pre>
+				</p:tab>
+				
+				<p:tab title="IdleMonitorController.java">
+					<pre name="code" class="brush:java">
+package org.primefaces.examples.view;
+
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+
+public class IdleMonitorController {
+	
+	public void idleListener() {
+		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, 
+										"Your session is closed", "You have been idle for at least 5 seconds"));
+		
+		//invalidate session
+	}
+
+    public void activeListener() {
+		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
+										"Welcome Back", "That's a long coffee break!"));
+	}
+}
+
+					</pre>
+				</p:tab>
+			</p:tabView>
+			
+		</div>
+
+	</ui:define>
+</ui:composition>

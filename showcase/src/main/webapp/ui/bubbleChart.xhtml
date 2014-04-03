@@ -1,0 +1,64 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="../templates/ui.xhtml">
+    
+    <ui:define name="content">
+
+        <h1 class="title ui-widget-header ui-corner-all">Area Chart</h1>
+        <div class="entry">
+            <p>BubbleChart is created with a BubbleChartModel.</p>
+
+            <p:chart type="bubble" model="#{chartBean.bubbleModel1}" />
+            
+            <br /><br />
+            
+            <p:chart type="bubble" model="#{chartBean.bubbleModel2}" />
+      
+            <h3>Source</h3>
+            <p:tabView>
+                <p:tab title="bubbleChart.xhtml">
+                    <pre name="code" class="brush:xml">
+&lt;p:chart type="bubble" model="\#{chartBean.bubbleModel1}" /&gt;
+
+&lt;p:chart type="bubble" model="\#{chartBean.bubbleModel2}" /&gt;
+                    </pre>
+                </p:tab>
+
+                <p:tab title="ChartBean.java">
+            <pre name="code" class="brush:java">
+package org.primefaces.examples.view;
+
+import java.io.Serializable;
+
+import org.primefaces.model.chart.BubbleChartModel;
+import org.primefaces.model.chart.BubbleCharSeries;
+
+public class ChartBean implements Serializable { 
+
+    private BubbleChartModel bubbleModel;
+
+    public ChartBean() {
+        createBubbleModel();
+    }
+
+    private void createBubbleModel() {
+        bubbleModel = new BubbleChartModel();
+
+        bubbleModel.add(new BubbleChartSeries("Acura", 70, 183,55));
+        bubbleModel.add(new BubbleChartSeries("Alfa Romeo", 45, 92, 36));
+        bubbleModel.add(new BubbleChartSeries("AM General", 24, 104, 40));
+        bubbleModel.add(new BubbleChartSeries("Bugatti", 50, 123, 60));
+        bubbleModel.add(new BubbleChartSeries("BMW", 15, 89, 25));
+        bubbleModel.add(new BubbleChartSeries("Audi", 40, 180, 80));
+        bubbleModel.add(new BubbleChartSeries("Aston Martin", 70, 70, 48));
+    }
+}
+            </pre>
+                </p:tab>
+            </p:tabView>
+        </div>
+    </ui:define>
+</ui:composition>

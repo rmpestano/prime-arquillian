@@ -1,0 +1,103 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="../templates/ui.xhtml">
+
+    <ui:define name="content">
+
+        <h1 class="title ui-widget-header ui-corner-all">Dialog Framework - Basic</h1>
+        <div class="entry">
+            <p>An external page can be displayed in a dynamically generated dialog on runtime.</p>
+
+            <h:form>
+
+                <p:commandButton value="View" icon="ui-icon-extlink" actionListener="#{dialogBean.viewCars}" />
+                
+                <p:commandButton value="Options" icon="ui-icon-extlink" actionListener="#{dialogBean.viewCarsCustomized}" />
+
+            </h:form>
+
+            <h3>Source</h3>
+            <p:tabView>
+                <p:tab title="dialogFrameworkBasic.xhtml">
+                    <pre name="code" class="brush:xml">
+&lt;h:form&gt;
+
+    &lt;p:commandButton value="View" icon="ui-icon-extlink" actionListener="\#{dialogBean.viewCars}" /&gt;
+
+    &lt;p:commandButton value="Options" icon="ui-icon-extlink" actionListener="\#{dialogBean.viewCarsCustomized}" /&gt;
+
+&lt;/h:form&gt;
+                    </pre>
+                </p:tab>
+                
+                <p:tab title="DialogBean.java">
+                    <pre name="code" class="brush:java">
+package org.primefaces.examples.view;
+
+public class DialogBean {
+    
+    public void viewCars() {
+        RequestContext.getCurrentInstance().openDialog("viewCars");
+    }
+    
+    public void viewCarsCustomized() {
+        Map&lt;String,Object&gt; options = new HashMap&lt;String, Object&gt;();
+        options.put("modal", true);
+        options.put("draggable", false);
+        options.put("resizable", false);
+        options.put("contentHeight", 320);
+        //hint: available options are modal, draggable, resizable, width, height, contentWidth and contentHeight
+        
+        RequestContext.getCurrentInstance().openDialog("viewCars", options, null);
+    }
+}
+                    </pre>
+                </p:tab>
+                
+                <p:tab title="viewCars.xhtml">
+                    <pre name="code" class="brush:xml">
+&lt;!DOCTYPE html&gt;
+&lt;html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"&gt;
+    
+    &lt;h:head&gt;
+        
+    &lt;/h:head&gt;
+    
+    &lt;h:body&gt;
+        &lt;p:dataTable var="car" value="\#{tableBean.carsSmall}"&gt;
+            &lt;p:column headerText="Model"&gt;
+                &lt;h:outputText value="\#{car.model}" /&gt;
+            &lt;/p:column&gt;
+
+            &lt;p:column headerText="Year"&gt;
+                &lt;h:outputText value="\#{car.year}" /&gt;
+            &lt;/p:column&gt;
+
+            &lt;p:column headerText="Manufacturer"&gt;
+                &lt;h:outputText value="\#{car.manufacturer}" /&gt;
+            &lt;/p:column&gt;
+
+            &lt;p:column headerText="Color"&gt;
+                &lt;h:outputText value="\#{car.color}" /&gt;
+            &lt;/p:column&gt;
+        &lt;/p:dataTable&gt;
+    &lt;/h:body&gt;
+    
+&lt;/html&gt;
+                    </pre>
+                </p:tab>
+
+                
+            </p:tabView>
+
+        </div>
+
+    </ui:define>
+</ui:composition>

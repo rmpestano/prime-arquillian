@@ -1,0 +1,90 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="../templates/ui.xhtml">
+
+	<ui:define name="content">
+
+		<h1 class="title ui-widget-header ui-corner-all">ContextMenu</h1>
+			<div class="entry">
+			<p>Right click anywhere on this page to view the context-menu options.</p>
+			
+			<h:form id="form">
+				
+				<p:growl id="messages"/>
+
+                <p:contextMenu id="contextMenuId">
+					<p:menuitem value="Save" actionListener="#{buttonBean.save}" update="messages" icon="ui-icon-disk"/>
+                    <p:menuitem value="Update" actionListener="#{buttonBean.update}" update="messages" icon="ui-icon-arrowrefresh-1-w"/>
+                    <p:menuitem value="Delete" actionListener="#{buttonBean.delete}" ajax="false" icon="ui-icon-close"/>
+                    <p:menuitem value="Homepage" url="http://www.primefaces.org" icon="ui-icon-extlink"/>
+				</p:contextMenu>
+                
+			</h:form>
+						
+			<h3>Source</h3>
+			<p:tabView>
+				<p:tab title="contextMenu.xhtml">
+				<pre name="code" class="brush:xml">
+&lt;h:form&gt;
+				
+	&lt;p:growl id="messages" /&gt;
+
+	&lt;p:contextMenu&gt;
+		&lt;p:menuitem value="Save" update="messages"
+			actionListener="\#{buttonBean.save}" icon="ui-icon-disk"/&gt;
+		&lt;p:menuitem value="Update" update="messages"
+			actionListener="\#{buttonBean.update}"
+            icon="ui-icon-arrowrefresh-1-w"/&gt;
+		&lt;p:menuitem value="Delete" icon="ui-icon-close"
+			actionListener="\#{buttonBean.delete}" ajax="false"/&gt;
+		&lt;p:menuitem value="Homepage" url="http://www.primefaces.org"
+            icon="ui-icon-extlink"/&gt;
+	&lt;/p:contextMenu&gt;
+
+&lt;/h:form&gt;
+</pre>
+				</p:tab>
+				<p:tab title="ButtonBean.java">
+			<pre name="code" class="brush:java">
+package org.primefaces.examples.view;
+
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
+
+public class ButtonBean {
+	
+	public void displayMessage(ActionEvent actionEvent) {
+		addMessage("You said:'" + text + "'");
+	}
+	
+	public void save(ActionEvent actionEvent) {
+		addMessage("Data saved");
+	}
+	
+	public void update(ActionEvent actionEvent) {
+		addMessage("Data updated");
+	}
+	
+	public void delete(ActionEvent actionEvent) {
+		addMessage("Data deleted");
+	}
+	
+	public void addMessage(String summary) {
+		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, summary,  null);
+		FacesContext.getCurrentInstance().addMessage(null, message);
+	}
+}
+
+			</pre>
+				</p:tab>
+			</p:tabView>
+
+						
+					</div>
+				
+	</ui:define>
+</ui:composition>

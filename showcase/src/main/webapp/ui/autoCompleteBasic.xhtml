@@ -1,0 +1,249 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="../templates/ui.xhtml">
+
+
+	<ui:define name="content">
+
+		<h1 class="title ui-widget-header ui-corner-all">AutoComplete</h1>
+		<div class="entry">
+			<p>AutoComplete is used by defining a server side complete method that returns the suggestions.</p>
+		
+			<h:form id="form">
+				<p:panel header="AutoComplete" toggleable="true" id="panel">
+					<h:panelGrid columns="2" cellpadding="5">
+						<h:outputLabel value="Simple :" for="acSimple" />
+						<p:autoComplete id="acSimple" value="#{autoCompleteBean.txt1}" completeMethod="#{autoCompleteBean.complete}" />
+						
+						<h:outputLabel value="Min Length (3) :" for="acMinLength" />
+						<p:autoComplete id="acMinLength" minQueryLength="3" value="#{autoCompleteBean.txt2}" completeMethod="#{autoCompleteBean.complete}" effect="fade"/>
+						
+						<h:outputLabel value="Delay(1000) :" for="acDelay" />
+						<p:autoComplete id="acDelay" queryDelay="1000" value="#{autoCompleteBean.txt3}" completeMethod="#{autoCompleteBean.complete}" effect="blind"/>
+						
+						<h:outputLabel value="Max Results(5) :" for="acMaxResults" />
+						<p:autoComplete id="acMaxResults" maxResults="5" value="#{autoCompleteBean.txt4}" completeMethod="#{autoCompleteBean.complete}" />
+						
+						<h:outputLabel value="Force Selection :" for="acForce" />
+						<p:autoComplete id="acForce" forceSelection="true" value="#{autoCompleteBean.txt5}" completeMethod="#{autoCompleteBean.complete}"/>
+                        
+                        <h:outputLabel value="DropDown :" for="dd" />
+						<p:autoComplete id="dd" dropdown="true" value="#{autoCompleteBean.txt6}" completeMethod="#{autoCompleteBean.complete}"/>
+                        
+                        <h:outputLabel value="Cache :" for="cache" class="ui-state-highlight"/>
+						<p:autoComplete id="cache" cache="true" cacheTimeout="30000" value="#{autoCompleteBean.txt7}" completeMethod="#{autoCompleteBean.complete}"/>
+					</h:panelGrid>
+				</p:panel>
+				
+				<br />
+				
+				<p:commandButton value="Submit" id="submit" update="display" oncomplete="PF('dialog').show()" />
+				
+				<p:dialog header="Values" widgetVar="dialog"
+						showEffect="fold" hideEffect="fold" width="200">
+						
+               		<h:panelGrid id="display" columns="2" cellpadding="5">
+						<h:outputText value="Value 1: " />
+						<h:outputText id="txt1" value="#{autoCompleteBean.txt1}" /> 
+						
+						<h:outputText value="Value 2: " />
+						<h:outputText id="txt2" value="#{autoCompleteBean.txt2}" /> 
+						
+						<h:outputText value="Value 3: " />
+						<h:outputText id="txt3" value="#{autoCompleteBean.txt3}" /> 
+						
+						<h:outputText value="Value 4: " />
+						<h:outputText id="txt4" value="#{autoCompleteBean.txt4}" /> 
+						
+						<h:outputText value="Value 5: " />
+						<h:outputText id="txt5" value="#{autoCompleteBean.txt5}" />
+                        
+                        <h:outputText value="Value 6: " />
+						<h:outputText id="txt6" value="#{autoCompleteBean.txt6}" /> 
+                        
+                        <h:outputText value="Value 7: " />
+						<h:outputText id="txt7" value="#{autoCompleteBean.txt7}" />
+					</h:panelGrid>
+					
+                </p:dialog>
+                	
+			</h:form>
+
+			<h3>Source</h3>
+			<p:tabView>
+				<p:tab title="autoCompleteBasic.xhtml">
+				<pre name="code" class="brush:xml">
+&lt;h:form id="form"&gt;
+	&lt;p:panel header="AutoComplete" toggleable="true" id="panel"&gt;
+		&lt;h:panelGrid columns="2" cellpadding="5"&gt;
+		
+			&lt;h:outputLabel value="Simple :" for="acSimple" /&gt;
+			&lt;p:autoComplete id="acSimple" value="\#{autoCompleteBean.txt1}" 
+					completeMethod="\#{autoCompleteBean.complete}"/&gt;
+			
+			&lt;h:outputLabel value="Min Length (3) :" for="acMinLength" /&gt;
+			&lt;p:autoComplete id="acMinLength" minQueryLength="3" 
+					value="\#{autoCompleteBean.txt2}" effect="fade"
+					completeMethod="\#{autoCompleteBean.complete}"/&gt;
+			
+			&lt;h:outputLabel value="Delay(1000) :" for="acDelay" /&gt;
+			&lt;p:autoComplete id="acDelay" queryDelay="1000" 
+					value="\#{autoCompleteBean.txt3}" effect="blind"
+					completeMethod="\#{autoCompleteBean.complete}"/&gt;
+					
+			&lt;h:outputLabel value="Max Results(5) :" for="acMaxResults" /&gt;
+			&lt;p:autoComplete id="acMaxResults" maxResults="5" 
+					value="\#{autoCompleteBean.txt4}" 
+					completeMethod="\#{autoCompleteBean.complete}"/&gt;
+			
+			&lt;h:outputLabel value="Force Selection :" for="acForce" /&gt;
+			&lt;p:autoComplete id="acForce" forceSelection="true" 
+					value="\#{autoCompleteBean.txt5}" 
+					completeMethod="\#{autoCompleteBean.complete}"/&gt;
+
+            &lt;h:outputLabel value="DropDown :" for="dd" /&gt;
+            &lt;p:autoComplete id="dd" dropdown="true" value="\#{autoCompleteBean.txt6}" 
+                    completeMethod="\#{autoCompleteBean.complete}" /&gt;
+            
+            &lt;h:outputLabel value="Cache :" for="cache" /&gt;
+			&lt;p:autoComplete id="cache" cache="true" cacheTimeout="30000" 
+                    value="\#{autoCompleteBean.txt7}" completeMethod="\#{autoCompleteBean.complete}"/&gt;
+			
+		&lt;/h:panelGrid&gt;
+	&lt;/p:panel&gt;
+	
+	&lt;p:commandButton value="Submit" id="submit" update="display" oncomplete="PF('dialog').show()" /&gt;
+	
+	&lt;p:dialog header="Values" widgetVar="dialog"
+			showEffect="fold" hideEffect="fold" width="200"&gt;
+			
+         &lt;h:panelGrid id="display" columns="2" cellpadding="5"&gt;
+			&lt;h:outputText value="Value 1: " /&gt;
+			&lt;h:outputText value="\#{autoCompleteBean.txt1}" /&gt; 
+			
+			&lt;h:outputText value="Value 2: " /&gt;
+			&lt;h:outputText value="\#{autoCompleteBean.txt2}" /&gt; 
+			
+			&lt;h:outputText value="Value 3: " /&gt;
+			&lt;h:outputText value="\#{autoCompleteBean.txt3}" /&gt; 
+			
+			&lt;h:outputText value="Value 4: " /&gt;
+			&lt;h:outputText value="\#{autoCompleteBean.txt4}" /&gt; 
+			
+			&lt;h:outputText value="Value 5: " /&gt;
+			&lt;h:outputText value="\#{autoCompleteBean.txt5}" /&gt; 
+
+            &lt;h:outputText value="Value 6: " /&gt;
+			&lt;h:outputText value="\#{autoCompleteBean.txt6}" /&gt; 
+
+            &lt;h:outputText value="Value 7: " /&gt;
+			&lt;h:outputText value="\#{autoCompleteBean.txt7}" /&gt;
+		&lt;/h:panelGrid&gt;
+		
+	&lt;/p:dialog&gt;
+             	
+&lt;/h:form&gt;
+				</pre>
+				</p:tab>
+				
+				<p:tab title="AutoCompleteBean.java">		
+			<pre name="code" class="brush:java">
+package org.primefaces.examples.view;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class AutoCompleteBean {
+
+	private String txt1;
+	
+	private String txt2;
+	
+	private String txt3;
+	
+	private String txt4;
+	
+	private String txt5;
+    
+    private String txt6;
+
+    private String txt7;
+    
+	public List&lt;String&gt; complete(String query) {
+		List&lt;String&gt; results = new ArrayList&lt;String&gt;();
+		
+		for (int i = 0; i &lt; 10; i++) {
+			results.add(query + i);
+		}
+		
+		return results;
+	}
+
+	public String getTxt1() {
+		return txt1;
+	}
+
+	public void setTxt1(String txt1) {
+		this.txt1 = txt1;
+	}
+
+	public String getTxt2() {
+		return txt2;
+	}
+
+	public void setTxt2(String txt2) {
+		this.txt2 = txt2;
+	}
+
+	public String getTxt3() {
+		return txt3;
+	}
+
+	public void setTxt3(String txt3) {
+		this.txt3 = txt3;
+	}
+	
+	public String getTxt4() {
+		return txt4;
+	}
+
+	public void setTxt4(String txt4) {
+		this.txt4 = txt4;
+	}
+
+	public String getTxt5() {
+		return txt5;
+	}
+
+	public void setTxt5(String txt5) {
+		this.txt5 = txt5;
+	}
+
+    public String getTxt6() {
+        return txt6;
+    }
+
+    public void setTxt6(String txt6) {
+        this.txt6 = txt6;
+    }
+
+    public String getTxt7() {
+        return txt7;
+    }
+
+    public void setTxt7(String txt7) {
+        this.txt7 = txt7;
+    }
+}
+			</pre>
+				</p:tab>
+			</p:tabView>
+			
+					
+		</div>
+
+	</ui:define>
+</ui:composition>

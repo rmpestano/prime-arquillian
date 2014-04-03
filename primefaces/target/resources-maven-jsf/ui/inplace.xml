@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<component>
+   <tag>inplace</tag>
+   <tagClass>org.primefaces.component.inplace.InplaceTag</tagClass>
+   <componentClass>org.primefaces.component.inplace.Inplace</componentClass>
+   <componentType>org.primefaces.component.Inplace</componentType>
+   <componentFamily>org.primefaces.component</componentFamily>
+   <rendererType>org.primefaces.component.InplaceRenderer</rendererType>
+   <rendererClass>org.primefaces.component.inplace.InplaceRenderer</rendererClass>
+   <parent>javax.faces.component.UIComponentBase</parent>
+   <description>
+      Inplace provides easy inplace editing and inline content display. 
+      Inplace consists of two members, display element is the inital clickable label and inline element is the hidden content 
+      that'll be displayed when display element is toggled.
+    </description>
+   <interfaces>
+      <interface>
+         <name>org.primefaces.component.api.Widget</name>
+      </interface>
+      <interface>
+         <name>javax.faces.component.behavior.ClientBehaviorHolder</name>
+      </interface>
+   </interfaces>
+   <attributes>
+      <attribute>
+         <name>id</name>
+         <required>false</required>
+         <type>java.lang.String</type>
+         <ignoreInComponent>true</ignoreInComponent>
+         <literal>true</literal>
+         <description>Unique identifier of the component in a namingContainer.</description>
+      </attribute>
+      <attribute>
+         <name>rendered</name>
+         <required>false</required>
+         <type>java.lang.Boolean</type>
+         <ignoreInComponent>true</ignoreInComponent>
+         <description>Boolean value to specify the rendering of the component, when set to false component will not be rendered.</description>
+      </attribute>
+      <attribute>
+         <name>binding</name>
+         <required>false</required>
+         <type>javax.faces.component.UIComponent</type>
+         <ignoreInComponent>true</ignoreInComponent>
+         <description>An el expression referring to a server side UIComponent instance in a backing bean.</description>
+      </attribute>
+      <attribute>
+         <name>widgetVar</name>
+         <required>false</required>
+         <type>java.lang.String</type>
+         <ignoreInComponent>false</ignoreInComponent>
+         <description>Name of the client side widget.</description>
+      </attribute>
+      <attribute>
+         <name>label</name>
+         <required>false</required>
+         <type>java.lang.String</type>
+         <description>Label to be shown in display mode.</description>
+      </attribute>
+      <attribute>
+         <name>emptyLabel</name>
+         <required>false</required>
+         <type>java.lang.String</type>
+         <description>Label to be shown in display mode when value isempty.</description>
+      </attribute>
+      <attribute>
+         <name>effect</name>
+         <required>false</required>
+         <type>java.lang.String</type>
+         <defaultValue>fade</defaultValue>
+         <description>Effect to be used when toggling. Default fade.</description>
+      </attribute>
+      <attribute>
+         <name>effectSpeed</name>
+         <required>false</required>
+         <type>java.lang.String</type>
+         <defaultValue>normal</defaultValue>
+         <description>Speed of the effect. Default normal.</description>
+      </attribute>
+      <attribute>
+         <name>disabled</name>
+         <required>false</required>
+         <type>java.lang.Boolean</type>
+         <defaultValue>false</defaultValue>
+         <description>Prevents hidden content to be shown.</description>
+      </attribute>
+      <attribute>
+         <name>style</name>
+         <required>false</required>
+         <type>java.lang.String</type>
+         <description>Inline style of the main container element.</description>
+      </attribute>
+      <attribute>
+         <name>styleClass</name>
+         <required>false</required>
+         <type>java.lang.String</type>
+         <description>Style class of the main container element.</description>
+      </attribute>
+      <attribute>
+         <name>editor</name>
+         <required>false</required>
+         <type>java.lang.Boolean</type>
+         <defaultValue>false</defaultValue>
+         <description>Specifies the editor mode.</description>
+      </attribute>
+      <attribute>
+         <name>saveLabel</name>
+         <required>false</required>
+         <type>java.lang.String</type>
+         <defaultValue>Save</defaultValue>
+         <description>Tooltip text of save buttin in editor mode. Default is "Save"</description>
+      </attribute>
+      <attribute>
+         <name>cancelLabel</name>
+         <required>false</required>
+         <type>java.lang.String</type>
+         <defaultValue>Cancel</defaultValue>
+         <description>Tooltip text of cancel buttin in editor mode. Default is "Cancel"</description>
+      </attribute>
+      <attribute>
+         <name>event</name>
+         <required>false</required>
+         <type>java.lang.String</type>
+         <defaultValue>click</defaultValue>
+         <description>Name of the client side event to display inline content. Default is click.</description>
+      </attribute>
+      <attribute>
+         <name>toggleable</name>
+         <required>false</required>
+         <type>java.lang.Boolean</type>
+         <defaultValue>true</defaultValue>
+         <description/>
+      </attribute>
+   </attributes>
+   <resources>
+      <resource>
+         <name>primefaces.css</name>
+      </resource>
+      <resource>
+         <name>jquery/jquery.js</name>
+      </resource>
+      <resource>
+         <name>primefaces.js</name>
+      </resource>
+   </resources>
+</component>

@@ -1,0 +1,151 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="../templates/ui.xhtml">
+	
+	<ui:define name="head">
+		<style type="text/css">
+			.ui-panel, div.ui-state-hover {
+				margin: 10px;
+				width:200px;
+			}
+			
+			.ui-dashboard-column {
+				width:220px;
+			}
+		</style>
+
+	</ui:define>
+	
+	<ui:define name="content">
+		<h1 class="title ui-widget-header ui-corner-all">Dashboard</h1>
+		<div class="entry">
+		
+		<p>Dashboard is a layout component featuring dragdrop based content reordering similar to portal environments. As a stateful component, dashboard is backed
+		by a DashboardModel API which is used to save the state of the UI.</p>
+		
+			<h:form id="form">
+			
+				<p:growl id="growl" showDetail="true" />
+		
+				<p:dashboard id="board" model="#{dashboardBean.model}">
+                    <p:ajax event="reorder" listener="#{dashboardBean.handleReorder}" update="growl" />
+                    
+					<p:panel id="sports" header="Sports">
+						<h:outputText value="Sports Content" />
+					</p:panel>
+					
+					<p:panel id="finance" header="Finance">
+						<h:outputText value="Finance Content" />
+					</p:panel>
+
+					<p:panel id="lifestyle" header="Lifestyle">
+                        <h:outputText value="Lifestyle Content"  />
+					</p:panel>
+			
+					<p:panel id="weather" header="Weather">
+						<h:outputText value="Weather Content" />
+					</p:panel>
+					
+					<p:panel id="politics" header="Politics">
+						<h:outputText value="Politics Content" />
+					</p:panel>
+				</p:dashboard>
+				
+				<div style="clear:both" />
+				
+			</h:form>
+			
+			<h3 style="clear:both;">Source</h3>
+			
+			<p:tabView>
+                <p:tab title="dashboard.xhtml">
+				<pre name="code" class="brush:xml">
+&lt;h:form id="form"&gt;
+
+    &lt;p:growl id="growl" showDetail="true" /&gt;
+
+    &lt;p:dashboard id="board" model="\#{dashboardBean.model}"&gt;
+        &lt;p:ajax event="reorder" listener="\#{dashboardBean.handleReorder}" update="growl" /&gt;
+
+        &lt;p:panel id="sports" header="Sports"&gt;
+            &lt;h:outputText value="Sports Content" /&gt;
+        &lt;/p:panel&gt;
+
+        &lt;p:panel id="finance" header="Finance"&gt;
+            &lt;h:outputText value="Finance Content" /&gt;
+        &lt;/p:panel&gt;
+
+        &lt;p:panel id="lifestyle" header="Lifestyle"&gt;
+            &lt;h:outputText value="Lifestyle Content"  /&gt;
+        &lt;/p:panel&gt;
+
+        &lt;p:panel id="weather" header="Weather"&gt;
+            &lt;h:outputText value="Weather Content" /&gt;
+        &lt;/p:panel&gt;
+
+        &lt;p:panel id="politics" header="Politics"&gt;
+            &lt;h:outputText value="Politics Content" /&gt;
+        &lt;/p:panel&gt;
+    &lt;/p:dashboard&gt;
+
+&lt;/h:form&gt;
+			</pre>
+				</p:tab>
+                
+				<p:tab title="DashboardBean.java">
+<pre name="code" class="brush:java">
+public class DashboardBean implements Serializable {
+
+	private DashboardModel model;
+	
+	public DashboardBean() {
+		model = new DefaultDashboardModel();
+		DashboardColumn column1 = new DefaultDashboardColumn();
+		DashboardColumn column2 = new DefaultDashboardColumn();
+		DashboardColumn column3 = new DefaultDashboardColumn();
+		
+		column1.addWidget("sports");
+		column1.addWidget("finance");
+		
+		column2.addWidget("lifestyle");
+		column2.addWidget("weather");
+		
+		column3.addWidget("politics");
+
+		model.addColumn(column1);
+		model.addColumn(column2);
+		model.addColumn(column3);
+	}
+	
+	public void handleReorder(DashboardReorderEvent event) {
+		FacesMessage message = new FacesMessage();
+		message.setSeverity(FacesMessage.SEVERITY_INFO);
+		message.setSummary("Reordered: " + event.getWidgetId());
+		message.setDetail("Item index: " + event.getItemIndex() + ", Column index: " + event.getColumnIndex() + ", Sender index: " + event.getSenderColumnIndex());
+		
+		addMessage(message);
+	}
+	
+	
+	private void addMessage(FacesMessage message) {
+		FacesContext.getCurrentInstance().addMessage(null, message);
+	}
+	
+	public DashboardModel getModel() {
+		return model;
+	}
+}
+			</pre>
+				</p:tab>
+				
+				
+			</p:tabView>
+			
+			
+		</div>
+
+	</ui:define>
+</ui:composition>

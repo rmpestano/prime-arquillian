@@ -1,0 +1,84 @@
+<arquillian xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://jboss.org/schema/arquillian"
+	xsi:schemaLocation="
+        http://jboss.org/schema/arquillian
+        http://jboss.org/schema/arquillian/arquillian_1_0.xsd">
+
+	<!-- Force the use of the Servlet 3.0 protocol with all containers, as it is the most mature -->
+
+	<defaultProtocol type="Servlet 3.0" />
+
+
+	<container qualifier="jboss-managed"  default="true" >
+		<configuration>
+	    	<property name="jbossHome">${arquillian.serverHome}</property>
+			<property name="outputToConsole">true</property>
+            <property name="javaVmArguments">-Xmx512m -XX:MaxPermSize=256m -Djboss.bind.address=${arquillian.localAddress} -Darquillian.debug=${arquillian.debug}</property>
+			<property name="allowConnectingToRunningServer">true</property>
+		</configuration>
+	</container>
+
+    <container qualifier="glassfish-managed">
+        <configuration>
+            <property name="glassFishHome">${arquillian.serverHome}</property>
+            <property name="outputToConsole">true</property>
+            <property name="javaVmArguments">-Xmx512m -XX:MaxPermSize=256m -Djboss.bind.address=${arquillian.localAddress} -Darquillian.debug=${arquillian.debug}</property>
+            <property name="allowConnectingToRunningServer">true</property>
+        </configuration>
+    </container>
+
+     <!-- remote adapters-->
+
+    <container qualifier="jboss-remote" >
+        <configuration>
+            <property name="managementAddress">127.0.0.1</property>
+            <property name="managementPort">9999</property>
+
+        </configuration>
+    </container>
+    <container qualifier="jboss-remote-domain" >
+        <configuration>
+            <!-- see topics https://community.jboss.org/thread/234070 and https://community.jboss.org/thread/204608 -->
+            <!-- <property name="managementAddress">localhost</property> <property name="managementPort">9999</property>
+                <property name="username">null</property> <property name="password">null</property> -->
+        </configuration>
+    </container>
+
+    <!-- extensions config-->
+
+    <!--extension qualifier="recorder">
+        <property name="startBeforeClass">true</property>
+    </extension-->
+
+    <!--extension qualifier="persistence-dbunit">
+        <property name="schema">sa</property>
+    </extension-->
+	
+<!-- 	<extension qualifier="systemproperties"> -->
+<!--         <property name="prefix">*</property> -->
+<!--     </extension> -->
+
+	<extension qualifier="graphene">
+	   <property name="waitGuiInterval">2</property>
+	   <property name="waitAjaxInterval">3</property>
+	   <property name="waitModelInterval">4</property>
+	   
+	</extension>
+	 <extension qualifier="webdriver">
+<!--         <property name="browser">firefox</property> -->
+        <property name="browser">${arquillian.browser}</property>
+<!--         <property name="dimensions">1280x1024</property>  -->
+        <property name="remoteReusable">${arquillian.remoteReusable}</property>
+ 		<property name="remote">${arquillian.remote}</property>
+        <property name="remoteAddress">${arquillian.remoteAddress}</property>
+        <!--<property name="chromeDriverBinary">c:/chromedriver.exe</property>-->
+        <!-- to use chrome browser download webdriver: http://code.google.com/p/chromedriver/downloads/list -->
+    </extension>
+     
+<!--     <extension qualifier="selenium-server"> -->
+<!--   		<property name="port">4444</property>  -->
+<!-- 		<property name="browserSessionReuse">true</property>  -->  
+<!-- 	</extension> -->
+	
+
+</arquillian>

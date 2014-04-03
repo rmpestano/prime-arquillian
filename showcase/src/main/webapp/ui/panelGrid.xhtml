@@ -1,0 +1,285 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="../templates/ui.xhtml">
+
+	<ui:define name="content">
+        
+        <h1 class="title ui-widget-header ui-corner-all">PanelGrid</h1>
+        <div class="entry">
+            <p>PanelGrid is an extension to the standard panelGrid with theme integration and colspan-rowspan support.</p>
+
+            <p:panelGrid columns="2">
+                <f:facet name="header">
+                    Basic PanelGrid
+                </f:facet>
+                
+                <h:outputLabel for="firstname" value="Firstname: *" />
+                <p:inputText id="firstname" value="#{pprBean.firstname}" label="Firstname" />
+
+                <h:outputLabel for="surname" value="Surname: *" />
+                <p:inputText id="surname" value="#{pprBean.surname}" required="true" label="Surname"/>
+                                
+                <f:facet name="footer">
+                    <p:commandButton type="button" value="Save" icon="ui-icon-check" style="margin:0"/>
+                </f:facet>
+            </p:panelGrid>
+            
+            <p:panelGrid style="margin-top:20px">
+                <f:facet name="header">
+                    <p:row>
+                        <p:column colspan="7">1995-96 NBA Playoffs</p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column colspan="2">Conf. Semifinals</p:column>
+                        <p:column colspan="2">Conf. Finals</p:column>
+                        <p:column colspan="2">NBA Finals</p:column>
+                        <p:column>Champion</p:column>
+                    </p:row>
+
+                </f:facet>
+                
+                <p:row>
+                    <p:column style="font-weight: bold;">Seattle</p:column>
+                    <p:column style="font-weight: bold;">4</p:column>
+                    
+                    <p:column rowspan="2" style="font-weight: bold;">Seattle</p:column>
+                    <p:column rowspan="2" style="font-weight: bold;">4</p:column>
+                    
+                    <p:column rowspan="5">Seattle</p:column>
+                    <p:column rowspan="5">2</p:column>
+                    
+                    <p:column rowspan="11" style="font-weight: bold;">Chicago</p:column>
+                </p:row>
+                
+                <p:row>
+                    <p:column>Houston</p:column>
+                    <p:column >0</p:column>
+                </p:row>
+                
+                <p:row>
+                    <p:column colspan="4" styleClass="ui-widget-header">
+                        <p:spacer height="0"/>
+                    </p:column>
+                </p:row>
+                
+                <p:row>
+                    <p:column style="font-weight: bold;">Utah</p:column>
+                    <p:column style="font-weight: bold;">4</p:column>
+                    
+                    <p:column rowspan="2">Utah</p:column>
+                    <p:column rowspan="2">3</p:column>
+                </p:row>
+                
+                <p:row>
+                    <p:column>San Antonio</p:column>
+                    <p:column >2</p:column>
+                </p:row>
+                
+                <p:row>
+                    <p:column colspan="6" styleClass="ui-widget-header">
+                        <p:spacer height="0"/>
+                    </p:column>
+                </p:row>
+               
+                <p:row>
+                    <p:column style="font-weight: bold;">Chicago</p:column>
+                    <p:column style="font-weight: bold;">4</p:column>
+                    
+                    <p:column rowspan="2" style="font-weight: bold;">Chicago</p:column>
+                    <p:column rowspan="2" style="font-weight: bold;">4</p:column>
+                    
+                    <p:column rowspan="5" style="font-weight: bold;">Chicago</p:column>
+                    <p:column rowspan="5" style="font-weight: bold;">4</p:column>
+                </p:row>
+                
+                <p:row>
+                    <p:column>New York</p:column>
+                    <p:column >1</p:column>
+                </p:row>
+                
+                <p:row>
+                    <p:column colspan="4" styleClass="ui-widget-header">
+                        <p:spacer height="0"/>
+                    </p:column>
+                </p:row>
+                
+                <p:row>
+                    <p:column>Atlanta</p:column>
+                    <p:column >1</p:column>
+                    
+                    <p:column rowspan="2">Orlando</p:column>
+                    <p:column rowspan="2">0</p:column>
+                </p:row>
+                
+                <p:row>
+                    <p:column style="font-weight: bold;">Orlando</p:column>
+                    <p:column style="font-weight: bold;">4</p:column>
+                </p:row>
+                
+                
+                <f:facet name="footer">
+                    <p:row>
+                        <p:column  colspan="4" style="text-align: right">
+                            Finals MVP
+                        </p:column>
+                        <p:column  colspan="3" rowspan="3">
+                            Michael Jordan (Chicago)
+                        </p:column>
+                    </p:row>
+                    
+                    <p:row>
+                        <p:column  colspan="4" style="text-align: right">
+                            Season MVP
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column  colspan="4" style="text-align: right">
+                            Top Scorer
+                        </p:column>
+                    </p:row>
+                </f:facet>
+            </p:panelGrid>
+
+            <h3>Source</h3>
+            <p:tabView>
+                <p:tab title="panelGrid.xhtml">
+                    <pre name="code" class="brush:xml">
+&lt;p:panelGrid columns="2"&gt;
+    &lt;f:facet name="header"&gt;
+        Basic PanelGrid
+    &lt;/f:facet&gt;
+
+    &lt;h:outputLabel for="firstname" value="Firstname: *" /&gt;
+    &lt;p:inputText id="firstname" value="#{pprBean.firstname}" label="Firstname" /&gt;
+
+    &lt;h:outputLabel for="surname" value="Surname: *" /&gt;
+    &lt;p:inputText id="surname" value="#{pprBean.surname}" required="true" label="Surname"/&gt;
+
+    &lt;f:facet name="footer"&gt;
+        &lt;p:commandButton type="button" value="Save" icon="ui-icon-check" style="margin:0"/&gt;
+    &lt;/f:facet&gt;
+&lt;/p:panelGrid&gt;
+
+&lt;p:panelGrid style="margin-top:20px"&gt;
+    &lt;f:facet name="header"&gt;
+        &lt;p:row&gt;
+            &lt;p:column colspan="7"&gt;1995-96 NBA Playoffs&lt;/p:column&gt;
+        &lt;/p:row&gt;
+        &lt;p:row&gt;
+            &lt;p:column colspan="2"&gt;Conf. Semifinals&lt;/p:column&gt;
+            &lt;p:column colspan="2"&gt;Conf. Finals&lt;/p:column&gt;
+            &lt;p:column colspan="2"&gt;NBA Finals&lt;/p:column&gt;
+            &lt;p:column&gt;Champion&lt;/p:column&gt;
+        &lt;/p:row&gt;
+    &lt;/f:facet&gt;
+
+    &lt;p:row&gt;
+        &lt;p:column style="font-weight: bold;"&gt;Seattle&lt;/p:column&gt;
+        &lt;p:column style="font-weight: bold;"&gt;4&lt;/p:column&gt;
+
+        &lt;p:column rowspan="2" style="font-weight: bold;"&gt;Seattle&lt;/p:column&gt;
+        &lt;p:column rowspan="2" style="font-weight: bold;"&gt;4&lt;/p:column&gt;
+
+        &lt;p:column rowspan="5"&gt;Seattle&lt;/p:column&gt;
+        &lt;p:column rowspan="5"&gt;2&lt;/p:column&gt;
+
+        &lt;p:column rowspan="11" style="font-weight: bold;"&gt;Chicago&lt;/p:column&gt;
+    &lt;/p:row&gt;
+    &lt;p:row&gt;
+        &lt;p:column&gt;Houston&lt;/p:column&gt;
+        &lt;p:column &gt;0&lt;/p:column&gt;
+    &lt;/p:row&gt;
+
+    &lt;p:row&gt;
+        &lt;p:column colspan="4" styleClass="ui-widget-header"&gt;
+            &lt;p:spacer height="0"/&gt;
+        &lt;/p:column&gt;
+    &lt;/p:row&gt;
+
+    &lt;p:row&gt;
+        &lt;p:column style="font-weight: bold;"&gt;Utah&lt;/p:column&gt;
+        &lt;p:column style="font-weight: bold;"&gt;4&lt;/p:column&gt;
+
+        &lt;p:column rowspan="2"&gt;Utah&lt;/p:column&gt;
+        &lt;p:column rowspan="2"&gt;3&lt;/p:column&gt;
+    &lt;/p:row&gt;
+
+    &lt;p:row&gt;
+        &lt;p:column&gt;San Antonio&lt;/p:column&gt;
+        &lt;p:column &gt;2&lt;/p:column&gt;
+    &lt;/p:row&gt;
+
+    &lt;p:row&gt;
+        &lt;p:column colspan="6" styleClass="ui-widget-header"&gt;
+            &lt;p:spacer height="0"/&gt;
+        &lt;/p:column&gt;
+    &lt;/p:row&gt;
+
+    &lt;p:row&gt;
+        &lt;p:column style="font-weight: bold;"&gt;Chicago&lt;/p:column&gt;
+        &lt;p:column style="font-weight: bold;"&gt;4&lt;/p:column&gt;
+
+        &lt;p:column rowspan="2" style="font-weight: bold;"&gt;Chicago&lt;/p:column&gt;
+        &lt;p:column rowspan="2" style="font-weight: bold;"&gt;4&lt;/p:column&gt;
+
+        &lt;p:column rowspan="5" style="font-weight: bold;"&gt;Chicago&lt;/p:column&gt;
+        &lt;p:column rowspan="5" style="font-weight: bold;"&gt;4&lt;/p:column&gt;
+    &lt;/p:row&gt;
+
+    &lt;p:row&gt;
+        &lt;p:column&gt;New York&lt;/p:column&gt;
+        &lt;p:column &gt;1&lt;/p:column&gt;
+    &lt;/p:row&gt;
+
+    &lt;p:row&gt;
+        &lt;p:column colspan="4" styleClass="ui-widget-header"&gt;
+            &lt;p:spacer height="0"/&gt;
+        &lt;/p:column&gt;
+    &lt;/p:row&gt;
+
+    &lt;p:row&gt;
+        &lt;p:column&gt;Atlanta&lt;/p:column&gt;
+        &lt;p:column &gt;1&lt;/p:column&gt;
+
+        &lt;p:column rowspan="2"&gt;Orlando&lt;/p:column&gt;
+        &lt;p:column rowspan="2"&gt;0&lt;/p:column&gt;
+    &lt;/p:row&gt;
+
+    &lt;p:row&gt;
+        &lt;p:column style="font-weight: bold;"&gt;Orlando&lt;/p:column&gt;
+        &lt;p:column style="font-weight: bold;"&gt;4&lt;/p:column&gt;
+    &lt;/p:row&gt;
+
+
+    &lt;f:facet name="footer"&gt;
+        &lt;p:row&gt;
+            &lt;p:column  colspan="4" style="text-align: right"&gt;
+                Finals MVP
+            &lt;/p:column&gt;
+            &lt;p:column  colspan="3" rowspan="3"&gt;
+                Michael Jordan (Chicago)
+            &lt;/p:column&gt;
+        &lt;/p:row&gt;
+
+        &lt;p:row&gt;
+            &lt;p:column  colspan="4" style="text-align: right"&gt;
+                Season MVP
+            &lt;/p:column&gt;
+        &lt;/p:row&gt;
+        &lt;p:row&gt;
+            &lt;p:column  colspan="4" style="text-align: right"&gt;
+                Top Scorer
+            &lt;/p:column&gt;
+        &lt;/p:row&gt;
+    &lt;/f:facet&gt;
+&lt;/p:panelGrid&gt;
+                    </pre>
+                </p:tab>
+            </p:tabView>
+		
+		</div>
+	</ui:define>
+</ui:composition>

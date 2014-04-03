@@ -1,0 +1,56 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="../templates/ui.xhtml">
+
+	<ui:define name="content">
+	
+		<h1 class="title ui-widget-header ui-corner-all">DataTable</h1>
+		<div class="entry">
+			
+			<p:menu styleClass="homeMenu">
+				<p:submenu label="DataTable">
+					<p:menuitem url="/ui/datatableBasic.jsf" value="Simple DataTable" />
+                    <p:menuitem url="/ui/datatableHeaderFooter.jsf" value="Header and Footer" />
+					<p:menuitem url="/ui/datatablePagination.jsf" value="Pagination" />
+                    <p:menuitem url="/ui/datatableSorting.jsf" value="Sorting" />
+                    <p:menuitem url="/ui/datatableSortingMultiple.jsf" value="Multi Sorting" />
+                    <p:menuitem url="/ui/datatableFiltering.jsf" value="Filtering" icon="ui-icon-notice"/>
+                    <p:menuitem url="/ui/datatableRowSelectionByColumn.jsf" value="Basic Row Selection" />
+                    <p:menuitem url="/ui/datatableRowSelectionSingle.jsf" value="Single Row Selection" />
+                    <p:menuitem url="/ui/datatableRowSelectionMultiple.jsf" value="Multiple Row Selection" />
+                    <p:menuitem url="/ui/datatableRowSelectionInstant.jsf" value="Instant Row Selection" />
+                    <p:menuitem url="/ui/datatableRowSelectionRadioCheckbox.jsf" value="Radio/Checkbox Selection" />
+                    <p:menuitem url="/ui/datatableGrouping.jsf" value="Grouping" />
+                    <p:menuitem url="/ui/datatableSubTable.jsf" value="SubTable"/>
+                    <p:menuitem url="/ui/datatableSummaryRow.jsf" value="Summary Row" />
+                    <p:menuitem url="/ui/datatableExpandableRows.jsf" value="Expandable Rows"/>
+                    <p:menuitem url="/ui/datatableDynamicColumns.jsf" value="Dynamic Columns" />
+                    <p:menuitem url="/ui/datatableRowEditing.jsf" value="Row Editing"/>
+                    <p:menuitem url="/ui/datatableCellEditing.jsf" value="Cell Editing" />
+                    <p:menuitem url="/ui/datatableScrolling.jsf" value="Scrolling" />
+                    <p:menuitem url="/ui/datatableFrozenRows.jsf" value="Frozen Rows" />
+                    <p:menuitem url="/ui/datatableFrozenColumns.jsf" value="Frozen Columns" icon="ui-icon-notice"/>
+                    <p:menuitem url="/ui/datatableColoring.jsf" value="Conditional Coloring" />
+                    <p:menuitem url="/ui/datatableLazy.jsf" value="Lazy Loading" />
+                    <p:menuitem url="/ui/datatableResizable.jsf" value="Resizable Columns" />
+                    <p:menuitem url="/ui/datatableReordering.jsf" value="Column Reordering" />
+                    <p:menuitem url="/ui/datatableDraggableRows.jsf" value="Row Reordering" icon="ui-icon-notice"/>
+                    <p:menuitem url="/ui/datatableColumnToggler.jsf" value="Column Toggler" icon="ui-icon-notice"/>
+                    <p:menuitem url="/ui/datatableContextMenu.jsf" value="Context Menu"/>
+                    <p:menuitem url="/ui/datatableSticky.jsf" value="Sticky Header"/>
+                    <p:menuitem url="/ui/datatableComplex.jsf" value="Complex DataTable" />
+                    <p:menuitem url="/ui/datatableRTL.jsf" value="RTL" />
+				</p:submenu>
+			</p:menu>
+			
+			<span class="homeText">DataTable is a data iteration component featuring ajax pagination, sorting, filtering, various row selection solutions,
+            nested headers, expandable rows, in-cell editing, scrolling and lazy data support.</span>
+		
+		</div>
+			
+
+	</ui:define>
+</ui:composition>

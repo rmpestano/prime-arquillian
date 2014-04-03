@@ -1,0 +1,75 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="../templates/ui.xhtml">
+	
+	<ui:define name="content">
+
+		<h1 class="title ui-widget-header ui-corner-all">Dialog - Close</h1>
+		<div class="entry">
+			<p>Close event can be listened via ajax behavior.</p>
+
+            <h:form id="form">
+
+                <p:growl id="growl" sticky="true" showDetail="true"/>
+
+                <h:outputLink id="openDialogLink" value="javascript:void(0)" onclick="PF('dlg').show()">Show the Picture of the Day</h:outputLink>
+
+                <p:dialog id="picture" widgetVar="dlg" header="Picture of the Day" width="425"
+                    resizable="false" showEffect="clip" hideEffect="clip">
+                    
+                    <p:ajax event="close" update="growl" listener="#{dialogBean.handleClose}"/>
+                    
+                    <p:graphicImage value="/images/nature3.jpg" />
+                    
+                </p:dialog>
+
+            </h:form>
+
+		<h3>Source</h3>
+		<p:tabView>
+			<p:tab title="dialogClose.xhtml">
+<pre name="code" class="brush:xml">
+&lt;h:form&gt;
+
+    &lt;p:growl id="growl" sticky="true" showDetail="true"/&gt;
+
+    &lt;h:outputLink id="openDialogLink" value="javascript:void(0)" onclick="PF('dlg').show()"&gt;Show the Picture of the Day&lt;/h:outputLink&gt;
+
+    &lt;p:dialog id="picture" widgetVar="dlg" header="Picture of the Day" width="425"
+        resizable="false" showEffect="clip" hideEffect="clip"&gt;
+
+        &lt;p:ajax event="close" update="growl" listener="\#{dialogBean.handleClose}"/&gt;
+
+        &lt;p:graphicImage value="/images/nature3.jpg" /&gt;
+
+    &lt;/p:dialog&gt;
+
+&lt;/h:form&gt;
+</pre>
+			</p:tab>
+			
+			<p:tab title="DialogBean.java">
+<pre name="code" class="brush:java">
+public class DialogBean {
+
+	public void handleClose(CloseEvent event) {
+		FacesContext facesContext = FacesContext.getCurrentInstance();
+		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, 
+			event.getComponent().getId() + " closed", "So you don't like nature?");
+		
+		facesContext.addMessage(null, message);
+	}
+}
+		</pre>
+			</p:tab>
+		</p:tabView>
+	
+		
+		
+		</div>
+
+	</ui:define>
+</ui:composition>

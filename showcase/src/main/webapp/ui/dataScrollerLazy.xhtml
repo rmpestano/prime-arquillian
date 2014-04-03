@@ -1,0 +1,286 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="../templates/ui.xhtml">
+
+    <ui:define name="head">
+        <style type="text/css">
+            .logo {
+                width: 5%
+            }
+            
+            .detail {
+                width: 95%;
+                padding-left: 25px;
+            }
+            
+            .detail td {
+                font-size: 24px;
+            }
+            
+            .ui-datascroller .ui-datascroller-item {
+                border-bottom: 1px solid #A8A8A8;
+                padding: 25px 10px;
+            }
+        </style>
+	</ui:define>
+	
+	<ui:define name="content">
+		<h1 class="title ui-widget-header ui-corner-all">DataScroller - Lazy</h1>
+		<div class="entry">
+			<p>DataScroller supports LazyDataModel to deal with huge datasets.</p>
+            
+            <h3>Source</h3>
+			<p:tabView style="margin-bottom:50px">
+				<p:tab title="dataScrollerLazy.xhtml">
+					<pre name="code" class="brush:xml">
+&lt;h:form id="form"&gt;
+                
+    &lt;p:dataScroller value="\#{tableBean.carsLarge}" var="car" chunkSize="10"&gt;
+
+        &lt;f:facet name="header"&gt;
+            Scroll Down to Load More Cars
+        &lt;/f:facet&gt;
+
+        &lt;h:panelGrid columns="2" style="width:100%" columnClasses="logo,detail"&gt;
+            &lt;p:graphicImage name="images/cars/\#{car.manufacturer}-big.gif" /&gt; 
+
+            &lt;p:outputPanel&gt;
+                &lt;h:panelGrid columns="2"&gt;
+                    &lt;h:outputText value="Model:" /&gt;
+                    &lt;h:outputText value="\#{car.model}" style="font-weight: bold"/&gt;
+
+                    &lt;h:outputText value="Year:" /&gt;
+                    &lt;h:outputText value="\#{car.year}" style="font-weight: bold"/&gt;
+
+                    &lt;h:outputText value="Color:" /&gt;
+                    &lt;h:outputText value="\#{car.color}" style="font-weight: bold"/&gt;
+                &lt;/h:panelGrid&gt;
+            &lt;/p:outputPanel&gt;
+        &lt;/h:panelGrid&gt;
+    &lt;/p:dataScroller&gt;
+
+&lt;/h:form&gt;
+					</pre>
+				</p:tab>
+				
+               <p:tab title="TableBean.java">
+                    <pre name="code" class="brush:java">
+package org.primefaces.examples.view;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
+
+import javax.servlet.ServletContext;
+
+import org.primefaces.examples.domain.Car;
+import org.primefaces.model.LazyDataModel;
+
+public class TableBean {
+	
+	private LazyDataModel&lt;Car&gt; lazyModel;
+
+    private Car selectedCar;
+
+    private List&lt;Car&gt; cars;
+
+    static {
+		colors = new String[10];
+		colors[0] = "Black";
+		colors[1] = "White";
+		colors[2] = "Green";
+		colors[3] = "Red";
+		colors[4] = "Blue";
+		colors[5] = "Orange";
+		colors[6] = "Silver";
+		colors[7] = "Yellow";
+		colors[8] = "Brown";
+		colors[9] = "Maroon";
+		
+		manufacturers = new String[10];
+		manufacturers[0] = "Mercedes";
+		manufacturers[1] = "BMW";
+		manufacturers[2] = "Volvo";
+		manufacturers[3] = "Audi";
+		manufacturers[4] = "Renault";
+		manufacturers[5] = "Opel";
+		manufacturers[6] = "Volkswagen";
+		manufacturers[7] = "Chrysler";
+		manufacturers[8] = "Ferrari";
+		manufacturers[9] = "Ford";
+	}
+
+	public TableBean() {
+        populateRandomCars(cars, 50);
+        lazyModel = new LazyCarDataModel(cars);
+	}
+
+    public Car getSelectedCar() {
+		return selectedCar;
+	}
+
+	public void setSelectedCar(Car selectedCar) {
+		this.selectedCar = selectedCar;
+	}
+	
+	public LazyDataModel&lt;Car&gt; getLazyModel() {
+		return lazyModel;
+	}
+
+	private void populateRandomCars(List&lt;Car&gt; list, int size) {
+		for(int i = 0 ; i &lt; size ; i++) {
+			list.add(new Car(getRandomModel(), getRandomYear(), getRandomManufacturer(), getRandomColor()));
+		}
+	}
+
+	private String getRandomColor() {
+		return colors[(int) (Math.random() * 10)];
+	}
+
+	private String getRandomManufacturer() {
+		return manufacturers[(int) (Math.random() * 10)];
+	}
+
+	private int getRandomYear() {
+		return (int) (Math.random() * 50 + 1960);
+	}
+}
+                    </pre>
+                </p:tab>
+                
+                <p:tab title="LazyCarDataModel.java">
+                    <pre name="code" class="brush:java">
+package org.primefaces.examples.view;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import org.primefaces.examples.domain.Car;
+import org.primefaces.model.LazyDataModel;
+import org.primefaces.model.SortOrder;
+
+/**
+ * Dummy implementation of LazyDataModel that uses a list to mimic a real datasource like a database.
+ */
+public class LazyCarDataModel extends LazyDataModel&lt;Car&gt; {
+    
+    private List&lt;Car&gt; datasource;
+    
+    public LazyCarDataModel(List&lt;Car&gt; datasource) {
+        this.datasource = datasource;
+    }
+    
+    @Override
+    public Car getRowData(String rowKey) {
+        for(Car car : datasource) {
+            if(car.getModel().equals(rowKey))
+                return car;
+        }
+
+        return null;
+    }
+
+    @Override
+    public Object getRowKey(Car car) {
+        return car.getModel();
+    }
+
+    @Override
+    public List&lt;Car&gt; load(int first, int pageSize, String sortField, SortOrder sortOrder, Map&lt;String,String&gt; filters) {
+        List&lt;Car&gt; data = new ArrayList&lt;Car&gt;();
+
+        //filter
+        for(Car car : datasource) {
+            boolean match = true;
+
+            for(Iterator&lt;String&gt; it = filters.keySet().iterator(); it.hasNext();) {
+                try {
+                    String filterProperty = it.next();
+                    String filterValue = filters.get(filterProperty);
+                    String fieldValue = String.valueOf(car.getClass().getField(filterProperty).get(car));
+
+                    if(filterValue == null || fieldValue.startsWith(filterValue)) {
+                        match = true;
+                    }
+                    else {
+                        match = false;
+                        break;
+                    }
+                } catch(Exception e) {
+                    match = false;
+                } 
+            }
+
+            if(match) {
+                data.add(car);
+            }
+        }
+
+        //sort
+        if(sortField != null) {
+            Collections.sort(data, new LazySorter(sortField, sortOrder));
+        }
+
+        //rowCount
+        int dataSize = data.size();
+        this.setRowCount(dataSize);
+
+        //paginate
+        if(dataSize &gt; pageSize) {
+            try {
+                return data.subList(first, first + pageSize);
+            }
+            catch(IndexOutOfBoundsException e) {
+                return data.subList(first, first + (dataSize % pageSize));
+            }
+        }
+        else {
+            return data;
+        }
+    }
+}
+                    </pre>
+                </p:tab>
+			</p:tabView>
+		
+			<h:form id="form">
+                
+                <p:dataScroller value="#{tableBean.lazyModel}" var="car" chunkSize="10" lazy="true">
+                    
+                    <f:facet name="header">
+                        Scroll Down to Load More Cars
+                    </f:facet>
+                    
+                    <h:panelGrid columns="2" style="width:100%" columnClasses="logo,detail">
+                        <p:graphicImage name="images/cars/#{car.manufacturer}-big.gif" /> 
+
+                        <p:outputPanel>
+                            <h:panelGrid columns="2">
+                                <h:outputText value="Model:" />
+                                <h:outputText value="#{car.model}" style="font-weight: bold"/>
+                                
+                                <h:outputText value="Year:" />
+                                <h:outputText value="#{car.year}" style="font-weight: bold"/>
+                                
+                                <h:outputText value="Color:" />
+                                <h:outputText value="#{car.color}" style="font-weight: bold"/>
+                            </h:panelGrid>
+                        </p:outputPanel>
+                    </h:panelGrid>
+                </p:dataScroller>
+                
+			</h:form>
+			
+		</div>
+				
+	</ui:define>
+    
+    <ui:define name="footer" />
+</ui:composition>

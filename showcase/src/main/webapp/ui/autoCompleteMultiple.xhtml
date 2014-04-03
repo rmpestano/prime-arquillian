@@ -1,0 +1,273 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="../templates/ui.xhtml">
+    
+        <ui:define name="head">
+        <style type="text/css">
+
+        </style>
+        
+        <script type="text/javascript">
+            //<![CDATA[
+
+            //]]>
+        </script>
+    </ui:define>
+    	
+	<ui:define name="content">
+
+		<h1 class="title ui-widget-header ui-corner-all">AutoComplete - Multiple Selection</h1>
+		<div class="entry">
+			<p>AutoComplete supports multiple selection as well.</p>
+		
+			<h:form id="form">
+                
+                <p:growl id="growl" />
+                
+                <h3>Basic Complete</h3>
+                <p:autoComplete id="basic" value="#{autoCompleteBean.selectedTexts}" completeMethod="#{autoCompleteBean.complete}" multiple="true"/>
+                
+                <h3>Advanced Complete</h3>
+                <p:autoComplete id="advanced" value="#{autoCompleteBean.selectedPlayers}" completeMethod="#{autoCompleteBean.completePlayer}"
+                    var="p" itemLabel="#{p.name}" itemValue="#{p}" converter="player" multiple="true">
+                    
+                    <p:ajax event="itemUnselect" listener="#{autoCompleteBean.handleUnselect}" update="growl" />
+                    
+                    <p:column style="width:20%;text-align:center">
+                        <p:graphicImage value="/images/barca/#{p.photo}" width="40" height="50"/>
+                    </p:column>
+
+                    <p:column style="width:80%">
+                        #{p.name} - #{p.number}
+                    </p:column>
+                </p:autoComplete>
+				
+                <p:separator style="margin-top:20px"/>
+                
+                <p:commandButton value="Submit" id="submit" update="display" style="margin:10px 0" oncomplete="PF('textDialog').show()" />
+                
+                <p:dialog modal="true" widgetVar="textDialog" showEffect="fade" width="200" resizable="false" header="Selected Values">
+                    <p:outputPanel id="display">
+                        <p:dataList value="#{autoCompleteBean.selectedTexts}"  var="text" id="texts">
+                            <f:facet name="header">
+                                Texts
+                            </f:facet>
+                           <h:outputText value="#{text}" id="text"/>
+                        </p:dataList>
+                        
+                        <p:separator style="margin:20px"/>
+
+                        <p:dataList value="#{autoCompleteBean.selectedPlayers}" var="player" id="players">
+                            <f:facet name="header">
+                                Players
+                            </f:facet>
+                            <h:outputText value="#{player}" id="player"/>
+                        </p:dataList>
+                    </p:outputPanel>
+                </p:dialog>
+			</h:form>
+
+			<br />
+			<h3>Source</h3>
+            <p:tabView>
+                <p:tab title="autoCompleteMultiple.xhtml">
+                    <pre name="code" class="brush:xml">
+&lt;h:form id="form"&gt;
+                
+    &lt;p:growl id="growl" /&gt;
+
+    &lt;h3&gt;Basic Complete&lt;/h3&gt;
+    &lt;p:autoComplete value="\#{autoCompleteBean.selectedTexts}" completeMethod="\#{autoCompleteBean.complete}" multiple="true"/&gt;
+
+    &lt;h3&gt;Advanced Complete&lt;/h3&gt;
+    &lt;p:autoComplete value="\#{autoCompleteBean.selectedPlayers}" completeMethod="\#{autoCompleteBean.completePlayer}"
+        var="p" itemLabel="\#{p.name}" itemValue="\#{p}" converter="player" multiple="true"&gt;
+
+        &lt;p:ajax event="itemUnselect" listener="\#{autoCompleteBean.handleUnselect}" update="growl" /&gt;
+
+        &lt;p:column style="width:20%;text-align:center"&gt;
+            &lt;p:graphicImage value="/images/barca/\#{p.photo}" width="40" height="50"/&gt;
+        &lt;/p:column&gt;
+
+        &lt;p:column style="width:80%"&gt;
+            \#{p.name} - \#{p.number}
+        &lt;/p:column&gt;
+    &lt;/p:autoComplete&gt;
+
+    &lt;p:separator style="margin-top:20px"/&gt;
+
+    &lt;p:commandButton value="Submit" id="submit" update="display" style="margin:10px 0" oncomplete="PF('textDialog').show()" /&gt;
+
+    &lt;p:dialog modal="true" widgetVar="textDialog" showEffect="fade" width="200" resizable="false" header="Selected Values"&gt;
+        &lt;p:outputPanel id="display"&gt;
+            &lt;p:dataList value="\#{autoCompleteBean.selectedTexts}" var="text"  id="texts"&gt;
+                &lt;f:facet name="header"&gt;
+                    Texts
+                &lt;/f:facet&gt;
+                 &lt;h:outputText value="#{text}" id="text"/&gt;
+            &lt;/p:dataList&gt;
+
+            &lt;p:separator style="margin:20px"/&gt;
+
+            &lt;p:dataList value="\#{autoCompleteBean.selectedPlayers1}" var="player" id="players"&gt;
+                &lt;f:facet name="header"&gt;
+                    Players
+                &lt;/f:facet&gt;
+                &lt;h:outputText value="#{player}" id="player"/&gt;
+            &lt;/p:dataList&gt;
+        &lt;/p:outputPanel&gt;
+    &lt;/p:dialog&gt;
+&lt;/h:form&gt;
+                    </pre>
+                </p:tab>
+
+                <p:tab title="AutoCompleteBean.java">
+			<pre name="code" class="brush:java">
+package org.primefaces.examples.view;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+
+import org.primefaces.event.UnselectEvent;
+import org.primefaces.examples.domain.Player;
+
+public class AutoCompleteBean {
+
+    private List&lt;Player&gt; players;
+
+    private List&lt;Player&gt; selectedPlayers;
+    
+    private List&lt;String&gt; selectedTexts;
+	
+	public AutoCompleteBean() {
+		players = PlayerConverter.playerDB;
+	}
+
+	public List&lt;String&gt; complete(String query) {
+		List&lt;String&gt; results = new ArrayList&lt;String&gt;();
+		
+		for(int i = 0; i &lt; 10; i++) {
+			results.add(query + i);
+		}
+		
+		return results;
+	}
+	
+	public List&lt;Player&gt; completePlayer(String query) {
+		List&lt;Player&gt; suggestions = new ArrayList&lt;Player&gt;();
+		
+		for(Player p : players) {
+			if(p.getName().startsWith(query))
+				suggestions.add(p);
+		}
+		
+		return suggestions;
+	}
+	
+    public List&lt;Player&gt; getPlayers() {
+        return players;
+    }
+
+    public List&lt;Player&gt; getSelectedPlayers() {
+        return selectedPlayers;
+    }
+
+    public void setSelectedPlayers(List&lt;Player&gt; selectedPlayers) {
+        this.selectedPlayers = selectedPlayers;
+    }
+
+    public List&lt;String&gt; getSelectedTexts() {
+        return selectedTexts;
+    }
+    public void setSelectedTexts(List&lt;String&gt; selectedTexts) {
+        this.selectedTexts = selectedTexts;
+    }
+
+    public void handleUnselect(UnselectEvent event) {
+		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Unselected:" + event.getObject().toString(), null);
+		
+		FacesContext.getCurrentInstance().addMessage(null, message);
+	}
+}
+			</pre>
+                </p:tab>
+                
+                <p:tab title="PlayerConverter.java">
+			<pre name="code" class="brush:java">
+package org.primefaces.examples.view;
+
+import java.util.ArrayList;
+import java.util.List;
+import javax.faces.application.FacesMessage;
+
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.convert.Converter;
+import javax.faces.convert.ConverterException;
+
+import org.primefaces.examples.domain.Player;
+
+public class PlayerConverter implements Converter {
+
+    public static List&lt;Player&gt; playerDB;
+
+    static {
+        playerDB = new ArrayList&lt;Player&gt;();
+
+        playerDB.add(new Player("Messi", 10, "messi.jpg", "CF"));
+        playerDB.add(new Player("Bojan", 9, "bojan.jpg", "CF"));
+        playerDB.add(new Player("Iniesta", 8, "iniesta.jpg", "CM"));
+        playerDB.add(new Player("Villa", 7, "villa.jpg", "CF"));
+        playerDB.add(new Player("Xavi", 6, "xavi.jpg", "CM"));
+        playerDB.add(new Player("Puyol", 5, "puyol.jpg", "CB"));
+        playerDB.add(new Player("Afellay", 20, "afellay.jpg", "AMC"));
+        playerDB.add(new Player("Abidal", 22, "abidal.jpg", "LB"));
+        playerDB.add(new Player("Alves", 2, "alves.jpg", "RB"));
+        playerDB.add(new Player("Pique", 3, "pique.jpg", "CB"));
+        playerDB.add(new Player("Keita", 15, "keita.jpg", "DM"));
+        playerDB.add(new Player("Adriano", 21, "adriano.jpg", "LB"));
+        playerDB.add(new Player("Valdes", 1, "valdes.jpg", "GK"));
+    }
+
+    public Object getAsObject(FacesContext facesContext, UIComponent component, String submittedValue) {
+        if (submittedValue.trim().equals("")) {
+            return null;
+        } else {
+            try {
+                int number = Integer.parseInt(submittedValue);
+
+                for (Player p : playerDB) {
+                    if (p.getNumber() == number) {
+                        return p;
+                    }
+                }
+                
+            } catch(NumberFormatException exception) {
+                throw new ConverterException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Conversion Error", "Not a valid player"));
+            }
+        }
+
+        return null;
+    }
+
+    public String getAsString(FacesContext facesContext, UIComponent component, Object value) {
+        if (value == null || value.equals("")) {
+            return "";
+        } else {
+            return String.valueOf(((Player) value).getNumber());
+        }
+    }
+}
+                    </pre>
+                </p:tab>
+            </p:tabView>
+		</div>
+
+	</ui:define>
+</ui:composition>
