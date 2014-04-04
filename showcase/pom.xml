@@ -24,7 +24,6 @@
         <recorder.version>1.0.0.Alpha2</recorder.version>
         <wildfly.version>8.0.0.Final</wildfly.version>
         <jboss.version>7.2.0.Final</jboss.version>
-        <arquillian.serverHome>c:\wildfly-8.0.0.Final</arquillian.serverHome>
         <arquillian.browser>firefox</arquillian.browser>
         <arquillian.debug>false</arquillian.debug>
         <arquillian.remote>false</arquillian.remote>
@@ -32,6 +31,9 @@
         <arquillian.chromeDriver>c:\chromedriver.exe</arquillian.chromeDriver>
         <arquillian.localAddress>localhost</arquillian.localAddress>
         <arquillian.remoteAddress>http://localhost:1035/wd/hub</arquillian.remoteAddress>
+        <jsfVersion>Mojarra-2.2.4</jsfVersion>
+        <primefacesVersion>PrimeFaces-5.0-SNAPSHOT</primefacesVersion>
+        <jsf-listener>com.sun.faces.config.ConfigureListener</jsf-listener>
     </properties>
 
     <build>
@@ -378,10 +380,21 @@
             <version>2.7.4</version>
         </dependency>-->
         <dependency>
-            <groupId>javax</groupId>
-            <artifactId>javaee-api</artifactId>
-            <version>6.0</version>
+            <groupId>org.primefaces</groupId>
+            <artifactId>primefaces</artifactId>
+            <version>5.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish</groupId>
+            <artifactId>javax.faces</artifactId>
+            <version>2.2.5</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.extras</groupId>
+            <artifactId>glassfish-embedded-all</artifactId>
+            <version>3.2-b06</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
@@ -421,6 +434,7 @@
             </activation>
             <properties>
                 <arquillian.testContainer>jboss-managed</arquillian.testContainer>
+                <arquillian.serverHome>/home/rmpestano/wildfly-8.0.0.Final</arquillian.serverHome>
             </properties>
             <dependencies>
                 <dependency>
@@ -436,6 +450,7 @@
             <properties>
                 <!--referenced by arquillian.launch and used in arquillian.xml to choice which container arquillian will use-->
                 <arquillian.testContainer>jboss-managed</arquillian.testContainer>
+                <arquillian.serverHome>/home/rmpestano/jboss-eap-6.1</arquillian.serverHome>
             </properties>
             <dependencies>
                 <dependency>
@@ -446,6 +461,23 @@
                 </dependency>
             </dependencies>
         </profile>
+        <profile>
+            <id>glassfish-managed</id>
+            <properties>
+                <!--referenced by arquillian.launch and used in arquillian.xml to choice which container arquillian will use-->
+                <arquillian.testContainer>glassfish-managed</arquillian.testContainer>
+                <arquillian.serverHome>/home/rmpestano/glassfish-4.01</arquillian.serverHome>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>org.jboss.arquillian.container</groupId>
+                    <artifactId>arquillian-glassfish-embedded-3.1</artifactId>
+                    <version>1.0.0.CR4</version>
+                    <scope>test</scope>
+                </dependency>
+            </dependencies>
+        </profile>
+
 
         <!-- selenium web drivers -->
         <profile>
@@ -489,92 +521,15 @@
                 <primefacesVersion>PrimeFaces-5.0-SNAPSHOT</primefacesVersion>
                 <jsf-listener>com.sun.faces.config.ConfigureListener</jsf-listener>
             </properties>
-            <dependencies>
-                <dependency>
-                    <groupId>org.primefaces</groupId>
-                    <artifactId>primefaces</artifactId>
-                    <version>5.0-SNAPSHOT</version>
-                </dependency>
-                <dependency>
-                    <groupId>org.glassfish</groupId>
-                    <artifactId>javax.faces</artifactId>
-                    <version>2.2.5</version>
-                    <scope>provided</scope>
-                </dependency>
-            </dependencies>
-        </profile>
-
-        <profile>
-            <id>mojarra-2.1</id>
-            <properties>
-                <jsfVersion>Mojarra-2.1.26</jsfVersion>
-                <primefacesVersion>PrimeFaces-4.0-SNAPSHOT</primefacesVersion>
-                <jsf-listener>com.sun.faces.config.ConfigureListener</jsf-listener>
-            </properties>
-            <dependencies>
-                <dependency>
-                    <groupId>org.primefaces</groupId>
-                    <artifactId>primefaces</artifactId>
-                    <version>${prime.version}</version>
-                </dependency>
-                <dependency>
-                    <groupId>org.glassfish</groupId>
-                    <artifactId>javax.faces</artifactId>
-                    <version>2.1.26</version>
-                </dependency>
-            </dependencies>
         </profile>
 
         <profile>
             <id>myfaces</id>
             <properties>
-                <jsfVersion>MyFaces-2.2.0-SNAPSHOT</jsfVersion>
-                <primefacesVersion>PrimeFaces-4.0-SNAPSHOT</primefacesVersion>
+                <jsfVersion>MyFaces-2.2.2</jsfVersion>
+                <primefacesVersion>PrimeFaces-5.0-SNAPSHOT</primefacesVersion>
                 <jsf-listener>org.apache.myfaces.webapp.StartupServletContextListener</jsf-listener>
             </properties>
-            <dependencies>
-                <dependency>
-                    <groupId>org.primefaces</groupId>
-                    <artifactId>primefaces</artifactId>
-                    <version>${prime.version}</version>
-                </dependency>
-                <dependency>
-                    <groupId>org.apache.myfaces.core</groupId>
-                    <artifactId>myfaces-api</artifactId>
-                    <version>2.2.0-SNAPSHOT</version>
-                </dependency>
-                <dependency>
-                    <groupId>org.apache.myfaces.core</groupId>
-                    <artifactId>myfaces-impl</artifactId>
-                    <version>2.2.0-SNAPSHOT</version>
-                </dependency>
-            </dependencies>
-        </profile>
-
-        <profile>
-            <id>myfaces-2.1</id>
-            <properties>
-                <jsfVersion>MyFaces-2.1.12</jsfVersion>
-                <primefacesVersion>PrimeFaces-4.0-SNAPSHOT</primefacesVersion>
-                <jsf-listener>org.apache.myfaces.webapp.StartupServletContextListener</jsf-listener>
-            </properties>
-            <dependencies>
-                <dependency>
-                    <groupId>org.primefaces</groupId>
-                    <artifactId>primefaces</artifactId>
-                    <version>${prime.version}</version>
-                </dependency>
-                <dependency>
-                    <groupId>org.apache.myfaces.core</groupId>
-                    <artifactId>myfaces-api</artifactId>
-                    <version>2.1.12</version>
-                </dependency>
-                <dependency>
-                    <groupId>org.apache.myfaces.core</groupId>
-                    <artifactId>myfaces-impl</artifactId>
-                    <version>2.1.12</version>
-                </dependency>
-            </dependencies>
         </profile>
 
 

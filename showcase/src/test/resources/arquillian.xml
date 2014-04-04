@@ -24,6 +24,11 @@
             <property name="outputToConsole">true</property>
             <property name="javaVmArguments">-Xmx512m -XX:MaxPermSize=256m -Djboss.bind.address=${arquillian.localAddress} -Darquillian.debug=${arquillian.debug}</property>
             <property name="allowConnectingToRunningServer">true</property>
+            <property name="adminHost">localhost</property>
+            <property name="adminPort">4848</property>
+            <property name="adminUser">admin</property>
+            <property name="adminPassword">admin</property>
+
         </configuration>
     </container>
 
