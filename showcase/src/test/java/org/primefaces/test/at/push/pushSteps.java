@@ -41,6 +41,12 @@ public class PushSteps extends BaseAtStep implements Serializable {
         assertTrue(pushHome.isPresent());
     }
 
+    @Given("i go to counter page")
+    public void gotoCounter(){
+        pushHome.gotoCounterPage();
+        assertTrue(pushHome.isHeaderPresent(pushHome.COUNTER_HEADER));
+    }
+
 
 
 

@@ -13,6 +13,8 @@ import org.openqa.selenium.WebElement;
 import java.io.Serializable;
 import java.util.List;
 
+import static org.junit.Assert.assertTrue;
+
 
 public abstract class BasePage implements Serializable {
 
@@ -68,6 +70,10 @@ public abstract class BasePage implements Serializable {
 
     public WebElement findMenuItemByText(GrapheneElement menu, String text){
         return menu.findElement(By.xpath("//span[@class='ui-menuitem-text' and text() = '" + text +"']"));
+    }
+
+    public boolean isHeaderPresent(String text){
+        return header.getText().equals(text);
     }
 
     public abstract boolean isPresent();

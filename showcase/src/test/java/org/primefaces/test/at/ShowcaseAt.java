@@ -20,8 +20,7 @@ public class ShowcaseAt extends BaseAt {
     @Deployment(testable = false)
     public static WebArchive createDeployment()
     {
-        WebArchive archive = createBaseDeployment()
-                .addAsResource("org/primefaces/test/at/push/push_at.story");
+        WebArchive archive = createBaseDeployment();
 
         System.out.println(archive.toString(true));
         return archive;

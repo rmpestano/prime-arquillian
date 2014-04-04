@@ -191,7 +191,9 @@
     <orderEntry type="library" scope="TEST" name="Maven: org.jboss.arquillian.protocol:arquillian-protocol-servlet:1.1.4.Final" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.slf4j:slf4j-log4j12:1.7.5" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: log4j:log4j:1.2.17" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: javax:javaee-api:6.0" level="project" />
+    <orderEntry type="module" module-name="primefaces" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.glassfish:javax.faces:2.2.5" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.glassfish.extras:glassfish-embedded-all:3.2-b06" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.jboss.as:jboss-as-arquillian-container-managed:7.2.0.Final" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.jboss.as:jboss-as-arquillian-common:7.2.0.Final" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.jboss.arquillian.container:arquillian-container-osgi:1.0.3.Final" level="project" />
@@ -268,8 +270,6 @@
     <orderEntry type="library" scope="TEST" name="Maven: org.jboss.osgi.repository:jbosgi-repository-api:2.1.0.Final" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.jboss.osgi.repository:jbosgi-repository-core:2.1.0.Final" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.jboss.arquillian.protocol:arquillian-protocol-jmx:1.1.4.Final" level="project" />
-    <orderEntry type="module" module-name="prime-arquillian" />
-    <orderEntry type="module" module-name="primefaces" />
   </component>
 </module>
 

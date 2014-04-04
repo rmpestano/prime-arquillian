@@ -13,13 +13,13 @@ import static org.jboss.arquillian.graphene.Graphene.guardHttp;
 @Location("push/index.jsp")
 public class PushHome extends BasePage {
 
-    @FindByJQuery("h1.ui-widget-header")
-    protected GrapheneElement header;
+    public static final String COUNTER_HEADER = "PrimePush - Counter";
+    public static final String PUSH_HEADER = "PrimePush - Counter";
 
 
     @Override
     public boolean isPresent() {
-        return header.getText().equals("PrimePush");
+        return header.getText().equals(PUSH_HEADER);
     }
 
 
