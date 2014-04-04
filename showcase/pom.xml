@@ -85,11 +85,14 @@
                     <runOrder>reversealphabetical</runOrder>
                     <includes>
                         <include>**/*Ft.java</include>
+                        <include>**/*At.java</include>
                     </includes>
                     <excludes>
                         <!-- Exclude integration tests within (unit) test phase. -->
                         <exclude>**/integration/**/*.java</exclude>
                         <exclude>**/*BaseFt.java</exclude>
+                        <exclude>**/*BaseAt.java</exclude>
+                        <exclude>**/*BaseBdd.java</exclude>
                     </excludes>
                     <encoding>${project.build.sourceEncoding}</encoding>
                 </configuration>
@@ -450,7 +453,7 @@
             <properties>
                 <!--referenced by arquillian.launch and used in arquillian.xml to choice which container arquillian will use-->
                 <arquillian.testContainer>jboss-managed</arquillian.testContainer>
-                <arquillian.serverHome>/home/rmpestano/jboss-eap-6.1</arquillian.serverHome>
+                <arquillian.serverHome>/home/rmpestano/jboss-eap-6.2</arquillian.serverHome>
             </properties>
             <dependencies>
                 <dependency>
@@ -532,7 +535,63 @@
             </properties>
         </profile>
 
+        <profile>
+            <!--executes only  functional tests -->
+            <id>ft-tests</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>2.16</version>
+                        <configuration>
+                            <runOrder>reversealphabetical</runOrder>
+                            <includes>
+                                <include>**/*Ft.java</include>
+                            </includes>
+                            <excludes>
+                                <!-- Exclude integration tests within (unit) test phase. -->
+                                <exclude>**/integration/**/*.java</exclude>
+                                <exclude>**/*BaseFt.java</exclude>
+                                <exclude>**/*BaseAt.java</exclude>
+                                <exclude>**/*BaseBdd.java</exclude>
+                                <exclude>**/*At.java</exclude>
+                            </excludes>
+                            <encoding>${project.build.sourceEncoding}</encoding>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
 
+        <profile>
+            <!--executes only acceptance tests -->
+            <id>at-tests</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>2.16</version>
+                        <configuration>
+                            <runOrder>reversealphabetical</runOrder>
+                            <includes>
+                                <include>**/*At.java</include>
+                            </includes>
+                            <excludes>
+                                <!-- Exclude integration tests within (unit) test phase. -->
+                                <exclude>**/integration/**/*.java</exclude>
+                                <exclude>**/*BaseFt.java</exclude>
+                                <exclude>**/*BaseAt.java</exclude>
+                                <exclude>**/*BaseBdd.java</exclude>
+                                <exclude>**/*Ft.java</exclude>
+                            </excludes>
+                            <encoding>${project.build.sourceEncoding}</encoding>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
     </profiles>
 
 </project>

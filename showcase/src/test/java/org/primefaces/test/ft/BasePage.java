@@ -19,6 +19,13 @@ public abstract class BasePage implements Serializable {
     @Drone
     protected WebDriver browser;
 
+    @FindByJQuery("h1.ui-widget-header")
+    protected GrapheneElement header;
+
+
+    @FindByJQuery("ul.ui-menu-list")
+    protected GrapheneElement menu;//represents p:menu component
+
     public String getLocation() {
         if (!getClass().isAnnotationPresent(Location.class)) {
             throw new RuntimeException("Provide @Location annotation for class:" + getClass().getSimpleName());

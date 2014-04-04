@@ -1,4 +1,4 @@
-package org.primefaces.test.ft.pages;
+package org.primefaces.test.pages;
 
 import org.jboss.arquillian.graphene.page.Location;
 import org.openqa.selenium.By;

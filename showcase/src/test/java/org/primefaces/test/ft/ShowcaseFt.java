@@ -5,8 +5,8 @@ import org.jboss.arquillian.graphene.page.Page;
 import org.jboss.arquillian.junit.InSequence;
 import org.junit.Test;
 import org.openqa.selenium.By;
-import org.primefaces.test.ft.pages.DatatableHome;
-import org.primefaces.test.ft.pages.HomePage;
+import org.primefaces.test.pages.datatable.DatatableHome;
+import org.primefaces.test.pages.HomePage;
 
 import static org.junit.Assert.assertTrue;
 

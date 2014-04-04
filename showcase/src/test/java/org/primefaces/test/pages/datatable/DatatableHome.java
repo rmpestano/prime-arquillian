@@ -1,4 +1,4 @@
-package org.primefaces.test.ft.pages;
+package org.primefaces.test.pages.datatable;
 
 import org.jboss.arquillian.graphene.GrapheneElement;
 import org.jboss.arquillian.graphene.findby.FindByJQuery;
@@ -19,12 +19,6 @@ public class DatatableHome extends BasePage {
 
     @FindByJQuery("div[id$=table]")
     private GrapheneElement datatable;
-
-    @FindByJQuery("h1.ui-widget-header")
-    private GrapheneElement header;
-
-    @FindByJQuery("ul.ui-menu-list")
-    private GrapheneElement menu;
 
 
 
