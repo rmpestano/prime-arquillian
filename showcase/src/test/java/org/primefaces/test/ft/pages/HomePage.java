@@ -7,7 +7,7 @@ import org.primefaces.test.ft.BasePage;
 /**
  * Created by rmpestano on 3/9/14.
  */
-@Location("ui/home.xhtml")
+@Location("ui/home.jsf")
 public class HomePage extends BasePage {
 
     public static final String H1_TEXT = "Welcome to PrimeFaces ShowCase";

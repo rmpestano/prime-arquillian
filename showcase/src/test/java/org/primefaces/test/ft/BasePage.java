@@ -59,5 +59,9 @@ public abstract class BasePage implements Serializable {
         return browser.findElements(By.xpath("//tbody[contains(@id,'" +tableId +"')]//tr[@role='row']//td[@role='gridcell']"));
     }
 
+    public WebElement findMenuItemByText(GrapheneElement menu, String text){
+        return menu.findElement(By.xpath("//span[@class='ui-menuitem-text' and text() = '" + text +"']"));
+    }
+
     public abstract boolean isPresent();
 }
