@@ -6,6 +6,7 @@ import org.jboss.arquillian.graphene.page.Location;
 import org.primefaces.test.ft.BasePage;
 
 import static org.jboss.arquillian.graphene.Graphene.guardHttp;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by rafael-pestano on 04/04/2014.
@@ -13,14 +14,16 @@ import static org.jboss.arquillian.graphene.Graphene.guardHttp;
 @Location("push/index.jsp")
 public class PushHome extends BasePage {
 
-    public static final String COUNTER_HEADER = "PrimePush - Counter";
     public static final String PUSH_HEADER = "PrimePush";
+    public static final String COUNTER_HEADER = "PrimePush - Counter";
+    public static final String VIEW_PARAM_HEADER = "PrimePush - ViewParam";
+
 
     @FindByJQuery("button:first")
     public GrapheneElement btCounter;
 
     @FindByJQuery("span[id$=out]")
-    private GrapheneElement counter;
+    private GrapheneElement out;
 
 
     @Override
@@ -31,13 +34,19 @@ public class PushHome extends BasePage {
 
     public void gotoCounterPage(){
         guardHttp(findMenuItemByText(menu,"Counter")).click();
+        assertTrue(isHeaderPresent(COUNTER_HEADER));
+    }
+
+    public void gotoViewParamPage(){
+        guardHttp(findMenuItemByText(menu,"ViewParam")).click();
+        assertTrue(isHeaderPresent(VIEW_PARAM_HEADER));
     }
 
     public GrapheneElement getBtCounter() {
         return btCounter;
     }
 
-    public GrapheneElement getCounter() {
-        return counter;
+    public GrapheneElement getOut() {
+        return out;
     }
 }

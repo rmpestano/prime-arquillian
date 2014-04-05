@@ -10,5 +10,23 @@ When user click in counter button
 
 Then counter value should be incremented
 
+Scenario: test viewparam page
 
+Given user is at push home
+
+And user is at viewparam page
+
+When user refreshes the browser passing [value] as viewparam
+
+Then [value] is displayed in the page
+
+Examples:
+|value|
+|Primefaces|
+|atmosfere|
+|arquillian|
+|graphene|
+|JSF|
+|CDI|
+|JavaEE|
 
