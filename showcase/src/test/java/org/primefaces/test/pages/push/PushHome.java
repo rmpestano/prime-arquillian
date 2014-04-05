@@ -14,7 +14,13 @@ import static org.jboss.arquillian.graphene.Graphene.guardHttp;
 public class PushHome extends BasePage {
 
     public static final String COUNTER_HEADER = "PrimePush - Counter";
-    public static final String PUSH_HEADER = "PrimePush - Counter";
+    public static final String PUSH_HEADER = "PrimePush";
+
+    @FindByJQuery("button:first")
+    public GrapheneElement btCounter;
+
+    @FindByJQuery("span[id$=out]")
+    private GrapheneElement counter;
 
 
     @Override
@@ -27,4 +33,11 @@ public class PushHome extends BasePage {
         guardHttp(findMenuItemByText(menu,"Counter")).click();
     }
 
+    public GrapheneElement getBtCounter() {
+        return btCounter;
+    }
+
+    public GrapheneElement getCounter() {
+        return counter;
+    }
 }

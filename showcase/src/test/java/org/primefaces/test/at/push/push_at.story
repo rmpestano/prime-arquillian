@@ -2,11 +2,13 @@ Story: test primefaces push component
 
 Scenario: test counter page
 
-Given i am at push home
+Given user is at push home
 
-And i go to counter page
+And user go to counter page
 
+When user click in counter button
 
+Then counter value should be incremented
 
 
 

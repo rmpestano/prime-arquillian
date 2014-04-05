@@ -21,7 +21,7 @@ public class ShowcaseAt extends BaseAt {
     public static WebArchive createDeployment()
     {
         WebArchive archive = createBaseDeployment();
-
+        archive.addPackages(true,"org.primefaces.examples.push");
         System.out.println(archive.toString(true));
         return archive;
     }
