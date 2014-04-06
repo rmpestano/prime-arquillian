@@ -17,15 +17,11 @@ package org.primefaces.examples.push.chat;
 
 import org.primefaces.push.EventBus;
 import org.primefaces.push.RemoteEndpoint;
-import org.primefaces.push.annotation.OnClose;
-import org.primefaces.push.annotation.OnMessage;
-import org.primefaces.push.annotation.OnOpen;
-import org.primefaces.push.annotation.PushEndpoint;
-import org.primefaces.push.annotation.Singleton;
+import org.primefaces.push.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
+import javax.annotation.Resource;
 import javax.servlet.ServletContext;
 
 @PushEndpoint("/{room}/{user}")
@@ -38,7 +34,7 @@ public class ChatResource {
     public final static int USER_PATH_SEGMENT = 2;
     public final static int ROOM_PATH_SEGMENT = 1;
 
-    @Inject
+    @Resource
     private ServletContext ctx;
 
     @OnOpen

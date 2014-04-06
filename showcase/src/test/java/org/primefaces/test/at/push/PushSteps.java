@@ -1,6 +1,9 @@
 package org.primefaces.test.at.push;
 
-import org.jbehave.core.annotations.*;
+import org.jbehave.core.annotations.Given;
+import org.jbehave.core.annotations.Named;
+import org.jbehave.core.annotations.Then;
+import org.jbehave.core.annotations.When;
 import org.jboss.arquillian.drone.api.annotation.Drone;
 import org.jboss.arquillian.graphene.page.Page;
 import org.jboss.arquillian.test.api.ArquillianResource;
@@ -12,7 +15,6 @@ import java.io.Serializable;
 import java.net.URL;
 
 import static org.jboss.arquillian.graphene.Graphene.guardAjax;
-import static org.jboss.arquillian.graphene.Graphene.guardHttp;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -64,7 +66,7 @@ public class PushSteps extends BaseAtStep implements Serializable {
 
     @When("user refreshes the browser passing $value as viewparam")
     public void userRefreshedBrowserWithParam(@Named("value") String value) {
-        guardHttp(browser).get(baseUrl + "/push/viewparam.jsf?data=" + value);
+        browser.get(baseUrl + "/push/viewparam.jsf?data=" + value);
     }
 
     @Then("$value is displayed in the page")

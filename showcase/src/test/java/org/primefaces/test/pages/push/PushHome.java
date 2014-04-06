@@ -1,5 +1,6 @@
 package org.primefaces.test.pages.push;
 
+import org.jboss.arquillian.graphene.Graphene;
 import org.jboss.arquillian.graphene.GrapheneElement;
 import org.jboss.arquillian.graphene.findby.FindByJQuery;
 import org.jboss.arquillian.graphene.page.Location;
@@ -20,7 +21,7 @@ public class PushHome extends BasePage {
 
 
     @FindByJQuery("button:first")
-    public GrapheneElement btCounter;
+    private GrapheneElement btCounter;
 
     @FindByJQuery("span[id$=out]")
     private GrapheneElement out;
@@ -38,7 +39,8 @@ public class PushHome extends BasePage {
     }
 
     public void gotoViewParamPage(){
-        guardHttp(findMenuItemByText(menu,"ViewParam")).click();
+        findMenuItemByText(menu,"ViewParam").click();
+        Graphene.waitModel();
         assertTrue(isHeaderPresent(VIEW_PARAM_HEADER));
     }
 

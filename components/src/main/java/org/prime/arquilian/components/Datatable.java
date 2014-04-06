@@ -17,7 +17,7 @@ import static org.jboss.arquillian.graphene.Graphene.guardNoRequest;
 public class Datatable {
 
     @Root
-    WebElement datatable;
+    private WebElement datatable;
 
     @FindByJQuery("span.ui-paginator-current")
     private PaginatorCurrentPage currentPage;

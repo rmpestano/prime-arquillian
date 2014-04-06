@@ -440,7 +440,7 @@
             <properties>
                 <!--referenced by arquillian.launch and used in arquillian.xml to choice which container arquillian will use-->
                 <arquillian.testContainer>jboss-managed</arquillian.testContainer>
-                <arquillian.serverHome>c:\jboss-eap-6.2</arquillian.serverHome>
+                <arquillian.serverHome>/home/rmpestano/jboss-eap-6.1</arquillian.serverHome>
             </properties>
             <dependencies>
                 <dependency>
