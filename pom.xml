@@ -17,6 +17,7 @@
     <modules>
         <module>primefaces</module>
         <module>showcase</module>
+        <module>components</module>
     </modules>
 
 

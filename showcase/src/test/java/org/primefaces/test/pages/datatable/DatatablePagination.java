@@ -2,8 +2,8 @@ package org.primefaces.test.pages.datatable;
 
 import org.jboss.arquillian.graphene.findby.FindByJQuery;
 import org.jboss.arquillian.graphene.page.Location;
+import org.prime.arquilian.components.Datatable;
 import org.primefaces.test.ft.BasePage;
-import org.primefaces.test.pages.components.Datatable;
 
 /**
  * Created by rmpestano on 4/5/14.
