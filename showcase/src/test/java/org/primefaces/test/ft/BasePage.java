@@ -13,7 +13,7 @@ import org.openqa.selenium.WebElement;
 import java.io.Serializable;
 import java.util.List;
 
-import static org.junit.Assert.assertTrue;
+import static org.jboss.arquillian.graphene.Graphene.guardAjax;
 
 
 public abstract class BasePage implements Serializable {
@@ -28,6 +28,9 @@ public abstract class BasePage implements Serializable {
     @FindByJQuery("ul.ui-menu-list")
     protected GrapheneElement menu;//represents p:menu component
 
+    @FindByJQuery("div.ui-growl-message")
+    private GrapheneElement growl;
+
     public String getLocation() {
         if (!getClass().isAnnotationPresent(Location.class)) {
             throw new RuntimeException("Provide @Location annotation for class:" + getClass().getSimpleName());
@@ -36,8 +39,6 @@ public abstract class BasePage implements Serializable {
         return location.value();
     }
 
-    @FindByJQuery("div.ui-growl-message")
-    private GrapheneElement growl;
 
     public void verifyMessage(String msg) {
         Graphene.waitAjax().until().element(growl).is().present();
@@ -70,6 +71,15 @@ public abstract class BasePage implements Serializable {
 
     public WebElement findMenuItemByText(GrapheneElement menu, String text){
         return menu.findElement(By.xpath("//span[@class='ui-menuitem-text' and text() = '" + text +"']"));
+    }
+
+    /**
+     *
+     * @param select html select component
+     * @param value option value
+     */
+    public void selectOptionByValue(GrapheneElement select, String value){
+        guardAjax(select.findElement(By.xpath("//option[text()='" + value +"']"))).click();
     }
 
     public boolean isHeaderPresent(String text){

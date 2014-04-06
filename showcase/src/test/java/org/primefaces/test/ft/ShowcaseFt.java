@@ -5,9 +5,12 @@ import org.jboss.arquillian.graphene.page.Page;
 import org.jboss.arquillian.junit.InSequence;
 import org.junit.Test;
 import org.openqa.selenium.By;
-import org.primefaces.test.pages.datatable.DatatableHome;
 import org.primefaces.test.pages.HomePage;
+import org.primefaces.test.pages.datatable.DatatableHeaderAndFooter;
+import org.primefaces.test.pages.datatable.DatatableHome;
+import org.primefaces.test.pages.datatable.DatatablePagination;
 
+import static junit.framework.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -50,8 +53,24 @@ public class ShowcaseFt extends BaseFt{
     @Test
     @InSequence(4)
     public void shouldRenderHeaderAndFooterTable(@InitialPage DatatableHome datatableHome){
+       DatatableHeaderAndFooter datatableFooterAndHeader = datatableHome.getDatatableHeaderAndFooter();
        datatableHome.openHeaderAndFooterTable();
-       assertTrue(browser.findElement(By.xpath("//h1[contains(@class,'title ')]")).getText().equals(datatableHome.HEADER_AND_FOOTER_TABLE_HEADER));
-       //todo verify header and footer
+       assertTrue(datatableFooterAndHeader.isPresent());
+       assertTrue(datatableFooterAndHeader.isTableHeaderPresent());
+       assertTrue(datatableFooterAndHeader.isTableFooterPresent());
+    }
+
+    @Test
+    @InSequence(5)
+    public void shouldPaginateDatatable(@InitialPage DatatableHome datatableHome){
+        DatatablePagination datatablePagination = datatableHome.getDatatablePagination();
+        datatableHome.opendataTablePagination();
+        assertTrue(datatablePagination.isPresent());
+        assertEquals(datatablePagination.getDatatable().getTableRows().size(), 10);
+        datatablePagination.selectPageByValue("5");
+        assertEquals(datatablePagination.getDatatable().getTableRows().size(), 5);
+        Integer tablePageBefore = datatablePagination.getCurrentPageValue();
+        datatablePagination.goTonextTablePage();
+        assertEquals(++tablePageBefore, datatablePagination.getCurrentPageValue());
     }
 }

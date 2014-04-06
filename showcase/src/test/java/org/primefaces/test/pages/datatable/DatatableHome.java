@@ -1,8 +1,7 @@
 package org.primefaces.test.pages.datatable;
 
-import org.jboss.arquillian.graphene.GrapheneElement;
-import org.jboss.arquillian.graphene.findby.FindByJQuery;
 import org.jboss.arquillian.graphene.page.Location;
+import org.jboss.arquillian.graphene.page.Page;
 import org.primefaces.test.ft.BasePage;
 
 import static org.jboss.arquillian.graphene.Graphene.guardHttp;
@@ -15,16 +14,12 @@ import static org.jboss.arquillian.graphene.Graphene.guardHttp;
 public class DatatableHome extends BasePage {
 
     public static final String DATATABLE_HEADER="DataTable";
-    public static final String HEADER_AND_FOOTER_TABLE_HEADER="DataTable - Header and Footer";
 
-    @FindByJQuery("div[id$=table]")
-    private GrapheneElement datatable;
+    @Page
+    private DatatableHeaderAndFooter datatableHeaderAndFooter;
 
-
-
-    public GrapheneElement getDatatable() {
-        return datatable;
-    }
+    @Page
+    private DatatablePagination datatablePagination;
 
 
     @Override
@@ -38,5 +33,17 @@ public class DatatableHome extends BasePage {
 
     public void openHeaderAndFooterTable(){
         guardHttp(findMenuItemByText(menu,"Header and Footer")).click();
+    }
+
+    public void opendataTablePagination(){
+        guardHttp(findMenuItemByText(menu,"Pagination")).click();
+    }
+
+    public DatatableHeaderAndFooter getDatatableHeaderAndFooter() {
+        return datatableHeaderAndFooter;
+    }
+
+    public DatatablePagination getDatatablePagination() {
+        return datatablePagination;
     }
 }

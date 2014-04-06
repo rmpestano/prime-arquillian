@@ -1,4 +1,4 @@
-package org.primefaces.test.pages.common;
+package org.primefaces.test.pages.components;
 
 import org.jboss.arquillian.graphene.GrapheneElement;
 import org.jboss.arquillian.graphene.fragment.Root;
