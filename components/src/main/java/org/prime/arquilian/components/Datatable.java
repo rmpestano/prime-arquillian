@@ -1,5 +1,6 @@
 package org.prime.arquilian.components;
 
+import org.jboss.arquillian.graphene.Graphene;
 import org.jboss.arquillian.graphene.findby.FindByJQuery;
 import org.jboss.arquillian.graphene.fragment.Root;
 import org.openqa.selenium.By;
@@ -8,6 +9,7 @@ import org.openqa.selenium.WebElement;
 import java.util.List;
 
 import static org.jboss.arquillian.graphene.Graphene.guardAjax;
+import static org.jboss.arquillian.graphene.Graphene.guardNoRequest;
 
 /**
  * Created by rmpestano on 4/5/14.
@@ -54,4 +56,22 @@ public class Datatable {
         WebElement column = datatable.findElement(By.xpath("//th[contains(@class,'ui-filter-column') and contains(@id,'" + colId + "')]//input"));
         guardAjax(column).sendKeys(query);
     }
+
+    public void clearColumn(String colId){
+        WebElement column = datatable.findElement(By.xpath("//th[contains(@class,'ui-filter-column') and contains(@id,'" + colId + "')]//input"));
+        guardNoRequest(column).clear();
+    }
+
+    public void filterSelectColumn(String colId, String query) {
+        StringBuilder xpath = new StringBuilder("//th[contains(@class,'ui-filter-column') and contains(@id,'" + colId + "')]");
+        xpath.append("//div[contains(@class,'ui-selectonemenu-trigger')]//span[contains(@class,'ui-icon-triangle-1-s')]");
+        datatable.findElement(By.xpath(xpath.toString())).click();
+        Graphene.waitAjax().until().element(By.className("ui-selectonemenu-items-wrapper")).is().present();
+        WebElement selectItem = datatable.findElement(By.xpath("//li[contains(@class,'ui-selectonemenu-item') and contains(text(),'" + query +"')]"));
+        guardAjax(selectItem).click();
+    }
+
+
+
+
 }

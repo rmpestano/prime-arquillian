@@ -84,10 +84,16 @@ public class ShowcaseFt extends BaseFt{
         DatatableFiltering datatableFiltering = datatableHome.getDatatableFiltering();
         datatableHome.openDataTableFiltering();
         assertTrue(datatableFiltering.isPresent());
-        datatableFiltering.filter("55");
+        datatableFiltering.filterInput("1");
         List<WebElement> rows = datatableFiltering.getDatatable().getTableRows();
         for (WebElement row : rows) {
-            assertTrue(row.getText().contains("55"));
+            assertTrue(row.getText().contains("1"));
+        }
+        datatableFiltering.getDatatable().clearColumn("modelColumn");
+        datatableFiltering.filterSelect("BMW");
+        rows = datatableFiltering.getDatatable().getTableRows();
+        for (WebElement row : rows) {
+            assertTrue(row.getText().contains("BMW"));
         }
     }
 }

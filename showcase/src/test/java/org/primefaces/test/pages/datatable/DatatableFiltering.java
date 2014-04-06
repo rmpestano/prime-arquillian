@@ -22,8 +22,11 @@ public class DatatableFiltering extends BasePage {
         return isHeaderPresent(HEADER);
     }
 
-    public void filter(String query) {
+    public void filterInput(String query) {
         datatable.filterInputColumn("modelColumn", query);
+    }
+    public void filterSelect(String query) {
+        datatable.filterSelectColumn("manufacturerColumn", query);
     }
 
     public void goTonextTablePage() {
