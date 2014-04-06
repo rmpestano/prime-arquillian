@@ -7,6 +7,8 @@ import org.openqa.selenium.WebElement;
 
 import java.util.List;
 
+import static org.jboss.arquillian.graphene.Graphene.guardAjax;
+
 /**
  * Created by rmpestano on 4/5/14.
  */
@@ -48,4 +50,8 @@ public class Datatable {
         return datatable.findElements(By.xpath("//tbody[contains(@id,'" +tableId +"')]//tr[@role='row']"));
     }
 
+    public void filterInputColumn(String colId, String query) {
+        WebElement column = datatable.findElement(By.xpath("//th[contains(@class,'ui-filter-column') and contains(@id,'" + colId + "')]//input"));
+        guardAjax(column).sendKeys(query);
+    }
 }

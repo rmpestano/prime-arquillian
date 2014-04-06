@@ -30,7 +30,7 @@
         <arquillian.remoteReusable>false</arquillian.remoteReusable>
         <arquillian.chromeDriver>c:\chromedriver.exe</arquillian.chromeDriver>
         <arquillian.localAddress>localhost</arquillian.localAddress>
-        <arquillian.remoteAddress>http://localhost:1035/wd/hub</arquillian.remoteAddress>
+        <arquillian.remoteAddress>http://localhost:4444/wd/hub</arquillian.remoteAddress>
         <jsfVersion>Mojarra-2.2.4</jsfVersion>
         <primefacesVersion>PrimeFaces-5.0-SNAPSHOT</primefacesVersion>
         <jsf-listener>com.sun.faces.config.ConfigureListener</jsf-listener>

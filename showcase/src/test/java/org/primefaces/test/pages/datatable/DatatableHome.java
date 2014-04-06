@@ -21,6 +21,9 @@ public class DatatableHome extends BasePage {
     @Page
     private DatatablePagination datatablePagination;
 
+    @Page
+    private DatatableFiltering datatableFiltering;
+
 
     @Override
     public boolean isPresent() {
@@ -35,8 +38,12 @@ public class DatatableHome extends BasePage {
         guardHttp(findMenuItemByText(menu,"Header and Footer")).click();
     }
 
-    public void opendataTablePagination(){
+    public void openDataTablePagination(){
         guardHttp(findMenuItemByText(menu,"Pagination")).click();
+    }
+
+    public void openDataTableFiltering(){
+        guardHttp(findMenuItemByText(menu,"Filtering")).click();
     }
 
     public DatatableHeaderAndFooter getDatatableHeaderAndFooter() {
@@ -45,5 +52,9 @@ public class DatatableHome extends BasePage {
 
     public DatatablePagination getDatatablePagination() {
         return datatablePagination;
+    }
+
+    public DatatableFiltering getDatatableFiltering() {
+        return datatableFiltering;
     }
 }

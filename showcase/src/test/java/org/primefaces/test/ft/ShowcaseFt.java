@@ -5,10 +5,14 @@ import org.jboss.arquillian.graphene.page.Page;
 import org.jboss.arquillian.junit.InSequence;
 import org.junit.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 import org.primefaces.test.pages.HomePage;
+import org.primefaces.test.pages.datatable.DatatableFiltering;
 import org.primefaces.test.pages.datatable.DatatableHeaderAndFooter;
 import org.primefaces.test.pages.datatable.DatatableHome;
 import org.primefaces.test.pages.datatable.DatatablePagination;
+
+import java.util.List;
 
 import static junit.framework.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -64,7 +68,7 @@ public class ShowcaseFt extends BaseFt{
     @InSequence(5)
     public void shouldPaginateDatatable(@InitialPage DatatableHome datatableHome){
         DatatablePagination datatablePagination = datatableHome.getDatatablePagination();
-        datatableHome.opendataTablePagination();
+        datatableHome.openDataTablePagination();
         assertTrue(datatablePagination.isPresent());
         assertEquals(datatablePagination.getDatatable().getTableRows().size(), 10);
         datatablePagination.selectPageByValue("5");
@@ -72,5 +76,18 @@ public class ShowcaseFt extends BaseFt{
         Integer tablePageBefore = datatablePagination.getCurrentPageValue();
         datatablePagination.goTonextTablePage();
         assertEquals(++tablePageBefore, datatablePagination.getCurrentPageValue());
+    }
+
+    @Test
+    @InSequence(6)
+    public void shouldFilterDatatable(@InitialPage DatatableHome datatableHome){
+        DatatableFiltering datatableFiltering = datatableHome.getDatatableFiltering();
+        datatableHome.openDataTableFiltering();
+        assertTrue(datatableFiltering.isPresent());
+        datatableFiltering.filter("55");
+        List<WebElement> rows = datatableFiltering.getDatatable().getTableRows();
+        for (WebElement row : rows) {
+            assertTrue(row.getText().contains("55"));
+        }
     }
 }
