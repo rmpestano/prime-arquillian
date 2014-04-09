@@ -1,4 +1,4 @@
-package org.primefaces.test.pages.exceptionhandler;
+package org.primefaces.test.pages.dialog;
 
 import org.jboss.arquillian.graphene.GrapheneElement;
 import org.jboss.arquillian.graphene.findby.FindByJQuery;

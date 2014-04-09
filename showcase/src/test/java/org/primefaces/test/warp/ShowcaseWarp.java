@@ -10,7 +10,7 @@ import org.jboss.arquillian.warp.jsf.AfterPhase;
 import org.jboss.arquillian.warp.jsf.Phase;
 import org.junit.Test;
 import org.primefaces.examples.view.LoginBean;
-import org.primefaces.test.pages.exceptionhandler.DialogLogin;
+import org.primefaces.test.pages.dialog.DialogLogin;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
