@@ -290,11 +290,11 @@
         <managed-bean-class>org.primefaces.examples.view.MapBean</managed-bean-class>
         <managed-bean-scope>view</managed-bean-scope>
     </managed-bean>
-    <managed-bean>
+    <!--managed-bean>
         <managed-bean-name>loginBean</managed-bean-name>
         <managed-bean-class>org.primefaces.examples.view.LoginBean</managed-bean-class>
         <managed-bean-scope>request</managed-bean-scope>
-    </managed-bean>
+    </managed-bean-->
     <managed-bean>
         <managed-bean-name>guestPreferences</managed-bean-name>
         <managed-bean-class>org.primefaces.examples.view.GuestPreferences</managed-bean-class>

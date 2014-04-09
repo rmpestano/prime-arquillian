@@ -9,10 +9,15 @@ import org.jboss.arquillian.warp.Warp;
 import org.jboss.arquillian.warp.jsf.AfterPhase;
 import org.jboss.arquillian.warp.jsf.Phase;
 import org.junit.Test;
-import org.primefaces.test.pages.exceptionhandler.ExceptionHandlerHome;
+import org.primefaces.examples.view.LoginBean;
+import org.primefaces.test.pages.exceptionhandler.DialogLogin;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.faces.event.ExceptionQueuedEvent;
+import javax.inject.Inject;
+
+import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by rmpestano on 4/7/14.
@@ -30,64 +35,59 @@ public class ShowcaseWarp extends BaseWarp {
 
     @Test
     @InSequence(1)
-    public void shouldThrowViewExpired(@InitialPage final ExceptionHandlerHome exceptionHandlerHome) {
+    public void shouldLogonWithSuccess(@InitialPage final DialogLogin dialogLogin) {
         Warp.initiate(new Activity() {
             public void perform() {
-                exceptionHandlerHome.fireViewExpired();
+                dialogLogin.openDialog();
+                dialogLogin.doLogon();
             }
 
         }).inspect(new Inspection() {
             private static final long serialVersionUID = 1L;
 
-
-            @AfterPhase(value = Phase.APPLY_REQUEST_VALUES)
-            public void verify(@ArquillianResource FacesContext context) {
-                System.out.println("VERIFY");
-                System.out.println(context.getMessageList());
-                System.out.println(context.getAttributes());
-                System.out.println(context.getExceptionHandler().getHandledExceptionQueuedEvent());
-                for (ExceptionQueuedEvent exceptionQueuedEvent : context.getExceptionHandler().getHandledExceptionQueuedEvents()) {
-                    System.out.println(exceptionQueuedEvent);
-                }
-            }
-
-            @AfterPhase(value = Phase.RENDER_RESPONSE)
-            public void RENDER(@ArquillianResource FacesContext context) {
-                System.out.println("RENDER");
-                System.out.println(context.getMessageList());
-                System.out.println(context.getAttributes());
-                System.out.println(context.getExceptionHandler().getHandledExceptionQueuedEvent());
-                for (ExceptionQueuedEvent exceptionQueuedEvent : context.getExceptionHandler().getHandledExceptionQueuedEvents()) {
-                    System.out.println(exceptionQueuedEvent);
-                }
+             @Inject
+             LoginBean loginBean;
 
 
-            }
 
             @AfterPhase(value = Phase.UPDATE_MODEL_VALUES)
-            public void update(@ArquillianResource FacesContext context) {
-                System.out.println("UPDATE");
-                System.out.println(context.getMessageList());
-                System.out.println(context.getAttributes());
-                System.out.println(context.getExceptionHandler().getHandledExceptionQueuedEvent());
-                for (ExceptionQueuedEvent exceptionQueuedEvent : context.getExceptionHandler().getHandledExceptionQueuedEvents()) {
-                    System.out.println(exceptionQueuedEvent);
-                }
-
+            public void updateModel(@ArquillianResource FacesContext context) {
+                assertEquals(loginBean.getPassword(), "admin");
+                assertEquals(loginBean.getUsername(), "admin");
             }
+
 
 
             @AfterPhase(value = Phase.INVOKE_APPLICATION)
-            public void invoke(@ArquillianResource FacesContext context) {
-                System.out.println("INVOKE");
-                System.out.println(context.getMessageList());
-                System.out.println(context.getAttributes());
-                System.out.println(context.getExceptionHandler().getHandledExceptionQueuedEvent());
-                for (ExceptionQueuedEvent exceptionQueuedEvent : context.getExceptionHandler().getHandledExceptionQueuedEvents()) {
-                    System.out.println(exceptionQueuedEvent);
-                }
+            public void invokeApplication(@ArquillianResource FacesContext context) {
 
+                boolean hasMessage = false;
+                for (FacesMessage facesMessage : context.getMessageList()) {
+                    if(facesMessage.getSummary().equals("Welcome") && facesMessage.getDetail().equals("admin")){
+                        hasMessage = true;
+                        break;
+                    }
+                }
+                assertTrue(hasMessage);
             }
+
+            @AfterPhase(value = Phase.RESTORE_VIEW)
+            public void verify2(@ArquillianResource FacesContext context) {
+                System.out.println("INVOKE_APPLICATION");
+                //assertEquals(loginBean.getPassword(), "admin");
+                //assertEquals(loginBean.getUsername(), "admin");
+                System.out.println("username:"+loginBean.getUsername());
+                boolean hasMessage = false;
+                for (FacesMessage facesMessage : context.getMessageList()) {
+                    if(facesMessage.getSummary().equals("Welcome") && facesMessage.getDetail().equals("admin")){
+                        hasMessage = true;
+                        break;
+                    }
+                }
+                //assertTrue(hasMessage);
+                System.out.println("hasmessage"+hasMessage);
+            }
+
         });
 
     }
