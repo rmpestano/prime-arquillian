@@ -71,22 +71,7 @@ public class ShowcaseWarp extends BaseWarp {
                 assertTrue(hasMessage);
             }
 
-            @AfterPhase(value = Phase.RESTORE_VIEW)
-            public void verify2(@ArquillianResource FacesContext context) {
-                System.out.println("INVOKE_APPLICATION");
-                //assertEquals(loginBean.getPassword(), "admin");
-                //assertEquals(loginBean.getUsername(), "admin");
-                System.out.println("username:"+loginBean.getUsername());
-                boolean hasMessage = false;
-                for (FacesMessage facesMessage : context.getMessageList()) {
-                    if(facesMessage.getSummary().equals("Welcome") && facesMessage.getDetail().equals("admin")){
-                        hasMessage = true;
-                        break;
-                    }
-                }
-                //assertTrue(hasMessage);
-                System.out.println("hasmessage"+hasMessage);
-            }
+
 
         });
 
