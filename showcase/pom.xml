@@ -739,7 +739,7 @@
                         <configuration>
                             <runOrder>reversealphabetical</runOrder>
                             <includes>
-                                <include>**/*warp.java</include>
+                                <include>**/*Warp.java</include>
                             </includes>
                             <excludes>
                                 <exclude>**/*BaseWarp.java</exclude>
