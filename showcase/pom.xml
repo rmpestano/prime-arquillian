@@ -32,7 +32,7 @@
         <arquillian.chromeDriver>c:\chromedriver.exe</arquillian.chromeDriver>
         <arquillian.localAddress>localhost</arquillian.localAddress>
         <arquillian.remoteAddress>http://localhost:4444/wd/hub</arquillian.remoteAddress>
-        <jboss_as_dist.version>7.1.1.Final</jboss_as_dist.version>
+        <jboss_as_dist.version>7.2.0.Final</jboss_as_dist.version>
         <jsfVersion>Mojarra-2.2.4</jsfVersion>
         <primefacesVersion>PrimeFaces-5.0-SNAPSHOT</primefacesVersion>
         <jsf-listener>com.sun.faces.config.ConfigureListener</jsf-listener>
@@ -337,13 +337,6 @@
             <groupId>org.jboss.arquillian.extension</groupId>
             <artifactId>arquillian-warp-jsf</artifactId>
             <version>${warp.version}</version>
-            <!--<scope>test</scope>-->
-            <!--exclusions>
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-log4j12</artifactId>
-                </exclusion>
-            </exclusions-->
         </dependency>
         <dependency>
             <groupId>org.jboss.spec.javax.annotation</groupId>
@@ -528,7 +521,7 @@
                                 <configuration>
                                     <artifactItems>
                                         <artifactItem>
-                                            <groupId>org.jboss.as</groupId>
+                                            <groupId>com.googlecode</groupId>
                                             <artifactId>jboss-as-dist</artifactId>
                                             <version>${jboss_as_dist.version}</version>
                                             <type>zip</type>
