@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2013 PrimeTek.
+ * Copyright 2009-2014 PrimeTek.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,4 +29,12 @@ public interface UploadedFile {
 	public byte[] getContents();
 	
 	public String getContentType();
+    
+    /**
+     * Writes the uploaded file to the given file path.
+     *
+     * @param filePath The target file path.
+     * @throws Exception If something went wrong.
+     */
+    public void write(String filePath) throws Exception;
 }

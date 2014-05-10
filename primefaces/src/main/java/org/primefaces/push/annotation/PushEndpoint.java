@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2013 PrimeTek.
+ * Copyright 2009-2014 PrimeTek.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,13 +23,16 @@ import java.lang.annotation.Target;
 
 /**
  * An Endpoint for Push operation executed from by {@link org.primefaces.push.RemoteEndpoint} or using an {@link org.primefaces.push.EventBus}.
- * A class annotated with this annotation must at least have one method annotated with {@link OnOpen},  {@link OnClose} or {@link OnMessage}.
+ * A class annotated with this annotation must at least have one method annotated with {@link OnOpen}, {@link OnClose} or {@link OnMessage}.
  */
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface PushEndpoint {
-
+    /**
+     * The path that will be used to map incoming request to a PushEndpoint
+     * @return the path, or "/" by default.
+     */
     String value() default "/";
 
 }

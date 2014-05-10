@@ -172,7 +172,7 @@ PrimeFaces.widget.Paginator = PrimeFaces.widget.BaseWidget.extend({
         }
 
         //current page report
-        var startRecord = (this.cfg.page * this.cfg.rows) + 1,
+        var startRecord = (this.cfg.rowCount === 0) ? 0 : (this.cfg.page * this.cfg.rows) + 1,
         endRecord = (this.cfg.page * this.cfg.rows) + this.cfg.rows;
         if(endRecord > this.cfg.rowCount) {
             endRecord = this.cfg.rowCount;
@@ -291,11 +291,11 @@ PrimeFaces.widget.Paginator = PrimeFaces.widget.BaseWidget.extend({
         return (this.cfg.rows * this.cfg.page);
     },
             
-    getContainerHeight: function() {
+    getContainerHeight: function(margin) {
         var height = 0;
         
         for(var i = 0; i < this.jq.length; i++) {
-            height += this.jq.eq(i).innerHeight();
+            height += this.jq.eq(i).outerHeight(margin);
         }
         
         return height;

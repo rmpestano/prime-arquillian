@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2013 PrimeTek.
+ * Copyright 2009-2014 PrimeTek.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -82,7 +82,7 @@ public class ProgressBarRenderer extends CoreRenderer {
         //label
         writer.startElement("div", progressBar);
         writer.writeAttribute("class", ProgressBar.LABEL_CLASS, null);
-        if(labelTemplate != null && value != 0) {
+        if(labelTemplate != null) {
             writer.writeAttribute("style", "display:block", style);
             writer.write(labelTemplate.replaceAll("\\{value\\}", String.valueOf(value)));
         }

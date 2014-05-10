@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2013 PrimeTek.
+ * Copyright 2009-2014 PrimeTek.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -200,6 +200,8 @@ public class FileUploadRenderer extends CoreRenderer {
             if(style != null) writer.writeAttribute("style", style, "style");
             if(styleClass != null) writer.writeAttribute("class", styleClass, "styleClass");
         }
+        
+        renderDynamicPassThruAttributes(context, fileUpload);
         
 		writer.endElement("input");
     }

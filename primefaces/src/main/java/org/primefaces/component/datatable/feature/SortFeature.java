@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2013 PrimeTek.
+ * Copyright 2009-2014 PrimeTek.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -64,10 +64,18 @@ public class SortFeature implements DataTableFeature {
                 if(sortColumn.isDynamic()) {
                     ((DynamicColumn) sortColumn).applyStatelessModel();
                     Object sortByProperty = sortColumn.getSortBy();
-                    sortField = (sortByProperty == null) ? table.resolveDynamicField(columnSortByVE) : sortByProperty.toString();
+                    String field = sortColumn.getField();
+                    if(field == null)
+                        sortField = (sortByProperty == null) ? table.resolveDynamicField(columnSortByVE) : sortByProperty.toString();
+                    else
+                        sortField = field;
                 }
                 else {
-                    sortField = (columnSortByVE == null) ? (String) sortColumn.getSortBy() : table.resolveStaticField(columnSortByVE);
+                    String field = sortColumn.getField();
+                    if(field == null)
+                        sortField = (columnSortByVE == null) ? (String) sortColumn.getSortBy() : table.resolveStaticField(columnSortByVE);
+                    else
+                        sortField = field;
                 }
                 
                 multiSortMeta.add(new SortMeta(sortColumn, sortField, SortOrder.valueOf(convertSortOrderParam(sortOrders[i])), sortColumn.getSortFunction()));
@@ -220,7 +228,7 @@ public class SortFeature implements DataTableFeature {
         return isSortRequest(context, table);
     }    
     
-    private String convertSortOrderParam(String order) {
+    public String convertSortOrderParam(String order) {
         String sortOrder = null;
         int orderNumber = Integer.parseInt(order);
         

@@ -387,11 +387,15 @@ PrimeFaces.ajax = {
                         postParams.push({ name:PrimeFaces.CLIENT_WINDOW, value:clientWindowInput.val() });
                     }
                     
+                    // DS compatiblity
                     var dsClientWindowInput = form.children("input[name='dsPostWindowId']");
                     if (dsClientWindowInput.length > 0) {
                         postParams.push({ name:'dsPostWindowId', value:dsClientWindowInput.val() });
                     }
-                    
+                    dsClientWindowInput = form.children("input[name='dspwid']");
+                    if (dsClientWindowInput.length > 0) {
+                        postParams.push({ name:'dspwid', value:dsClientWindowInput.val() });
+                    }
                 }
 
             }
@@ -516,6 +520,8 @@ PrimeFaces.ajax = {
                         break;
 
                     case "changes":
+                        var activeElementId = $(document.activeElement).attr('id');
+                        
                         for (var j = 0; j < currentNode.childNodes.length; j++) {
                             var currentChangeNode = currentNode.childNodes[j];
                             switch (currentChangeNode.nodeName) {
@@ -540,7 +546,7 @@ PrimeFaces.ajax = {
                             }
                         }
 
-                        PrimeFaces.ajax.Response.handleReFocus();
+                        PrimeFaces.ajax.Response.handleReFocus(activeElementId);
                         PrimeFaces.ajax.Response.destroyDetachedWidgets();
                         break;
 
@@ -559,9 +565,7 @@ PrimeFaces.ajax = {
             }
         },
 
-        handleReFocus : function() {
-            var activeElementId = $(document.activeElement).attr('id');
-
+        handleReFocus : function(activeElementId) {
             // re-focus element
             if (PrimeFaces.customFocus === false
                     && activeElementId
@@ -614,7 +618,7 @@ PrimeFaces.ajax = {
             var id = node.getAttribute('id'),
             content = PrimeFaces.ajax.Utils.getContent(node);
 
-            if (updateHandler && updateHandler.widget.id === id) {
+            if (updateHandler && updateHandler.widget && updateHandler.widget.id === id) {
                 updateHandler.handle.call(updateHandler.widget, content);
             } else {
                 PrimeFaces.ajax.Utils.updateElement(id, content, xhr);
@@ -693,26 +697,5 @@ PrimeFaces.ajax = {
     //Backward compatibility
     AjaxRequest: function(cfg, ext) {
         return PrimeFaces.ajax.Request.handle(cfg, ext);
-    },
-    
-    //Backward compatibility
-    AjaxUtils: {
-        
-        getContent : function(update) {
-            return PrimeFaces.ajax.Utils.getContent(update.get(0));
-        },
-
-        updateElement : function(id, data, xhr) {
-            PrimeFaces.ajax.Utils.updateElement(id, data, xhr);
-        },
-
-        handleResponse: function(xml) {
-            //just for backward compatibility
-            //we just always return true, so that no update will be processed
-            //it will actually be done in the widgets itself
-            PrimeFaces.ajax.Response.handle(xml, null, null, function(id, content) {
-                return true;
-            });
-        }
-    } 
+    }
 };

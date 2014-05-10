@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2013 PrimeTek.
+ * Copyright 2009-2014 PrimeTek.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -71,7 +71,7 @@ public class PrimeResourceHandler extends ResourceHandlerWrapper {
         String dynamicContentId = (String) params.get(Constants.DYNAMIC_CONTENT_PARAM);
         StringEncrypter strEn = RequestContext.getCurrentInstance().getEncrypter();
         
-        if(dynamicContentId != null && library != null && library.equals("primefaces")) {
+        if(dynamicContentId != null && library != null && library.equals(Constants.LIBRARY)) {
             StreamedContent streamedContent = null;
             boolean cache = Boolean.valueOf(params.get(Constants.DYNAMIC_CONTENT_CACHE_PARAM));
             

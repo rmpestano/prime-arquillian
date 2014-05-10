@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2013 PrimeTek.
+ * Copyright 2009-2014 PrimeTek.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -138,12 +138,12 @@ public class FilterFeature implements DataTableFeature {
                 UIColumn column = filterMeta.getColumn();
                 MethodExpression filterFunction = column.getFilterFunction();
                 ValueExpression filterByVE = filterMeta.getFilterByVE();
-                Object columnValue = filterByVE.getValue(elContext);
                 
                 if(column instanceof DynamicColumn) {
                     ((DynamicColumn) column).applyStatelessModel();
                 }
                 
+                Object columnValue = filterByVE.getValue(elContext);
                 FilterConstraint filterConstraint = this.getFilterConstraint(column);
 
                 if(hasGlobalFilter && !globalMatch) {
@@ -221,11 +221,19 @@ public class FilterFeature implements DataTableFeature {
                 
                 if(column.isDynamic()) {
                     ((DynamicColumn) column).applyStatelessModel();
-                    Object filterByProperty = column.getSortBy();
-                    filterField = (filterByProperty == null) ? table.resolveDynamicField(filterByVE) : filterByProperty.toString();
+                    Object filterByProperty = column.getFilterBy();
+                    String field = column.getField();
+                    if(field == null)
+                        filterField = (filterByProperty == null) ? table.resolveDynamicField(filterByVE) : filterByProperty.toString();
+                    else
+                        filterField = field;
                 }
                 else {
-                    filterField = (filterByVE == null) ? (String) column.getFilterBy(): table.resolveStaticField(filterByVE);
+                    String field = column.getField();
+                    if(field == null)
+                        filterField = (filterByVE == null) ? (String) column.getFilterBy(): table.resolveStaticField(filterByVE);
+                    else
+                        filterField = field;
                 }
 
                 filterParameterMap.put(filterField, filterValue);
@@ -293,9 +301,11 @@ public class FilterFeature implements DataTableFeature {
                     else if(column instanceof DynamicColumn) {
                         DynamicColumn dynamicColumn = (DynamicColumn) column;
                         dynamicColumn.applyStatelessModel();
+                        filterByProperty = column.getFilterBy();
                         filterByVE = (filterByProperty == null) ? columnFilterByVE : createFilterByVE(context, var, filterByProperty);
                         filterId = dynamicColumn.getContainerClientId(context) + separator + "filter";
-                    }  
+                        dynamicColumn.cleanStatelessModel();
+                    }
                     
                     if(filterFacet == null)
                         filterValue = params.get(filterId);

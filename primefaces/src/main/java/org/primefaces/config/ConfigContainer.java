@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2013 PrimeTek.
+ * Copyright 2009-2014 PrimeTek.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.faces.application.ViewHandler;
 
 import javax.faces.component.UIInput;
 import javax.faces.context.ExternalContext;
@@ -64,29 +65,41 @@ public class ConfigContainer {
     private boolean beanValidationAvailable = false;
     private boolean stringConverterAvailable = false;
     private boolean jsf22 = false;
-	
+    private boolean jsf21 = false;
+
     // build properties
     private String buildVersion = null;
-    
+
     // web.xml
     private Map<String, String> errorPages;
+
+    protected ConfigContainer() {
+
+    }
 
     public ConfigContainer(FacesContext context) {
         initConfig(context);
         initConfigFromContextParams(context);
         initBuildProperties();
         initConfigFromWebXml(context);
+        initValidateEmptyFields(context);
     }
 
-    private void initConfig(FacesContext context) {
+    protected void initConfig(FacesContext context) {
         beanValidationAvailable = checkIfBeanValidationIsAvailable();
 
         jsf22 = detectJSF22();
+        if (jsf22) {
+            jsf21 = true;
+        }
+        else {
+            jsf21 = detectJSF21();
+        }
 
         stringConverterAvailable = null != context.getApplication().createConverter(String.class);
     }
 
-    private void initConfigFromContextParams(FacesContext context) {
+    protected void initConfigFromContextParams(FacesContext context) {
         ExternalContext externalContext = context.getExternalContext();
 
         String value = null;
@@ -96,40 +109,59 @@ public class ConfigContainer {
 
         value = externalContext.getInitParameter(Constants.ContextParams.SUBMIT);
         partialSubmitEnabled = (value == null) ? false : value.equalsIgnoreCase("partial");
-        
+
         value = externalContext.getInitParameter(Constants.ContextParams.RESET_VALUES);
         resetValuesEnabled = (value == null) ? false : Boolean.valueOf(value);
 
         value = externalContext.getInitParameter(Constants.ContextParams.SECRET_KEY);
         secretKey = (value == null) ? "primefaces" : value;
-        
+
         value = externalContext.getInitParameter(Constants.ContextParams.PFV_KEY);
         clientSideValidationEnabled = (value == null) ? false : Boolean.valueOf(value);
-        
+
         value = externalContext.getInitParameter(Constants.ContextParams.UPLOADER);
         uploader = (value == null) ? "auto" : value;
-        
+
         pushServerURL = externalContext.getInitParameter(Constants.ContextParams.PUSH_SERVER_URL);
-        
+
         theme = externalContext.getInitParameter(Constants.ContextParams.THEME);
-        
+
         mobileTheme = externalContext.getInitParameter(Constants.ContextParams.MOBILE_THEME);
 
-        value = externalContext.getInitParameter(UIInput.VALIDATE_EMPTY_FIELDS_PARAM_NAME);
-        if (null == value) {
-            value = (String) externalContext.getApplicationMap().get(UIInput.VALIDATE_EMPTY_FIELDS_PARAM_NAME);
-        }
-        if (value == null || value.equals("auto")) {
-            validateEmptyFields = beanValidationAvailable;
-        } else {
-            validateEmptyFields = Boolean.valueOf(value);
-        }
-        
         value = externalContext.getInitParameter(Constants.ContextParams.TRANSFORM_METADATA);
         transformMetadataEnabled = (value == null) ? false : Boolean.valueOf(value);
     }
 
-    private void initBuildProperties() {
+    protected void initValidateEmptyFields(FacesContext context) {
+        ExternalContext externalContext = context.getExternalContext();
+
+        String param = externalContext.getInitParameter(UIInput.VALIDATE_EMPTY_FIELDS_PARAM_NAME);
+
+        if (param == null && externalContext.getApplicationMap().containsKey(UIInput.VALIDATE_EMPTY_FIELDS_PARAM_NAME)) {
+            Object applicationMapValue = externalContext.getApplicationMap().get(UIInput.VALIDATE_EMPTY_FIELDS_PARAM_NAME);
+            if (applicationMapValue instanceof String) {
+                param = (String) applicationMapValue;
+            }
+            else if (applicationMapValue instanceof Boolean) {
+                validateEmptyFields = (Boolean) applicationMapValue;
+                // already initialized - skip further processing
+                return;
+            }
+        }
+
+        if (param == null) {
+            // null means the same as auto.
+            param = "auto";
+        }
+        else {
+            // The environment variables are case insensitive.
+            param = param.toLowerCase();
+        }
+
+        validateEmptyFields = (param.equals("auto") && beanValidationAvailable) || param.equals("true");
+    }
+
+    protected void initBuildProperties() {
 
         Properties buildProperties = new Properties();
         InputStream is = null;
@@ -148,7 +180,7 @@ public class ConfigContainer {
             catch (IOException e) { }
         }
     }
-	
+
     private boolean checkIfBeanValidationIsAvailable() {
     	boolean available = false;
 
@@ -173,10 +205,10 @@ public class ConfigContainer {
 
         return available;
     }
-    
+
     private boolean detectJSF22() {
         String version = FacesContext.class.getPackage().getImplementationVersion();
-        
+
         if(version != null) {
             return version.startsWith("2.2");
         }
@@ -185,16 +217,34 @@ public class ConfigContainer {
             try {
                 Class.forName("javax.faces.flow.Flow");
                 return true;
-            } 
+            }
             catch (ClassNotFoundException ex) {
                 return false;
             }
         }
     }
 
-    private void initConfigFromWebXml(FacesContext context) {
+    private boolean detectJSF21() {
+        String version = FacesContext.class.getPackage().getImplementationVersion();
+
+        if(version != null) {
+            return version.startsWith("2.1");
+        }
+        else {
+            //fallback
+            try {
+                ViewHandler.class.getDeclaredMethod("deriveLogicalViewId", FacesContext.class, String.class);
+                return true;
+            }
+            catch (NoSuchMethodException ex) {
+                return false;
+            }
+        }
+    }
+
+    protected void initConfigFromWebXml(FacesContext context) {
         InputStream is = null;
-        
+
         try {
             is = context.getExternalContext().getResourceAsStream("/WEB-INF/web.xml");
 
@@ -206,7 +256,7 @@ public class ConfigContainer {
                 factory.setExpandEntityReferences(false);
                 DocumentBuilder builder = factory.newDocumentBuilder();
                 Document document = builder.parse(is);
-                
+
                 initErrorPages(document.getDocumentElement());
             }
         }
@@ -224,7 +274,7 @@ public class ConfigContainer {
             }
         }
     }
-    
+
     private void initErrorPages(Element webXml) throws Exception {
         errorPages = new HashMap<String, String>();
 
@@ -234,10 +284,10 @@ public class ConfigContainer {
 
         for (int i = 0; i < exceptionTypes.getLength(); i++) {
             Node node = exceptionTypes.item(i);
-            
+
             String exceptionType = node.getTextContent().trim();
             String key = Throwable.class.getName().equals(exceptionType) ? null : exceptionType;
-            
+
             String location = xpath.compile("location").evaluate(node.getParentNode()).trim();
 
             if (!errorPages.containsKey(key)) {
@@ -285,7 +335,11 @@ public class ConfigContainer {
     public boolean isAtLeastJSF22() {
         return jsf22;
     }
-    
+
+    public boolean isAtLeastJSF21() {
+        return jsf21;
+    }
+
     public boolean isResetValuesEnabled() {
     	return resetValuesEnabled;
     }
@@ -305,7 +359,7 @@ public class ConfigContainer {
     public String getTheme() {
         return theme;
     }
-    
+
     public String getMobileTheme() {
         return mobileTheme;
     }

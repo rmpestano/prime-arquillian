@@ -1706,18 +1706,7 @@ PrimeFaces.widget.FileUpload = PrimeFaces.widget.BaseWidget.extend({
                 $this.uploadedFileCount += data.files.length;
                 $this.removeFiles(data.files);
 
-                var xmlDoc = $(data.result.documentElement),
-                updates = xmlDoc.find('update');
-
-                for (var i = 0; i < updates.length; i++) {
-                    var update = updates.eq(i),
-                    id = update.attr('id'),
-                    content = PrimeFaces.ajax.AjaxUtils.getContent(update);
-
-                    PrimeFaces.ajax.AjaxUtils.updateElement.call(this, id, content);
-                }
-
-                PrimeFaces.ajax.AjaxUtils.handleResponse.call(this, data.result);
+                PrimeFaces.ajax.Response.handle(data.result, data.textStatus, data.jqXHR, null);
             },
             always: function(e, data) {
                 if($this.cfg.oncomplete) {
@@ -1806,15 +1795,16 @@ PrimeFaces.widget.FileUpload = PrimeFaces.widget.BaseWidget.extend({
     },
             
     createPostData: function() {
-        var process = this.cfg.process ? this.id + ' ' + this.cfg.process : this.id,
-                params = this.form.serializeArray();
+        var process = this.cfg.process ? this.id + ' ' + PrimeFaces.expressions.SearchExpressionFacade.resolveComponents(this.cfg.process).join(' ') : this.id;
+        var params = this.form.serializeArray();
 
         params.push({name: PrimeFaces.PARTIAL_REQUEST_PARAM, value: 'true'});
         params.push({name: PrimeFaces.PARTIAL_PROCESS_PARAM, value: process});
         params.push({name: PrimeFaces.PARTIAL_SOURCE_PARAM, value: this.id});
 
         if (this.cfg.update) {
-            params.push({name: PrimeFaces.PARTIAL_UPDATE_PARAM, value: this.cfg.update});
+            var update = PrimeFaces.expressions.SearchExpressionFacade.resolveComponents(this.cfg.update).join(' ');
+            params.push({name: PrimeFaces.PARTIAL_UPDATE_PARAM, value: update});
         }
 
         return params;

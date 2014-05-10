@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2013 PrimeTek.
+ * Copyright 2009-2014 PrimeTek.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,11 +19,14 @@ import java.io.IOException;
 import java.util.Map;
 import javax.faces.component.EditableValueHolder;
 import javax.faces.component.UIComponent;
+import javax.faces.component.visit.VisitContext;
 import javax.faces.context.FacesContext;
 import org.primefaces.component.api.UIColumn;
 import org.primefaces.component.celleditor.CellEditor;
 import org.primefaces.component.datatable.DataTable;
 import org.primefaces.component.datatable.DataTableRenderer;
+import org.primefaces.util.ComponentUtils;
+import org.primefaces.visit.ResetInputVisitCallback;
 
 public class RowEditFeature implements DataTableFeature {
 
@@ -38,21 +41,29 @@ public class RowEditFeature implements DataTableFeature {
         String action = params.get(clientId + "_rowEditAction");
         table.setRowIndex(editedRowId);
 
-        if(action.equals("cancel")) {
-            for(UIColumn column : table.getColumns()) {
-                for(UIComponent grandkid : column.getChildren()) {
-                    if(grandkid instanceof CellEditor) {
+        if (action.equals("cancel")) {
+            VisitContext visitContext = null;
+
+            for (UIColumn column : table.getColumns()) {
+                for (UIComponent grandkid : column.getChildren()) {
+                    if (grandkid instanceof CellEditor) {
                         UIComponent inputFacet = grandkid.getFacet("input");
-                        
-                        if(inputFacet instanceof EditableValueHolder) {
+
+                        if (inputFacet instanceof EditableValueHolder) {
                             ((EditableValueHolder) inputFacet).resetValue();
+                        }
+                        else {
+                            if (visitContext == null) {
+                                visitContext = VisitContext.createVisitContext(context, null, ComponentUtils.VISIT_HINTS_SKIP_UNRENDERED);
+                            }
+                            inputFacet.visitTree(visitContext, ResetInputVisitCallback.INSTANCE);
                         }
                     }
                 }
-            }            
+            }
         }
 
-        if(table.isRowAvailable()) {
+        if (table.isRowAvailable()) {
             renderer.encodeRow(context, table, clientId, editedRowId);
         }
     }

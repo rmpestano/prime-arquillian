@@ -15,18 +15,23 @@
  */
 package org.primefaces.model.chart;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 public class BarChartModel extends CartesianChartModel {
     
     private int barPadding = 8;
     private int barMargin = 10;
-    
+    private boolean stacked = false;
+        
     @Override
     public void createAxes() {
         axes = new HashMap<AxisType, Axis>();
         axes.put(AxisType.X, new CategoryAxis());
-        axes.put(AxisType.Y, new Axis());
+        axes.put(AxisType.Y, new LinearAxis());
     }
 
     public String getOrientation() {
@@ -47,5 +52,28 @@ public class BarChartModel extends CartesianChartModel {
 
     public void setBarMargin(int barMargin) {
         this.barMargin = barMargin;
-    }  
+    }
+    
+    public boolean isStacked() {
+        return stacked;
+    }
+    public void setStacked(boolean stacked) {
+        this.stacked = stacked;
+    }
+    
+    public List<String> getTicks() {
+        List<ChartSeries> series = this.getSeries();
+        List<String> ticks = new ArrayList<String>();
+        
+        if(series.size() > 0) {
+            Map<Object,Number> firstSeriesData = series.get(0).getData();
+            for(Iterator<Object> it = firstSeriesData.keySet().iterator(); it.hasNext();) {
+                Object key = it.next();
+                
+                ticks.add(key.toString());
+            }
+        }
+        
+        return ticks;
+    }
 }

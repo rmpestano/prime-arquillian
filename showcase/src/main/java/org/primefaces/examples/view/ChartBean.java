@@ -21,6 +21,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
 
 import org.primefaces.event.ItemSelectEvent;
@@ -33,22 +34,26 @@ import org.primefaces.model.chart.BubbleChartSeries;
 import org.primefaces.model.chart.CartesianChartModel;
 import org.primefaces.model.chart.CategoryAxis;
 import org.primefaces.model.chart.ChartSeries;
+import org.primefaces.model.chart.DateAxis;
 import org.primefaces.model.chart.DonutChartModel;
 import org.primefaces.model.chart.HorizontalBarChartModel;
+import org.primefaces.model.chart.LineChartModel;
 import org.primefaces.model.chart.LineChartSeries;
+import org.primefaces.model.chart.LinearAxis;
 import org.primefaces.model.chart.MeterGaugeChartModel;
 import org.primefaces.model.chart.OhlcChartModel;
 import org.primefaces.model.chart.OhlcChartSeries;
 import org.primefaces.model.chart.PieChartModel;
 
+@ManagedBean
 public class ChartBean implements Serializable {
 
-    private CartesianChartModel lineModel1;
-    private CartesianChartModel lineModel2;
-    private CartesianChartModel zoomModel;
+    private LineChartModel lineModel1;
+    private LineChartModel lineModel2;
+    private LineChartModel zoomModel;
     private CartesianChartModel combinedModel;
     private CartesianChartModel fillToZero;
-    private CartesianChartModel areaModel;
+    private LineChartModel areaModel;
     private BarChartModel barModel;
     private HorizontalBarChartModel horizontalBarModel;
     private PieChartModel pieModel1;
@@ -62,9 +67,10 @@ public class ChartBean implements Serializable {
     private OhlcChartModel ohlcModel;
     private OhlcChartModel ohlcModel2;
     private PieChartModel livePieModel;
-    private CartesianChartModel animatedModel1;
+    private LineChartModel animatedModel1;
     private BarChartModel animatedModel2;
-    private CartesianChartModel multiAxisModel;
+    private LineChartModel multiAxisModel;
+    private LineChartModel dateModel;
 
 	public ChartBean() {
         createLineModels();
@@ -79,6 +85,7 @@ public class ChartBean implements Serializable {
         createAnimatedModels();
         createCombinedModel();
         createMultiAxisModel();
+        createDateModel();
 	}
 
 	public void itemSelect(ItemSelectEvent event) {
@@ -88,15 +95,15 @@ public class ChartBean implements Serializable {
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 	}
 
-    public CartesianChartModel getLineModel1() {
+    public LineChartModel getLineModel1() {
         return lineModel1;
     }
 
-    public CartesianChartModel getLineModel2() {
+    public LineChartModel getLineModel2() {
         return lineModel2;
     }
 
-    public CartesianChartModel getZoomModel() {
+    public LineChartModel getZoomModel() {
         return zoomModel;
     }
 
@@ -160,7 +167,7 @@ public class ChartBean implements Serializable {
         return horizontalBarModel;
     }
 
-    public CartesianChartModel getAnimatedModel1() {
+    public LineChartModel getAnimatedModel1() {
         return animatedModel1;
     }
 
@@ -168,10 +175,14 @@ public class ChartBean implements Serializable {
         return animatedModel2;
     }
 
-    public CartesianChartModel getMultiAxisModel() {
+    public LineChartModel getMultiAxisModel() {
         return multiAxisModel;
     }
 
+    public LineChartModel getDateModel() {
+        return dateModel;
+    }
+    
     public PieChartModel getLivePieModel() {
         int random1 = (int)(Math.random() * 1000);
 		int random2 = (int)(Math.random() * 1000);
@@ -185,8 +196,8 @@ public class ChartBean implements Serializable {
         return livePieModel;
     }
     
-    private CartesianChartModel initCategoryModel() {
-        CartesianChartModel model = new CartesianChartModel();
+    private LineChartModel initCategoryModel() {
+        LineChartModel model = new LineChartModel();
 
         ChartSeries boys = new ChartSeries();
         boys.setLabel("Boys");
@@ -201,7 +212,7 @@ public class ChartBean implements Serializable {
         girls.set("2004", 52);
         girls.set("2005", 60);
         girls.set("2006", 110);
-        girls.set("2007", 135);
+        girls.set("2007", 90);
         girls.set("2008", 120);
 
         model.addSeries(boys);
@@ -221,6 +232,7 @@ public class ChartBean implements Serializable {
         lineModel2 = initCategoryModel();
         lineModel2.setTitle("Category Chart");
         lineModel2.setLegendPosition("e");
+        lineModel2.setShowPointLabels(true);
         lineModel2.getAxes().put(AxisType.X, new CategoryAxis("Years"));
         yAxis = lineModel2.getAxis(AxisType.Y);
         yAxis.setLabel("Births");
@@ -237,17 +249,40 @@ public class ChartBean implements Serializable {
     }
     
     private void createAreaModel() {
-        areaModel = initCategoryModel();
+        areaModel = new LineChartModel();
+
+        LineChartSeries boys = new LineChartSeries();
+        boys.setFill(true);
+        boys.setLabel("Boys");
+        boys.set("2004", 120);
+        boys.set("2005", 100);
+        boys.set("2006", 44);
+        boys.set("2007", 150);
+        boys.set("2008", 25);
+
+        LineChartSeries girls = new LineChartSeries();
+        girls.setFill(true);
+        girls.setLabel("Girls");
+        girls.set("2004", 52);
+        girls.set("2005", 60);
+        girls.set("2006", 110);
+        girls.set("2007", 90);
+        girls.set("2008", 120);
+
+        areaModel.addSeries(boys);
+        areaModel.addSeries(girls);
         
         areaModel.setTitle("Area Chart");
         areaModel.setLegendPosition("ne");
-        areaModel.setFill(true);
+        areaModel.setStacked(true);
+        areaModel.setShowPointLabels(true);
         
-        areaModel.getAxes().put(AxisType.X, new CategoryAxis("Year"));
+        Axis xAxis = new CategoryAxis("Years");
+        areaModel.getAxes().put(AxisType.X, xAxis);
         Axis yAxis = areaModel.getAxis(AxisType.Y);
         yAxis.setLabel("Births");
         yAxis.setMin(0);
-        yAxis.setMax(200);
+        yAxis.setMax(300);
     }
     
     private BarChartModel initBarModel() {
@@ -356,13 +391,16 @@ public class ChartBean implements Serializable {
         
         combinedModel.setTitle("Bar and Line");
         combinedModel.setLegendPosition("ne");
+        combinedModel.setMouseoverHighlight(false);
+        combinedModel.setShowDatatip(false);
+        combinedModel.setShowPointLabels(true);
         Axis yAxis = combinedModel.getAxis(AxisType.Y);
         yAxis.setMin(0);
         yAxis.setMax(200);
     }
     
     private void createMultiAxisModel() {
-        multiAxisModel = new CartesianChartModel();
+        multiAxisModel = new LineChartModel();
 
         BarChartSeries boys = new BarChartSeries();
         boys.setLabel("Boys");
@@ -388,6 +426,7 @@ public class ChartBean implements Serializable {
         multiAxisModel.addSeries(girls);
         
         multiAxisModel.setTitle("Multi Axis Chart");
+        multiAxisModel.setMouseoverHighlight(false);
         
         multiAxisModel.getAxes().put(AxisType.X, new CategoryAxis("Years"));
         multiAxisModel.getAxes().put(AxisType.X2, new CategoryAxis("Period"));
@@ -397,7 +436,7 @@ public class ChartBean implements Serializable {
         yAxis.setMin(0);
         yAxis.setMax(200);
                 
-        Axis y2Axis = new Axis("Number");
+        Axis y2Axis = new LinearAxis("Number");
         y2Axis.setMin(0);
         y2Axis.setMax(200);
         
@@ -442,7 +481,10 @@ public class ChartBean implements Serializable {
         bubbleModel1 = initBubbleModel();
         bubbleModel1.setTitle("Bubble Chart");
         bubbleModel1.getAxis(AxisType.X).setLabel("Price");
-        bubbleModel1.getAxis(AxisType.Y).setLabel("Labels");
+        Axis yAxis = bubbleModel1.getAxis(AxisType.Y);
+        yAxis.setMin(0);
+        yAxis.setMax(250);
+        yAxis.setLabel("Labels");
         
         bubbleModel2 = initBubbleModel();
         bubbleModel2.setTitle("Custom Options");
@@ -450,7 +492,10 @@ public class ChartBean implements Serializable {
         bubbleModel2.setBubbleGradients(true);
         bubbleModel2.setBubbleAlpha(0.8);
         bubbleModel2.getAxis(AxisType.X).setTickAngle(-50);
-        bubbleModel2.getAxis(AxisType.Y).setTickAngle(50);
+        yAxis = bubbleModel2.getAxis(AxisType.Y);
+        yAxis.setMin(0);
+        yAxis.setMax(250);
+        yAxis.setTickAngle(50);
     }
     
     private BubbleChartModel initBubbleModel(){
@@ -467,8 +512,8 @@ public class ChartBean implements Serializable {
         return model;
     }
 
-    private CartesianChartModel initLinearModel() {
-        CartesianChartModel model = new CartesianChartModel();
+    private LineChartModel initLinearModel() {
+        LineChartModel model = new LineChartModel();
 
         LineChartSeries series1 = new LineChartSeries();
         series1.setLabel("Series 1");
@@ -628,5 +673,41 @@ public class ChartBean implements Serializable {
         yAxis = animatedModel2.getAxis(AxisType.Y);
         yAxis.setMin(0);
         yAxis.setMax(200);
+    }
+    
+    private void createDateModel() {
+        dateModel = new LineChartModel();
+        LineChartSeries series1 = new LineChartSeries();
+        series1.setLabel("Series 1");
+
+        series1.set("2014-01-01", 51);
+        series1.set("2014-01-06", 22);
+        series1.set("2014-01-12", 65);
+        series1.set("2014-01-18", 74);
+        series1.set("2014-01-24", 24);
+        series1.set("2014-01-30", 51);
+
+        LineChartSeries series2 = new LineChartSeries();
+        series2.setLabel("Series 2");
+
+        series2.set("2014-01-01", 32);
+        series2.set("2014-01-06", 73);
+        series2.set("2014-01-12", 24);
+        series2.set("2014-01-18", 12);
+        series2.set("2014-01-24", 74);
+        series2.set("2014-01-30", 62);
+
+        dateModel.addSeries(series1);
+        dateModel.addSeries(series2);
+        
+        dateModel.setTitle("Zoom for Details");
+        dateModel.setZoom(true);
+        dateModel.getAxis(AxisType.Y).setLabel("Values");
+        DateAxis axis = new DateAxis("Dates");
+        axis.setTickAngle(-50);
+        axis.setMax("2014-02-01");
+        axis.setTickFormat("%b %#d, %y");
+        
+        dateModel.getAxes().put(AxisType.X, axis);
     }
 }

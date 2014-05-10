@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2013 PrimeTek.
+ * Copyright 2009-2014 PrimeTek.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,21 +30,20 @@ import org.atmosphere.cpr.BroadcastFilter;
 import org.atmosphere.cpr.PerRequestBroadcastFilter;
 import org.atmosphere.handler.AbstractReflectorAtmosphereHandler;
 import org.atmosphere.handler.AnnotatedProxy;
-import org.atmosphere.interceptor.AllowInterceptor;
 import org.atmosphere.util.IOUtils;
 import org.primefaces.push.EventBus;
-import org.primefaces.push.EventBusFactory;
+import org.primefaces.push.RemoteEndpoint;
+import org.primefaces.push.Status;
 import org.primefaces.push.annotation.OnClose;
 import org.primefaces.push.annotation.OnMessage;
 import org.primefaces.push.annotation.OnOpen;
-import org.primefaces.push.RemoteEndpoint;
-import org.primefaces.push.Status;
+import org.primefaces.push.annotation.PathParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.lang.annotation.Annotation;
-import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -55,12 +54,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.ExecutionException;
 
-public class PushEndpointHandlerProxy extends AbstractReflectorAtmosphereHandler implements AnnotatedProxy {
+public class PushEndpointHandlerProxy extends AbstractReflectorAtmosphereHandler implements AnnotatedProxy{
 
     private Logger logger = LoggerFactory.getLogger(PushEndpointHandlerProxy.class);
-    private final static List<Decoder<?, ?>> EMPTY = Collections.<Decoder<?, ?>>emptyList();
     private Object proxiedInstance;
     private List<Method> onMessageMethods;
     private Method onCloseMethod;
@@ -71,6 +68,7 @@ public class PushEndpointHandlerProxy extends AbstractReflectorAtmosphereHandler
     private EventBus eventBus;
     private boolean injectEventBus = false;
     private boolean injectEndpoint = false;
+    private boolean pathParams;
 
     final Map<Method, List<Encoder<?, ?>>> encoders = new HashMap<Method, List<Encoder<?, ?>>>();
     final Map<Method, List<Decoder<?, ?>>> decoders = new HashMap<Method, List<Decoder<?, ?>>>();
@@ -78,14 +76,22 @@ public class PushEndpointHandlerProxy extends AbstractReflectorAtmosphereHandler
     private final Set<String> trackedUUID = Collections.synchronizedSet(new HashSet<String>());
 
 
+    // Duplicate message because of Atmosphere 2.2.x API Changes from 2.1.x
     private final BroadcastFilter onMessageFilter = new BroadcastFilter() {
         //@Override
         public BroadcastAction filter(Object originalMessage, Object message) {
             return invoke(null, originalMessage, message);
+
+        }
+
+        public BroadcastAction filter(String broadccasterId, Object originalMessage, Object message) {
+            return filter(originalMessage, message);
         }
     };
 
+    // Duplicate message because of Atmosphere 2.2.x API Changes from 2.1.x
     private final BroadcastFilter onPerMessageFilter = new PerRequestBroadcastFilter() {
+
         //@Override
         public BroadcastAction filter(Object originalMessage, Object message) {
             return invoke(null, originalMessage, message);
@@ -95,6 +101,16 @@ public class PushEndpointHandlerProxy extends AbstractReflectorAtmosphereHandler
         public BroadcastAction filter(AtmosphereResource r, Object originalMessage, Object message) {
             RemoteEndpointImpl rm = (RemoteEndpointImpl) r.getRequest().getAttribute(RemoteEndpointImpl.class.getName());
             return invoke(rm, originalMessage, message);
+        }
+
+        //@Override
+        public BroadcastAction filter(String broadccasterId, Object originalMessage, Object message) {
+            return filter(originalMessage, message);
+        }
+
+        //@Override
+        public BroadcastAction filter(String broadccasterId, AtmosphereResource r, Object originalMessage, Object message) {
+            return filter(r, originalMessage, message);
         }
     };
 
@@ -110,7 +126,7 @@ public class PushEndpointHandlerProxy extends AbstractReflectorAtmosphereHandler
     public PushEndpointHandlerProxy() {
     }
 
-    public PushEndpointHandlerProxy configure(AtmosphereConfig config, Object c) {
+    public AnnotatedProxy configure(AtmosphereConfig config, Object c) {
         this.proxiedInstance = c;
         this.onMessageMethods = populateMessage(c, OnMessage.class);
         this.onCloseMethod = populate(c, OnClose.class);
@@ -118,7 +134,8 @@ public class PushEndpointHandlerProxy extends AbstractReflectorAtmosphereHandler
         this.onOpenMethod = populate(c, OnOpen.class);
         this.onResumeMethod = populate(c, OnClose.class);
         this.config = config;
-        this.eventBus = EventBusFactory.getDefault().eventBus();
+        this.eventBus = (EventBus) config.properties().get("evenBus");
+        this.pathParams = pathParams(c);
 
         if (onMessageMethods.size() > 0) {
             populateEncoders();
@@ -130,7 +147,9 @@ public class PushEndpointHandlerProxy extends AbstractReflectorAtmosphereHandler
     //@Override
     public void onRequest(final AtmosphereResource resource) throws IOException {
         final AtmosphereRequest request = resource.getRequest();
-        String body = IOUtils.readEntirely(resource).toString();
+        Object b = IOUtils.readEntirely(resource).toString();
+        String body = b.toString();
+
         final RemoteEndpointImpl remoteEndpoint = new RemoteEndpointImpl(request, body);
         String method = request.getMethod();
 
@@ -204,7 +223,7 @@ public class PushEndpointHandlerProxy extends AbstractReflectorAtmosphereHandler
         Boolean resumeOnBroadcast = r.resumeOnBroadcast();
         if (!resumeOnBroadcast) {
             // For legacy reason, check the attribute as well
-            Object o = r.getRequest(false).getAttribute(ApplicationConfig.RESUME_ON_BROADCAST);
+            Object o = request.getAttribute(ApplicationConfig.RESUME_ON_BROADCAST);
             if (o != null && Boolean.class.isAssignableFrom(o.getClass())) {
                 resumeOnBroadcast = Boolean.class.cast(o);
             }
@@ -221,6 +240,7 @@ public class PushEndpointHandlerProxy extends AbstractReflectorAtmosphereHandler
         if (event.isCancelled() || event.isClosedByClient()) {
             remoteEndpoint.status().status(event.isCancelled() ? Status.STATUS.UNEXPECTED_CLOSE : Status.STATUS.CLOSED_BY_CLIENT);
             request.removeAttribute(RemoteEndpointImpl.class.getName());
+            trackedUUID.remove(r.uuid());
 
             invokeOpenOrClose(onCloseMethod, remoteEndpoint);
         } else if (event.isResumedOnTimeout() || event.isResuming()) {
@@ -235,6 +255,19 @@ public class PushEndpointHandlerProxy extends AbstractReflectorAtmosphereHandler
         if (resumeOnBroadcast && r.isSuspended()) {
             r.resume();
         }
+    }
+
+    public boolean pathParams(){
+        return pathParams;
+    }
+
+    protected boolean pathParams(Object o){
+        for (Field field : o.getClass().getDeclaredFields()) {
+            if (field.isAnnotationPresent(PathParam.class)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public Object invoke(RemoteEndpointImpl resource, Object msg) throws IOException {
@@ -296,20 +329,6 @@ public class PushEndpointHandlerProxy extends AbstractReflectorAtmosphereHandler
         }
     }
 
-    private Object invoke(Method m, Object o) {
-        if (m != null) {
-            try {
-                return m.invoke(proxiedInstance, o == null ? new Object[]{} : new Object[]{o});
-            } catch (IllegalAccessException e) {
-                logger.debug("", e);
-            } catch (InvocationTargetException e) {
-                logger.debug("", e);
-            }
-        }
-        logger.trace("No Method Mapped for {}", o);
-        return null;
-    }
-
     private Object message(RemoteEndpoint resource, Object o) {
         try {
             // TODO: this code is hacky, but documentation will clarify what is supported.
@@ -360,6 +379,6 @@ public class PushEndpointHandlerProxy extends AbstractReflectorAtmosphereHandler
 
     @Override
     public String toString() {
-        return "ManagedAtmosphereHandler proxy for " + proxiedInstance.getClass().getName();
+        return "PushEndpointHandlerProxy proxy for " + proxiedInstance.getClass().getName();
     }
 }

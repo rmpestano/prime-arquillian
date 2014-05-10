@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2013 PrimeTek.
+ * Copyright 2009-2014 PrimeTek.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,10 +20,9 @@ import java.util.Iterator;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import org.primefaces.component.chart.Chart;
-import org.primefaces.model.chart.AxisType;
 import org.primefaces.model.chart.CartesianChartModel;
 import org.primefaces.model.chart.ChartSeries;
-import org.primefaces.model.chart.LineChartSeries;
+import org.primefaces.model.chart.LineChartModel;
 
 public class LineRenderer extends CartesianPlotRenderer {
 
@@ -69,31 +68,12 @@ public class LineRenderer extends CartesianPlotRenderer {
         super.encodeOptions(context, chart);
         
         ResponseWriter writer = context.getResponseWriter();
-        CartesianChartModel model = (CartesianChartModel) chart.getModel();
+        LineChartModel model = (LineChartModel) chart.getModel();
         
         writer.write(",series:[");
         for(Iterator<ChartSeries> it = model.getSeries().iterator(); it.hasNext();) {
             ChartSeries series = (ChartSeries) it.next();
-            AxisType xAxis = series.getXaxis();
-            AxisType yAxis = series.getYaxis();
-            String seriesRenderer = series.getRenderer();
-            boolean fill = series.isFill();
-            
-            writer.write("{");
-            writer.write("label:'" + series.getLabel() + "'");
-
-            if(series instanceof LineChartSeries) {
-                LineChartSeries  lineChartSeries = (LineChartSeries) series;
-                writer.write(",showLine:" + lineChartSeries.isShowLine());
-                writer.write(",markerOptions:{show:" + lineChartSeries.isShowMarker()+ ", style:'" + lineChartSeries.getMarkerStyle() + "'}");
-            }
-            
-            if(seriesRenderer != null) writer.write(",renderer: $.jqplot." + seriesRenderer);
-            if(fill) writer.write(",fill:true");
-            if(xAxis != null) writer.write(",xaxis:\"" + xAxis + "\"");
-            if(yAxis != null) writer.write(",yaxis:\"" + yAxis + "\"");
-            
-            writer.write("}");
+            series.encode(writer);
 
             if(it.hasNext()) {
                 writer.write(",");
@@ -102,11 +82,11 @@ public class LineRenderer extends CartesianPlotRenderer {
 
         writer.write("]");
         
-        if(model.isFill()) writer.write(",fill:true");
         if(model.isStacked()) writer.write(",stackSeries:true");
         if(model.isBreakOnNull()) writer.write(",breakOnNull:true");
         if(model.isZoom()) writer.write(",zoom:true");
         if(model.isAnimate()) writer.write(",animate:true");
+        if(model.isShowPointLabels()) writer.write(",showPointLabels:true");
         
         if(model.isShowDatatip()) {
             writer.write(",datatip:true");

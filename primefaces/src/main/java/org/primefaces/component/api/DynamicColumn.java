@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2013 PrimeTek.
+ * Copyright 2009-2014 PrimeTek.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,6 +34,12 @@ public class DynamicColumn implements UIColumn {
         this.index = index;
         this.columns = columns;
     }
+    
+    public DynamicColumn(int index, Columns columns, String columnKey) {
+        this.index = index;
+        this.columns = columns;
+        this.columnKey = columnKey;
+    }
 
     public int getIndex() {
         return index;
@@ -45,6 +51,10 @@ public class DynamicColumn implements UIColumn {
     
     public void applyStatelessModel() {
         this.columns.setRowModel(index);
+    }
+    
+    public void cleanStatelessModel() {
+        this.columns.setRowModel(-1);
     }
 
     public ValueExpression getValueExpression(String property) {
@@ -181,5 +191,13 @@ public class DynamicColumn implements UIColumn {
     
     public MethodExpression getFilterFunction() {
         return this.columns.getFilterFunction();
+    }
+
+    public String getField() {
+        return this.columns.getField();
+    }
+
+    public Object getFilterValue() {
+        return this.columns.getFilterValue();
     }
 }

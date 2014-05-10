@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2013 PrimeTek.
+ * Copyright 2009-2014 PrimeTek.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,12 +43,17 @@ public class DraggableColumnsFeature implements DataTableFeature {
                     orderedColumns.add(child);
                     break;
                 }
-                else if(child instanceof Columns && columnId.startsWith(child.getClientId(context))) {
-                    String[] ids = columnId.split(separator);
-                    int index = Integer.parseInt(ids[ids.length - 1]);
+                else if(child instanceof Columns) {
+                    String columnsClientId =  child.getClientId(context);
                     
-                    orderedColumns.add(new DynamicColumn(index, (Columns) child));
-                    break;
+                    if(columnId.startsWith(columnsClientId)) {
+                        String[] ids = columnId.split(separator);
+                        int index = Integer.parseInt(ids[ids.length - 1]);
+
+                        orderedColumns.add(new DynamicColumn(index, (Columns) child, (columnsClientId + separator + index)));
+                        break;
+                    }
+                    
                 }
             }
                         

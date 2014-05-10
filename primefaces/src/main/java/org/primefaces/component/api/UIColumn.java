@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2013 PrimeTek.
+ * Copyright 2009-2014 PrimeTek.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -55,6 +55,8 @@ public interface UIColumn {
     
     public Object getFilterBy();
     
+    public Object getFilterValue();
+    
     public String getHeaderText();
     
     public String getFooterText();
@@ -68,7 +70,7 @@ public interface UIColumn {
     public int getFilterMaxLength();
     
     public Object getFilterOptions();
-    
+        
     public CellEditor getCellEditor();
     
     public boolean isDynamic();
@@ -90,4 +92,6 @@ public interface UIColumn {
     public boolean isToggleable();
     
     public MethodExpression getFilterFunction();
+    
+    public String getField();
 }

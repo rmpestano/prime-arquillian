@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2013 PrimeTek.
+ * Copyright 2009-2014 PrimeTek.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -78,6 +78,8 @@ public class TooltipRenderer extends CoreRenderer {
             .attr("hideEvent", tooltip.getHideEvent(), null)
             .attr("showEffect", tooltip.getShowEffect(), null)
             .attr("hideEffect", tooltip.getHideEffect(), null)
+            .attr("showDelay", tooltip.getShowDelay(), 150)
+            .attr("hideDelay", tooltip.getHideDelay(), 0)
             .attr("target", target, null)
             .attr("globalSelector", tooltip.getGlobalSelector(), null)
             .attr("escape", tooltip.isEscape(), true)

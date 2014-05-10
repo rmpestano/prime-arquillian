@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2013 PrimeTek.
+ * Copyright 2009-2014 PrimeTek.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -75,4 +75,8 @@ public class Constants {
     public final static String CLIENT_BEHAVIOR_RENDERING_MODE = "CLIENT_BEHAVIOR_RENDERING_MODE";
     
     public final static String DEFAULT_CACHE_REGION = "primefaces.DEFAULT_CACHE_REGION";
+    
+    public final static String MOBILE_RENDER_KIT_ID = "PRIMEFACES_MOBILE";
+    
+    
 }

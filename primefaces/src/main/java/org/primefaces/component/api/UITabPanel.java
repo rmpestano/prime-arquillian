@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2013 PrimeTek.
+ * Copyright 2009-2014 PrimeTek.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -919,9 +919,7 @@ public class UITabPanel extends UIPanel implements NamingContainer {
             // override the behavior from UIComponent to visit
             // all children once per "row"
 
-            //(Boolean) context.getFacesContext().getAttributes().get(SKIP_ITERATION_HINT);
-            Boolean skipIterationHint = context.getHints().contains(VisitHint.SKIP_ITERATION);
-            if (skipIterationHint != null && skipIterationHint.booleanValue()) {
+            if (ComponentUtils.isSkipIteration(context)) {
                 return super.visitTree(context, callback);
             }
 

@@ -4,6 +4,20 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:p="http://primefaces.org/ui"
 	template="../templates/ui.xhtml">
+    
+      <ui:define name="head">
+        <style type="text/css">
+
+        </style>
+
+        <script type="text/javascript">
+//<![CDATA[
+
+//]]>
+		</script>
+
+	</ui:define>
+
 	
 	<ui:define name="content">
         <h1 class="title ui-widget-header ui-corner-all">Charts - Area</h1>
@@ -16,17 +30,73 @@
             <p:tabView>
                 <p:tab title="areaChart.xhtml">
                     <pre name="code" class="brush:xml">
-&lt;p:lineChart id="filled" value="\#{chartBean.categoryModel}" legendPosition="ne" fill="true"
-             title="Filled" style="height:300px;margin-top:20px" xaxisLabel="Year" yaxisLabel="Births" /&gt;
-
-&lt;p:lineChart id="stacked" value="\#{chartBean.categoryModel}" legendPosition="ne" stacked="true" fill="true""
-             title="Stacked and Filled" style="height:300px;margin-top:20px" xaxisLabel="Year" yaxisLabel="Births" /&gt;
+&lt;p:chart type="line" model="\#{chartBean.areaModel}" style="height:300px" /&gt;
                     </pre>
                 </p:tab>
 
                 <p:tab title="ChartBean.java">
                     <pre name="code" class="brush:java">
+package org.primefaces.examples.view;
 
+import java.io.Serializable;
+import javax.faces.bean.ManagedBean;
+
+import org.primefaces.model.chart.Axis;
+import org.primefaces.model.chart.AxisType;
+import org.primefaces.model.chart.LineChartModel;
+import org.primefaces.model.chart.LineChartSeries;
+
+@ManagedBean
+public class ChartBean implements Serializable {
+
+    private LineChartModel areaModel;
+
+	public ChartBean() {
+        createAreaModel();
+	}
+
+    public LineChartModel getAreaModel() {
+        return areaModel;
+    }
+    
+    private void createAreaModel() {
+        areaModel = new LineChartModel();
+
+        LineChartSeries boys = new LineChartSeries();
+        boys.setFill(true);
+        boys.setLabel("Boys");
+        boys.set("2004", 120);
+        boys.set("2005", 100);
+        boys.set("2006", 44);
+        boys.set("2007", 150);
+        boys.set("2008", 25);
+
+        LineChartSeries girls = new LineChartSeries();
+        girls.setFill(true);
+        girls.setLabel("Girls");
+        girls.set("2004", 52);
+        girls.set("2005", 60);
+        girls.set("2006", 110);
+        girls.set("2007", 90);
+        girls.set("2008", 120);
+
+        areaModel.addSeries(boys);
+        areaModel.addSeries(girls);
+        
+        areaModel.setTitle("Area Chart");
+        areaModel.setLegendPosition("ne");
+        areaModel.setStacked(true);
+        areaModel.setShowPointLabels(true);
+        
+        Axis xAxis = new CategoryAxis("Years");
+        areaModel.getAxes().put(AxisType.X, xAxis);
+        Axis yAxis = areaModel.getAxis(AxisType.Y);
+        yAxis.setLabel("Births");
+        yAxis.setMin(0);
+        yAxis.setMax(300);
+    }
+    
+}
                     </pre>
                 </p:tab>
             </p:tabView>

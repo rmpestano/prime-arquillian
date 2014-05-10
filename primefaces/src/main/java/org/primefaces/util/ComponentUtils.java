@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2013 PrimeTek.
+ * Copyright 2009-2014 PrimeTek.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,6 +29,7 @@ import javax.faces.application.ConfigurableNavigationHandler;
 import javax.faces.application.NavigationCase;
 import javax.faces.application.ResourceHandler;
 import javax.faces.component.*;
+import javax.faces.component.visit.VisitContext;
 import javax.faces.component.visit.VisitHint;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
@@ -41,6 +42,8 @@ import org.primefaces.expression.SearchExpressionFacade;
 public class ComponentUtils {
 
 	public static final EnumSet<VisitHint> VISIT_HINTS_SKIP_UNRENDERED = EnumSet.of(VisitHint.SKIP_UNRENDERED);
+    
+    public static final String SKIP_ITERATION_HINT = "javax.faces.visit.SKIP_ITERATION";
 
 	/**
 	 * Algorithm works as follows;
@@ -372,4 +375,26 @@ public class ComponentUtils {
             return context.getExternalContext().encodeResourceURL(url);
         }
     }
+    
+    public static boolean isSkipIteration(VisitContext visitContext) {
+        if (RequestContext.getCurrentInstance().getApplicationContext().getConfig().isAtLeastJSF21()) {
+            return visitContext.getHints().contains(VisitHint.SKIP_ITERATION);
+        }
+        else {
+            Boolean skipIterationHint = (Boolean) visitContext.getFacesContext().getAttributes().get(SKIP_ITERATION_HINT);
+            return skipIterationHint != null && skipIterationHint.booleanValue() == true;
+        }
+    }
+    
+	public static String resolveWidgetVar(FacesContext context, Widget widget) {
+        UIComponent component = (UICommand) widget;
+		String userWidgetVar = (String) component.getAttributes().get("widgetVar");
+
+		if (userWidgetVar != null) {
+			return userWidgetVar;
+        }
+        else {
+			return "widget_" + component.getClientId(context).replaceAll("-|" + UINamingContainer.getSeparatorChar(context), "_");
+        }
+	}
 }

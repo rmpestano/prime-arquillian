@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2013 PrimeTek.
+ * Copyright 2009-2014 PrimeTek.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -128,7 +128,7 @@ public class InputTextareaRenderer extends InputRenderer {
 		writer.writeAttribute("id", clientId, null);
 		writer.writeAttribute("name", clientId, null);
 
-		renderPassThruAttributes(context, inputTextarea, HTML.INPUT_TEXT_ATTRS_WITHOUT_EVENTS);
+		renderPassThruAttributes(context, inputTextarea, HTML.TEXTAREA_ATTRS_WITHOUT_EVENTS);
         renderDomEvents(context, inputTextarea, HTML.INPUT_TEXT_EVENTS);
         
         if(inputTextarea.isDisabled()) writer.writeAttribute("disabled", "disabled", null);

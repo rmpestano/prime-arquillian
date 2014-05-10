@@ -5,14 +5,14 @@
     <groupId>org.primefaces</groupId>
     <artifactId>showcase</artifactId>
     <packaging>war</packaging>
-    <version>5.0-SNAPSHOT</version>
+    <version>5.1-SNAPSHOT</version>
     <name>showcase</name>
     <url>http://www.primefaces.org</url>
 
     <parent>
         <groupId>org.primefaces</groupId>
         <artifactId>prime-arquillian</artifactId>
-        <version>5.0-SNAPSHOT</version>
+        <version>5.1-SNAPSHOT</version>
         <relativePath>../../prime-arquillian</relativePath>
     </parent>
     <properties>
@@ -35,7 +35,7 @@
         <jboss_as_dist.version>7.2.0.Final</jboss_as_dist.version>
         <jboss_eap_dist.version>6.2.0.Final</jboss_eap_dist.version>
         <jsfVersion>Mojarra-2.2.4</jsfVersion>
-        <primefacesVersion>PrimeFaces-5.0-SNAPSHOT</primefacesVersion>
+        <primefacesVersion>PrimeFaces-5.0</primefacesVersion>
         <jsf-listener>com.sun.faces.config.ConfigureListener</jsf-listener>
     </properties>
 
@@ -125,6 +125,16 @@
     </build>
 
     <dependencies>
+        <dependency>
+            <groupId>org.primefaces</groupId>
+            <artifactId>primefaces</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.primefaces.themes</groupId>
+            <artifactId>all-themes</artifactId>
+            <version>1.0.10</version>
+        </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
@@ -241,11 +251,7 @@
         </dependency-->
 
         <!-- Themes -->
-        <dependency>
-            <groupId>org.primefaces.themes</groupId>
-            <artifactId>all-themes</artifactId>
-            <version>1.0.10</version>
-        </dependency>
+
 
         <!-- test dependencies -->
 
@@ -373,11 +379,7 @@
             <artifactId>ehcache</artifactId>
             <version>2.7.4</version>
         </dependency>-->
-        <dependency>
-            <groupId>org.primefaces</groupId>
-            <artifactId>primefaces</artifactId>
-            <version>5.0-SNAPSHOT</version>
-        </dependency>
+
         <dependency>
             <groupId>org.glassfish</groupId>
             <artifactId>javax.faces</artifactId>

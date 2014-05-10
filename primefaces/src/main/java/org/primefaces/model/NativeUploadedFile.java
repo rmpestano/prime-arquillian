@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2013 PrimeTek.
+ * Copyright 2009-2014 PrimeTek.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -60,5 +60,9 @@ public class NativeUploadedFile implements UploadedFile, Serializable {
         }
         
         return null;
+    }
+
+    public void write(String filePath) throws Exception {
+        part.write(filePath);
     }
 }

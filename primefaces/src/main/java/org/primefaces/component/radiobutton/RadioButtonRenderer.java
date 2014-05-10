@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2013 PrimeTek.
+ * Copyright 2009-2014 PrimeTek.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -99,17 +99,19 @@ public class RadioButtonRenderer extends InputRenderer {
         if(tabindex != null) writer.writeAttribute("tabindex", tabindex, null);
         if(checked) writer.writeAttribute("checked", "checked", null);
         if(disabled) writer.writeAttribute("disabled", "disabled", null);
-        
+
         //onchange
+        String radioOnchange = buildDomEvent(context, radio, "onchange", "change", "valueChange", null);
+        String buttonOnchange = buildDomEvent(context, button, "onchange", "change", "valueChange", null);
         StringBuilder onchangeBuilder = SharedStringBuilder.get(context, SB_ENCODE_OPTION_INPUT);
-        if(radio.getOnchange() != null) onchangeBuilder.append(radio.getOnchange()).append(";");
-        if(button.getOnchange() != null) onchangeBuilder.append(button.getOnchange()).append(";");
-        if(onchangeBuilder.length() > 0) {  
+        if (radioOnchange != null) onchangeBuilder.append(radioOnchange);
+        if (buttonOnchange != null) onchangeBuilder.append(buttonOnchange);
+        
+        if (onchangeBuilder.length() > 0) {  
             writer.writeAttribute("onchange", onchangeBuilder.toString(), null);
         }
 
         writer.endElement("input");
-
         writer.endElement("div");
     }
 

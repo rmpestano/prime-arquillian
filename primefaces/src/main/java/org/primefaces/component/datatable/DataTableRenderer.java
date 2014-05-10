@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2013 PrimeTek.
+ * Copyright 2009-2014 PrimeTek.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,6 +42,7 @@ import org.primefaces.component.summaryrow.SummaryRow;
 import org.primefaces.model.SortMeta;
 import org.primefaces.renderkit.DataRenderer;
 import org.primefaces.util.ComponentUtils;
+import org.primefaces.util.Constants;
 import org.primefaces.util.HTML;
 import org.primefaces.util.WidgetBuilder;
 
@@ -100,7 +101,9 @@ public class DataTableRenderer extends DataRenderer {
             if(table.isMultiSort())
                 sortFeature.multiSort(context, table);
             else
-                sortFeature.singleSort(context, table);            
+                sortFeature.singleSort(context, table);  
+            
+            table.setRowIndex(-1);
         }
 
         if(table.isPaginator()) {
@@ -265,12 +268,14 @@ public class DataTableRenderer extends DataRenderer {
         boolean hasFrozenColumns = (frozenColumns != Integer.MIN_VALUE);
         ResponseWriter writer = context.getResponseWriter();
         String clientId = table.getClientId(context);
+        int columnsCount = table.getColumns().size();
         
         if(hasFrozenColumns) {
             writer.startElement("table", null);
             writer.startElement("tbody", null);
             writer.startElement("tr", null);
             
+            //frozen columns
             writer.startElement("td", null);
             writer.writeAttribute("class", "ui-datatable-frozenlayout-left", null);
             writer.startElement("div", null);
@@ -287,19 +292,20 @@ public class DataTableRenderer extends DataRenderer {
             writer.endElement("div");
             writer.endElement("td");
             
+            //scrollable columns
             writer.startElement("td", null);
             writer.writeAttribute("class", "ui-datatable-frozenlayout-right", null);
             writer.startElement("div", null);
             writer.writeAttribute("class", "ui-datatable-scrollable-container", null);
             
             encodeScrollAreaStart(context, table, DataTable.SCROLLABLE_HEADER_CLASS, DataTable.SCROLLABLE_HEADER_BOX_CLASS, tableStyle, tableStyleClass);
-            encodeThead(context, table, frozenColumns, table.getColumnsCount(), clientId + "_scrollableThead");
+            encodeThead(context, table, frozenColumns, columnsCount, clientId + "_scrollableThead");
             encodeScrollAreaEnd(context);
 
-            encodeScrollBody(context, table, tableStyle, tableStyleClass, frozenColumns, table.getColumnsCount(), clientId + "_scrollableTbody");
+            encodeScrollBody(context, table, tableStyle, tableStyleClass, frozenColumns, columnsCount, clientId + "_scrollableTbody");
 
             encodeScrollAreaStart(context, table, DataTable.SCROLLABLE_FOOTER_CLASS, DataTable.SCROLLABLE_FOOTER_BOX_CLASS, tableStyle, tableStyleClass);
-            encodeTFoot(context, table, frozenColumns, table.getColumnsCount());
+            encodeTFoot(context, table, frozenColumns, columnsCount);
             encodeScrollAreaEnd(context);
             writer.endElement("div");
             writer.endElement("td");
@@ -313,7 +319,7 @@ public class DataTableRenderer extends DataRenderer {
             encodeThead(context, table);
             encodeScrollAreaEnd(context);
 
-            encodeScrollBody(context, table, tableStyle, tableStyleClass, 0, table.getColumnsCount(), null);
+            encodeScrollBody(context, table, tableStyle, tableStyleClass, 0, columnsCount, null);
 
             encodeScrollAreaStart(context, table, DataTable.SCROLLABLE_FOOTER_CLASS, DataTable.SCROLLABLE_FOOTER_BOX_CLASS, tableStyle, tableStyleClass);
             encodeTFoot(context, table);
@@ -383,10 +389,15 @@ public class DataTableRenderer extends DataRenderer {
         ValueExpression columnSortByVE = column.getValueExpression("sortBy");
         Object columnSortByProperty = column.getSortBy();
         boolean sortable = (columnSortByVE != null || columnSortByProperty != null);
-        boolean hasFilter = (column.getValueExpression("filterBy") != null || column.getFilterBy() != null);
+        Object filterByProperty = column.getFilterBy();
+        boolean hasFilter = (column.getValueExpression("filterBy") != null || filterByProperty != null);
         String selectionMode = column.getSelectionMode();
         String sortIcon = null;
         boolean resizable = table.isResizableColumns() && column.isResizable();
+        
+        if(columnSortByProperty != null || filterByProperty != null) {
+            logger.warning("Defining fields in sortBy-filterBy attributes is deprecated use a value expression instead. e.g. sortBy=\"#{user.name}\" instead of sortBy=\"name\"");
+        }
         
         String columnClass = sortable ? DataTable.COLUMN_HEADER_CLASS + " " + DataTable.SORTABLE_COLUMN_CLASS : DataTable.COLUMN_HEADER_CLASS;
         columnClass = hasFilter ? columnClass + " " + DataTable.FILTER_COLUMN_CLASS : columnClass;
@@ -552,13 +563,8 @@ public class DataTableRenderer extends DataRenderer {
                     filterValue = params.get(filterId);
                 }
                 else {
-                    ValueExpression filterValueVE = column.getValueExpression("filterValue");
-                    if(filterValueVE != null) {
-                        filterValue = (String) filterValueVE.getValue(context.getELContext());
-                    }
-                    else {
-                        filterValue = "";
-                    }
+                    Object columnFilterValue = column.getFilterValue();
+                    filterValue = (columnFilterValue == null) ? Constants.EMPTY_STRING: columnFilterValue.toString();
                 }
             }
 
@@ -662,7 +668,7 @@ public class DataTableRenderer extends DataRenderer {
     }
     
     protected void encodeThead(FacesContext context, DataTable table) throws IOException {
-        this.encodeThead(context, table, 0, table.getColumnsCount(), null);
+        this.encodeThead(context, table, 0, table.getColumns().size(), null);
     }
 
     protected void encodeThead(FacesContext context, DataTable table, int columnStart, int columnEnd, String theadId) throws IOException {
@@ -735,7 +741,7 @@ public class DataTableRenderer extends DataRenderer {
     }
     
     public void encodeTbody(FacesContext context, DataTable table, boolean dataOnly) throws IOException {
-        this.encodeTbody(context, table, dataOnly, 0, table.getColumnsCount(), null);
+        this.encodeTbody(context, table, dataOnly, 0, table.getColumns().size(), null);
     }
 
     public void encodeTbody(FacesContext context, DataTable table, boolean dataOnly, int columnStart, int columnEnd, String tbodyId) throws IOException {
@@ -755,7 +761,12 @@ public class DataTableRenderer extends DataRenderer {
 		int first = table.getFirst();
         int rowCount = table.getRowCount();
         int rowCountToRender = rows == 0 ? (table.isLiveScroll() ? table.getScrollRows() : rowCount) : rows;
+        int frozenRows = table.getFrozenRows();
         boolean hasData = rowCount > 0;
+        
+        if(first == 0 && frozenRows > 0) {
+            first += frozenRows;
+        }
               
         if(!dataOnly) {
             writer.startElement("tbody", null);
@@ -830,23 +841,20 @@ public class DataTableRenderer extends DataRenderer {
     }
         
     protected void encodeFrozenRows(FacesContext context, DataTable table) throws IOException {
-        Collection<?> frozenRows = table.getFrozenRows();
-        if(frozenRows == null || frozenRows.isEmpty()) {
+        int frozenRows = table.getFrozenRows();
+        if(frozenRows == 0 ) {
             return;
         }
         
         ResponseWriter writer = context.getResponseWriter();
         String clientId = table.getClientId(context);
-        String var = table.getVar();
-        Map<String,Object> requestMap = context.getExternalContext().getRequestMap();
         
         writer.startElement("tbody", null);
         writer.writeAttribute("class", DataTable.DATA_CLASS, null);
         
-        int index = 0;
-        for(Iterator<? extends Object> it = frozenRows.iterator(); it.hasNext();) {
-            requestMap.put(var, it.next());            
-            encodeRow(context, table, clientId, index, 0, table.getColumnsCount());
+        for (int i = 0; i < frozenRows; i++) {
+            table.setRowIndex(i);
+            encodeRow(context, table, clientId, i, 0, table.getColumnsCount());
         }
 
         writer.endElement("tbody");
@@ -958,7 +966,7 @@ public class DataTableRenderer extends DataRenderer {
     }
     
     protected void encodeTFoot(FacesContext context, DataTable table) throws IOException {
-        this.encodeTFoot(context, table, 0, table.getColumnsCount());
+        this.encodeTFoot(context, table, 0, table.getColumns().size());
     }
 
     protected void encodeTFoot(FacesContext context, DataTable table, int columnStart, int columnEnd) throws IOException {

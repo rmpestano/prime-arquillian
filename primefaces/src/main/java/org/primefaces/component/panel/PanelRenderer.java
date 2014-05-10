@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2013 PrimeTek.
+ * Copyright 2009-2014 PrimeTek.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -163,7 +163,7 @@ public class PanelRenderer extends CoreRenderer {
             renderChild(context, header);
         } 
         else if(headerText != null) {
-            writer.write(headerText);
+            writer.writeText(headerText, null);
         }
 
         writer.endElement("span");
@@ -219,7 +219,7 @@ public class PanelRenderer extends CoreRenderer {
             if (footer != null) {
                 renderChild(facesContext, footer);
             } else if (footerText != null) {
-                writer.write(footerText);
+                writer.writeText(footerText, null);
             }
 
             writer.endElement("div");

@@ -12,7 +12,7 @@
     <parent>
         <groupId>org.primefaces</groupId>
         <artifactId>prime-arquillian</artifactId>
-        <version>5.0-SNAPSHOT</version>
+        <version>5.1-SNAPSHOT</version>
         <relativePath>../../prime-arquillian</relativePath>
     </parent>
     <properties>

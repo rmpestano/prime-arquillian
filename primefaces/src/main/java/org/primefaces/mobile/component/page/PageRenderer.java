@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2013 PrimeTek.
+ * Copyright 2009-2014 PrimeTek.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -56,14 +56,14 @@ public class PageRenderer extends CoreRenderer {
     
     private void encodeContent(FacesContext context, Page page) throws IOException {
         ResponseWriter writer = context.getResponseWriter();
-        String theme = page.getTheme();
+        String swatch = page.getSwatch();
         String title = page.getTitle();
         String style = page.getStyle();
         String styleClass = page.getStyleClass();
 
         writer.writeAttribute("data-role", "page", null);
 
-        if(theme != null) writer.writeAttribute("data-theme", theme, null);
+        if(swatch != null) writer.writeAttribute("data-theme", swatch, null);
         if(title != null) writer.writeAttribute("data-title", title, null);
         if(style != null) writer.writeAttribute("style", style, null);
         if(styleClass != null) writer.writeAttribute("class", styleClass, null);

@@ -92,6 +92,12 @@
             <description>Location of the column filter with respect to header content. Options are 'bottom'(default) and 'top'.</description>
 		</attribute>
         <attribute>
+			<name>filterValue</name>
+			<required>false</required>
+			<type>java.lang.Object</type>
+            <description>Value of the filter field.</description>
+		</attribute>
+        <attribute>
 			<name>rowspan</name>
 			<required>false</required>
 			<type>java.lang.Integer</type>
@@ -164,6 +170,12 @@
 			<type>javax.el.MethodExpression</type>
 			<method-signature>java.lang.Boolean filter(java.lang.Object, java.lang.Object, java.util.Locale locale)</method-signature>
             <description>Custom implementation to filter a value against a constraint.</description>
+		</attribute>
+        <attribute>
+			<name>field</name>
+			<required>false</required>
+			<type>java.lang.String</type>
+            <description>Name of the field to pass lazy load method for filtering and sorting. If not specified, filterBy-sortBy values are used to identify the field name.</description>
 		</attribute>
     </attributes>
 </component>

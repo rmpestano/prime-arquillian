@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2013 PrimeTek.
+ * Copyright 2009-2014 PrimeTek.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,16 +18,20 @@ package org.primefaces.cache;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.logging.Logger;
 
 /**
  * Basic cache provider for development purposes, should be avoided to use in production as there is no eviction and timeouts.
  */
 public class DefaultCacheProvider implements CacheProvider {
 
+    private final static Logger logger = Logger.getLogger(DefaultCacheProvider.class.getName());
+    
     private ConcurrentMap<String,ConcurrentMap<String,Object>> cache;
     
     public DefaultCacheProvider() {
         cache = new ConcurrentHashMap<String, ConcurrentMap<String, Object>>();
+        logger.warning("DefaultCacheProvider is for development purposes only, prefer another provider such as EhCache and HazelCast in production.");
     }
 
     public Object get(String region, String key) {

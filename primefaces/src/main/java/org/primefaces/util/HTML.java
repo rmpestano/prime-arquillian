@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2013 PrimeTek.
+ * Copyright 2009-2014 PrimeTek.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -117,7 +117,7 @@ public class HTML {
 		"title"
 	};
 
-	public static String[] TEXTAREA_ATTRS = {
+	public static String[] TEXTAREA_ATTRS_WITHOUT_EVENTS = {
 		"cols",
 		"rows",
         "accesskey",
@@ -170,7 +170,7 @@ public class HTML {
     public static final String[] INPUT_TEXT_EVENTS = ArrayUtils.concat(COMMON_EVENTS, CHANGE_SELECT_EVENTS, BLUR_FOCUS_EVENTS);
     public static final String[] INPUT_TEXT_ATTRS = ArrayUtils.concat(INPUT_TEXT_ATTRS_WITHOUT_EVENTS, INPUT_TEXT_EVENTS);
     
-    public static final String[] INPUT_TEXTAREA_ATTRS = ArrayUtils.concat(TEXTAREA_ATTRS, COMMON_EVENTS, CHANGE_SELECT_EVENTS, BLUR_FOCUS_EVENTS);
+    public static final String[] INPUT_TEXTAREA_ATTRS = ArrayUtils.concat(TEXTAREA_ATTRS_WITHOUT_EVENTS, COMMON_EVENTS, CHANGE_SELECT_EVENTS, BLUR_FOCUS_EVENTS);
 
     public static final String[] SELECT_ATTRS = ArrayUtils.concat(SELECT_ATTRS_WITHOUT_EVENTS, COMMON_EVENTS, CHANGE_SELECT_EVENTS, BLUR_FOCUS_EVENTS);
     

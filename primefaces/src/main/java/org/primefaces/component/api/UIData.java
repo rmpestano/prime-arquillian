@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2013 PrimeTek.
+ * Copyright 2009-2014 PrimeTek.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -272,7 +272,11 @@ public class UIData extends javax.faces.component.UIData {
         popComponentFromEL(context);
     }
     
-    protected void processPhase(FacesContext context, PhaseId phaseId) {        
+    protected void processPhase(FacesContext context, PhaseId phaseId) {
+        if(shouldSkipChildren(context)) {
+            return;
+        }
+        
         setRowIndex(-1);
         processFacets(context, phaseId);
         if(requiresColumns()) {
@@ -312,7 +316,7 @@ public class UIData extends javax.faces.component.UIData {
                 break;
             }
             
-            for(UIComponent child : this.getChildren()) {
+            for(UIComponent child : this.getIterableChildren()) {
                 if(child.isRendered()) {
                     if(child instanceof Column) {
                         for(UIComponent grandkid : child.getChildren()) {
@@ -328,10 +332,6 @@ public class UIData extends javax.faces.component.UIData {
     }
     
     protected void process(FacesContext context, UIComponent component, PhaseId phaseId) {
-        if(shouldSkipChildren(context)) {
-            return;
-        }
-        
         if(phaseId == PhaseId.APPLY_REQUEST_VALUES) {
             component.processDecodes(context);
         }
@@ -899,6 +899,10 @@ public class UIData extends javax.faces.component.UIData {
     
     protected boolean requiresColumns() {
         return false;
+    }
+    
+    protected List<UIComponent> getIterableChildren() {
+        return this.getChildren();
     }
 }
 

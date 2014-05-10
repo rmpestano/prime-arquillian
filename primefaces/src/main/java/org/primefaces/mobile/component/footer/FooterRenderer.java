@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2013 PrimeTek.
+ * Copyright 2009-2014 PrimeTek.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@ public class FooterRenderer extends CoreRenderer {
     public void encodeBegin(FacesContext context, UIComponent component) throws IOException {
         ResponseWriter writer = context.getResponseWriter();
         Footer footer = (Footer) component;
-        String theme = footer.getTheme();
+        String swatch = footer.getSwatch();
         String title = footer.getTitle();
 
         writer.startElement("div", footer);
@@ -36,7 +36,7 @@ public class FooterRenderer extends CoreRenderer {
         
         if(footer.getStyle() != null) writer.writeAttribute("style", footer.getStyle(), null);
         if(footer.getStyleClass() != null) writer.writeAttribute("class", footer.getStyleClass(), null);
-        if(theme != null) writer.writeAttribute("data-theme", theme, null);        
+        if(swatch != null) writer.writeAttribute("data-theme", swatch, null);        
         if(footer.isFixed()) {
             writer.writeAttribute("data-position", "fixed", null);
             

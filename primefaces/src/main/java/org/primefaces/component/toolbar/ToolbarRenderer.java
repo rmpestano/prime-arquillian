@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2013 PrimeTek.
+ * Copyright 2009-2014 PrimeTek.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,8 @@
 package org.primefaces.component.toolbar;
 
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
@@ -24,6 +26,8 @@ import org.primefaces.renderkit.CoreRenderer;
 
 public class ToolbarRenderer extends CoreRenderer {
 
+    private final static Logger logger = Logger.getLogger(ToolbarRenderer.class.getName());
+    
     @Override
     public void encodeEnd(FacesContext context, UIComponent component) throws IOException {
         Toolbar toolbar = (Toolbar) component;
@@ -38,7 +42,22 @@ public class ToolbarRenderer extends CoreRenderer {
         if(style != null) {
             writer.writeAttribute("style", style, null);
         }
+        
+        if(toolbar.getChildCount() > 0) {
+            logger.log(Level.WARNING, "ToolbarGroup is deprecated, use \"left\" and \"right\" facets to define groups instead.");
+            encodeCompatibleMode(context, toolbar);
+        }
+        else {
+            encodeFacet(context, toolbar, "left");
+            encodeFacet(context, toolbar, "right");
+        }
 
+        writer.endElement("div");
+    }
+    
+    protected void encodeCompatibleMode(FacesContext context, Toolbar toolbar) throws IOException {
+        ResponseWriter writer = context.getResponseWriter();
+        
         for(UIComponent child : toolbar.getChildren()) {
             if(child.isRendered() && child instanceof ToolbarGroup) {
                 ToolbarGroup group = (ToolbarGroup) child;
@@ -49,7 +68,7 @@ public class ToolbarRenderer extends CoreRenderer {
                 groupClass = groupClass == null ? defaultGroupClass : defaultGroupClass + " " + groupClass;
 
                 writer.startElement("div", null);
-                writer.writeAttribute("class", groupClass, style);
+                writer.writeAttribute("class", groupClass, null);
                 if(groupStyle != null) {
                     writer.writeAttribute("style", groupStyle, null);
                 }
@@ -64,10 +83,20 @@ public class ToolbarRenderer extends CoreRenderer {
                 writer.endElement("div");
             }
         }
-
-        writer.endElement("div");
     }
     
+    protected void encodeFacet(FacesContext context, Toolbar toolbar, String facetName) throws IOException {
+        ResponseWriter writer = context.getResponseWriter();
+        UIComponent facet = toolbar.getFacet(facetName);
+        
+        if(facet != null) {
+            writer.startElement("div", null);
+            writer.writeAttribute("class", "ui-toolbar-group-" + facetName, null);
+            facet.encodeAll(context);
+            writer.endElement("div");
+        }
+    }
+        
     public void encodeSeparator(FacesContext context, UISeparator separator) throws IOException {
         ResponseWriter writer = context.getResponseWriter();
         String style = separator.getStyle();

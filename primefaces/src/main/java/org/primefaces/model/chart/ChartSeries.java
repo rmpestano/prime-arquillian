@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2013 PrimeTek.
+ * Copyright 2009-2014 PrimeTek.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,9 @@
  */
 package org.primefaces.model.chart;
 
+import java.io.IOException;
 import java.io.Serializable;
+import java.io.Writer;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -75,5 +77,17 @@ public class ChartSeries implements Serializable {
     }
     public void setYaxis(AxisType yaxis) {
         this.yaxis = yaxis;
+    }
+    
+    public void encode(Writer writer) throws IOException {
+        String renderer = this.getRenderer();
+        writer.write("{");
+        writer.write("label:'" + label + "'");
+
+        if(renderer != null) writer.write(",renderer: $.jqplot." + renderer);
+        if(xaxis != null) writer.write(",xaxis:\"" + xaxis + "\"");
+        if(yaxis != null) writer.write(",yaxis:\"" + yaxis + "\"");
+
+        writer.write("}");
     }
 }

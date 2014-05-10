@@ -253,14 +253,14 @@ import org.primefaces.util.SharedStringBuilder;
                     String[] sortDirs = params.get(clientId + "_sortDir").split(",");
                     String[] sortKeys = params.get(clientId + "_sortKey").split(",");
                     
-                    order = SortOrder.valueOf(sortDirs[sortDirs.length - 1]);
+                    order = SortOrder.valueOf(((SortFeature) FEATURES.get(DataTableFeatureKey.SORT)).convertSortOrderParam(sortDirs[sortDirs.length - 1]));
                     sortColumn = findColumn(sortKeys[sortKeys.length - 1]);
                 } 
                 else {
-                    order = SortOrder.valueOf(params.get(clientId + "_sortDir"));
+                    order = SortOrder.valueOf(((SortFeature) FEATURES.get(DataTableFeatureKey.SORT)).convertSortOrderParam(params.get(clientId + "_sortDir")));
                     sortColumn = findColumn(params.get(clientId + "_sortKey"));
                 }
-
+                
                 wrapperEvent = new SortEvent(this, behaviorEvent.getBehavior(), sortColumn, order);
             }
             else if(eventName.equals("filter")) {
@@ -453,10 +453,18 @@ import org.primefaces.util.SharedStringBuilder;
             if(column.isDynamic()) {
                 ((DynamicColumn) sortColumn).applyStatelessModel();
                 Object sortByProperty = sortColumn.getSortBy();
-                sortField = (sortByProperty == null) ? resolveDynamicField(columnSortByVE) : sortByProperty.toString();
+                String field = column.getField();
+                if(field == null)
+                    sortField = (sortByProperty == null) ? resolveDynamicField(columnSortByVE) : sortByProperty.toString();
+                else
+                    sortField = field;
             }
             else {
-                sortField = (columnSortByVE == null) ? (String) column.getSortBy() : resolveStaticField(columnSortByVE);
+                String field = column.getField();
+                if(field == null)
+                    sortField = (columnSortByVE == null) ? (String) column.getSortBy() : resolveStaticField(columnSortByVE);
+                else
+                    sortField = field;
             }
         }
         
@@ -735,10 +743,9 @@ import org.primefaces.util.SharedStringBuilder;
             for(UIComponent kid : getChildren()) {
                 if(kid.isRendered()) {
                     if(kid instanceof Columns) {
-                        Columns uicolumns = (Columns) kid;
-                        Collection collection = (Collection) uicolumns.getValue();
-                        if(collection != null) {
-                            columnsCount += collection.size();
+                        int dynamicColumnsCount = ((Columns) kid).getRowCount();
+                        if(dynamicColumnsCount > 0) {
+                            columnsCount += dynamicColumnsCount;
                         }
                     }
                     else if(kid instanceof Column) {
@@ -946,5 +953,21 @@ import org.primefaces.util.SharedStringBuilder;
     
     private boolean isFilterRequest(FacesContext context) {
         return context.getExternalContext().getRequestParameterMap().containsKey(this.getClientId(context) + "_filtering");
+    }
+    
+    private List<UIComponent> iterableChildren;
+    
+    @Override
+    protected List<UIComponent> getIterableChildren() {
+        if(iterableChildren == null) {
+            iterableChildren = new ArrayList<UIComponent>();
+            for(UIComponent child : this.getChildren()) {
+                if(!(child instanceof ColumnGroup)) {
+                    iterableChildren.add(child);
+                }
+            }
+        }
+        
+        return iterableChildren;
     }
     

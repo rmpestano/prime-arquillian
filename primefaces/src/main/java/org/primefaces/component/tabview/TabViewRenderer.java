@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2013 PrimeTek.
+ * Copyright 2009-2014 PrimeTek.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -210,9 +210,11 @@ public class TabViewRenderer extends CoreRenderer {
         ResponseWriter writer = context.getResponseWriter();
         String defaultStyleClass = active ? TabView.ACTIVE_TAB_HEADER_CLASS : TabView.INACTIVE_TAB_HEADER_CLASS;
         defaultStyleClass = defaultStyleClass + " ui-corner-" + tabView.getOrientation();   //cornering
+        if(tab.isDisabled()) {
+            defaultStyleClass = defaultStyleClass + " ui-state-disabled";
+        }
         String styleClass = tab.getTitleStyleClass();
-        styleClass = tab.isDisabled() ? (styleClass == null ? "" : styleClass) + " ui-state-disabled" : styleClass;
-        styleClass = styleClass == null ? defaultStyleClass : defaultStyleClass + " " + styleClass;
+        styleClass = (styleClass == null) ? defaultStyleClass : defaultStyleClass + " " + styleClass;
         UIComponent titleFacet = tab.getFacet("title");
         
         //header container

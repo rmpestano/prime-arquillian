@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2013 PrimeTek.
+ * Copyright 2009-2014 PrimeTek.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,121 +15,77 @@
  */
 package org.primefaces.push.impl;
 
+import org.atmosphere.config.managed.ManagedServiceInterceptor;
 import org.atmosphere.config.service.AtmosphereInterceptorService;
-import org.atmosphere.cpr.Action;
-import org.atmosphere.cpr.AtmosphereConfig;
-import org.atmosphere.cpr.AtmosphereFramework.AtmosphereHandlerWrapper;
-import org.atmosphere.cpr.AtmosphereInterceptorAdapter;
+import org.atmosphere.cpr.AtmosphereFramework;
 import org.atmosphere.cpr.AtmosphereRequest;
 import org.atmosphere.cpr.AtmosphereResource;
 import org.atmosphere.cpr.Broadcaster;
-import org.atmosphere.cpr.FrameworkConfig;
 import org.atmosphere.handler.AnnotatedProxy;
-import org.atmosphere.interceptor.InvokationOrder;
+import org.primefaces.push.annotation.PathParam;
 import org.primefaces.push.annotation.PushEndpoint;
-import org.primefaces.push.annotation.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.lang.reflect.Field;
+import java.util.Map;
+
 @AtmosphereInterceptorService
-public class PushEndpointInterceptor extends AtmosphereInterceptorAdapter {
+public class PushEndpointInterceptor extends ManagedServiceInterceptor {
+    private Logger logger = LoggerFactory.getLogger(PushEndpointInterceptor.class);
 
-    private final static Logger logger = LoggerFactory.getLogger(PushEndpointInterceptor.class);
-    private AtmosphereConfig config;
-    private boolean wildcardMapping = false;
-
-    public PushEndpointInterceptor() {
-    }
-
-    @Override
-    public void configure(AtmosphereConfig config) {
-        this.config = config;
-        optimizeMapping();
-    }
-
-    @Override
-    public Action inspect(AtmosphereResource r) {
-        if (!wildcardMapping) return Action.CONTINUE;
-
-        mapAnnotatedService(r.getRequest(), (AtmosphereHandlerWrapper)
-                r.getRequest().getAttribute(FrameworkConfig.ATMOSPHERE_HANDLER_WRAPPER));
-
-        return Action.CONTINUE;
-    }
-
-    protected void optimizeMapping() {
-        for (String w : config.handlers().keySet()) {
-            if (w.contains("{") && w.contains("}")) {
-                wildcardMapping = true;
-                break;
-            }
-        }
-    }
-
-    protected void mapAnnotatedService(AtmosphereRequest request, AtmosphereHandlerWrapper w) {
-        Broadcaster b = w.broadcaster;
-
-        String path;
-        String pathInfo = null;
-        try {
-            pathInfo = request.getPathInfo();
-        } catch (IllegalStateException ex) {
-            // http://java.net/jira/browse/GRIZZLY-1301
-        }
-
-        if (pathInfo != null) {
-            path = request.getServletPath() + pathInfo;
-        } else {
-            path = request.getServletPath();
-        }
-
-        if (path == null || path.isEmpty()) {
-            path = "/";
-        }
-
-        // Remove the Broadcaster with curly braces
-        if (b.getID().contains("{")) {
-            config.getBroadcasterFactory().remove(b.getID());
-        }
-
+    protected void mapAnnotatedService(boolean reMap, String path, AtmosphereRequest request, AtmosphereFramework.AtmosphereHandlerWrapper w) {
         synchronized (config.handlers()) {
             String servletPath = (String) config.properties().get("servletPath");
             if (path.startsWith(servletPath)) {
                 path = path.substring(servletPath.length());
             }
+        }
+        super.mapAnnotatedService(reMap, path, request, w);
+    }
 
-            if (config.handlers().get(path) == null) {
-                if (AnnotatedProxy.class.isAssignableFrom(w.atmosphereHandler.getClass())) {
-                    AnnotatedProxy ap = AnnotatedProxy.class.cast(w.atmosphereHandler);
-                    PushEndpoint a = ap.target().getClass().getAnnotation(PushEndpoint.class);
-                    if (a != null) {
-                        String targetPath = a.value();
-                        if (targetPath.indexOf("{") != -1 && targetPath.indexOf("}") != -1) {
-                            try {
-                                boolean singleton = ap.target().getClass().getAnnotation(Singleton.class) != null;
-                                if (!singleton) {
-                                    PushEndpointHandlerProxy h = config.framework().newClassInstance(PushEndpointHandlerProxy.class, PushEndpointHandlerProxy.class);
-                                    h.configure(config, config.framework().newClassInstance(Object.class, ap.target().getClass()));
-                                    config.framework().addAtmosphereHandler(path, h,
-                                            config.getBroadcasterFactory().lookup(request.resource().getBroadcaster().getClass(), path, true), w.interceptors);
-                                } else {
-                                    config.framework().addAtmosphereHandler(path, w.atmosphereHandler,
-                                            config.getBroadcasterFactory().lookup(request.resource().getBroadcaster().getClass(), path, true), w.interceptors);
-                                }
-                                request.setAttribute(FrameworkConfig.NEW_MAPPING, "true");
-                            } catch (Throwable e) {
-                                logger.warn("Unable to create AtmosphereHandler", e);
-                            }
-                        }
+    protected AnnotatedProxy proxyHandler() throws IllegalAccessException, InstantiationException {
+        return config.framework().newClassInstance(AnnotatedProxy.class, PushEndpointHandlerProxy.class);
+    }
+
+    protected ManagedAnnotation managed(AnnotatedProxy ap, final AtmosphereResource r) {
+        final PushEndpoint a = ap.target().getClass().getAnnotation(PushEndpoint.class);
+        if (a == null) return null;
+
+        return new ManagedAnnotation() {
+            public String path() {
+                return a.value();
+            }
+
+            public Class<? extends Broadcaster> broadcaster() {
+                return r.getBroadcaster().getClass();
+            }
+        };
+    }
+
+    protected void injectPathParams(Object o, Map<String, String> annotatedPathVars){
+        /* now look for appropriate annotations and fill the variables accordingly */
+        for (Field field : o.getClass().getDeclaredFields()) {
+            if (field.isAnnotationPresent(PathParam.class)) {
+                PathParam annotation = field.getAnnotation(PathParam.class);
+                String name = annotation.value();
+                if (name.isEmpty()) {
+                    name = field.getName();
+                }
+                if (annotatedPathVars.containsKey(name)) {
+                    try {
+                        logger.debug("Annotating field {}", name);
+                        field.setAccessible(true);
+                        field.set(o, annotatedPathVars.get(name));
+                    } catch (Exception e) {
+                        logger.error("Error processing @PathVariable annotation", e);
                     }
+                } else {
+                    logger.error("No path marker found for PathVariable {}, class {}", field.getName(), o.getClass());
                 }
             }
         }
-    }
-
-    @Override
-    public PRIORITY priority() {
-        return InvokationOrder.AFTER_DEFAULT;
+        /* end @PathVariable annotations processing */
     }
 
     @Override
