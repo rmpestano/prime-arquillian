@@ -34,7 +34,7 @@ public class Deployments {
         war.addAsLibraries(resolver.loadPomFromFile("pom.xml").resolve("com.lowagie:itext:2.1.7").withoutTransitivity().asFile());
         war.addAsLibraries(resolver.loadPomFromFile("pom.xml").resolve("commons-fileupload:commons-fileupload:1.3").withoutTransitivity().asFile());
         war.addAsLibraries(resolver.loadPomFromFile("pom.xml").resolve("rome:rome:1.0").withoutTransitivity().asFile());
-        war.addAsLibraries(resolver.loadPomFromFile("pom.xml").resolve("org.atmosphere:atmosphere-runtime:2.1.0").withoutTransitivity().asFile());
+        war.addAsLibraries(resolver.loadPomFromFile("pom.xml").resolve("org.atmosphere:atmosphere-runtime:2.1.3").withoutTransitivity().asFile());
         war.addAsLibraries(resolver.loadPomFromFile("pom.xml").resolve("net.sf.ehcache:ehcache:2.7.4").withoutTransitivity().asFile());
         war.addAsLibraries(resolver.loadPomFromFile("pom.xml").resolve("com.hazelcast:hazelcast:2.6.5").withoutTransitivity().asFile());
         //WEB-INF
