@@ -15,7 +15,6 @@ import static org.jboss.arquillian.graphene.Graphene.guardNoRequest;
  * Created by rmpestano on 4/5/14.
  */
 public class Datatable {
-
     @Root
     private WebElement datatable;
 
@@ -57,7 +56,7 @@ public class Datatable {
         guardAjax(column).sendKeys(query);
     }
 
-    public void clearColumn(String colId){
+    public void clearFilterColumn(String colId){
         WebElement column = datatable.findElement(By.xpath("//th[contains(@class,'ui-filter-column') and contains(@id,'" + colId + "')]//input"));
         guardNoRequest(column).clear();
     }

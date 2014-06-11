@@ -17,6 +17,13 @@
 		</configuration>
 	</container>
 
+    <container qualifier="wildfly-remote" >
+        <configuration>
+            <property name="managementAddress">127.0.0.1</property>
+            <property name="managementPort">9990</property>
+        </configuration>
+    </container>
+
     <container qualifier="glassfish-managed">
         <configuration>
             <property name="outputToConsole">true</property>

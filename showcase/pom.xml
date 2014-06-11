@@ -23,7 +23,7 @@
         <arquillian.version>1.1.4.Final</arquillian.version>
         <graphene.version>2.0.3.Final</graphene.version>
         <recorder.version>1.0.0.Alpha2</recorder.version>
-        <wildfly.version>8.0.0.Final</wildfly.version>
+        <wildfly.version>8.1.0.Final</wildfly.version>
         <jboss.version>7.2.0.Final</jboss.version>
         <arquillian.browser>firefox</arquillian.browser>
         <arquillian.debug>false</arquillian.debug>
@@ -427,7 +427,6 @@
 
     <profiles>
         <!-- test profiles -->
-
         <profile>
             <id>wildfly-managed</id>
             <activation>
@@ -591,31 +590,38 @@
                 </plugins>
             </build>
         </profile>
-        <!--<profile>-->
-            <!--<id>wildfly-remote</id>-->
-            <!--<dependencies>-->
-                <!--<dependency>-->
-                    <!--<groupId>org.jboss.as</groupId>-->
-                    <!--<artifactId>wildfly-arquillian-container-remote</artifactId>-->
-                    <!--<scope>test</scope>-->
-                    <!--<version>${wildfly.version}</version>-->
-                <!--</dependency>-->
-            <!--</dependencies>-->
-            <!--<build>-->
-                <!--<plugins>-->
-                    <!--<plugin>-->
-                        <!--<groupId>org.apache.maven.plugins</groupId>-->
-                        <!--<artifactId>maven-surefire-plugin</artifactId>-->
-                        <!--<version>2.16</version>-->
-                        <!--<configuration>-->
-                            <!--<systemPropertyVariables>-->
-                                <!--<arquillian.launch>jboss-remote</arquillian.launch>-->
-                            <!--</systemPropertyVariables>-->
-                        <!--</configuration>-->
-                    <!--</plugin>-->
-                <!--</plugins>-->
-            <!--</build>-->
-        <!--</profile>-->
+        <profile>
+            <id>wildfly-remote</id>
+            <properties>
+                <datasource>java:jboss/datasources/ExampleDS2</datasource>
+                <hibernate.platform>org.hibernate.service.jta.platform.internal.JBossAppServerJtaPlatform
+                </hibernate.platform>
+                <hibernate.provider>org.hibernate.ejb.HibernatePersistence</hibernate.provider>
+                <!--referenced by arquillian.launch and used in arquillian.xml to choice which container arquillian will use-->
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>org.wildfly</groupId>
+                    <artifactId>wildfly-arquillian-container-remote</artifactId>
+                    <scope>test</scope>
+                    <version>${wildfly.version}</version>
+                </dependency>
+            </dependencies>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>2.16</version>
+                        <configuration>
+                            <systemPropertyVariables>
+                                <arquillian.launch>wildfly-remote</arquillian.launch>
+                            </systemPropertyVariables>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
         <profile>
             <id>glassfish-managed</id>
             <dependencies>
