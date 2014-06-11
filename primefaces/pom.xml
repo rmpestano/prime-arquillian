@@ -265,9 +265,9 @@
                             <shortName>p</shortName>
                             <templatesDir>src/main/java-templates</templatesDir>
                             <componentConfigsDir>target/resources-maven-jsf/ui</componentConfigsDir>
-                            <standardFacesConfig>src/main/resources-maven-jsf/standard-faces-config.xml</standardFacesConfig>
+                            <!--<standardFacesConfig>src/main/resources-maven-jsf/standard-faces-config.xml</standardFacesConfig>-->
                             <standardFaceletsTaglib>src/main/resources-maven-jsf/standard-facelets-taglib.xml</standardFaceletsTaglib>
-                            <standardTLD>src/main/resources-maven-jsf/standard-tld.xml</standardTLD>
+                            <!--<standardTLD>src/main/resources-maven-jsf/standard-tld.xml</standardTLD>-->
                         </configuration>
                         <goals>
                             <goal>generate-components</goal>
@@ -295,7 +295,7 @@
                             <componentConfigsDir>target/resources-maven-jsf/ui</componentConfigsDir>
                             <standardFacesConfig>src/main/resources-maven-jsf/standard-faces-config.xml</standardFacesConfig>
                             <standardRenderersConfig>src/main/resources-maven-jsf/standard-renderers.xml</standardRenderersConfig>
-                            <jsfVersion>2</jsfVersion>
+                            <!--<jsfVersion>2</jsfVersion>-->
                         </configuration>
                         <goals>
                             <goal>generate-faces-config</goal>
