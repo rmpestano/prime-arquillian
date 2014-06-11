@@ -26,9 +26,15 @@ public class DatatablePagination extends BasePage {
         datatable.getPaginatorDropdown().selectOptionByValue(value);
     }
 
-    public void goTonextTablePage(){
+    public void goToNextTablePage(){
           Integer nextPage = getCurrentPageValue()+1;
           datatable.getPaginatorPages().gotoPage(nextPage);
+
+    }
+
+    public void goToPreviousTablePage(){
+        Integer nextPage = getCurrentPageValue()-1;
+        datatable.getPaginatorPages().gotoPage(nextPage);
 
     }
 

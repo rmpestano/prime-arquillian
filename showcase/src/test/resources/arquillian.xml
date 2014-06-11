@@ -70,7 +70,7 @@
 	 <extension qualifier="webdriver">
 <!--         <property name="browser">firefox</property> -->
         <property name="browser">${arquillian.browser}</property>
-<!--         <property name="dimensions">1280x1024</property>  -->
+         <property name="dimensions">1280x1024</property>
         <property name="remoteReusable">${arquillian.remoteReusable}</property>
  		<property name="remote">${arquillian.remote}</property>
         <property name="remoteAddress">${arquillian.remoteAddress}</property>

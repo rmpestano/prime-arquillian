@@ -17,11 +17,11 @@
     </parent>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <selenium.version>2.40.0</selenium.version>
+        <selenium.version>2.41.0</selenium.version>
         <drone.version>1.3.0.Final</drone.version>
         <warp.version>1.0.0.Alpha7</warp.version>
         <arquillian.version>1.1.4.Final</arquillian.version>
-        <graphene.version>2.0.2.Final</graphene.version>
+        <graphene.version>2.0.3.Final</graphene.version>
         <recorder.version>1.0.0.Alpha2</recorder.version>
         <wildfly.version>8.0.0.Final</wildfly.version>
         <jboss.version>7.2.0.Final</jboss.version>
@@ -98,7 +98,6 @@
                         <exclude>**/*BaseAt.java</exclude>
                         <exclude>**/*BaseBdd.java</exclude>
                     </excludes>
-                    <encoding>${project.build.sourceEncoding}</encoding>
                 </configuration>
             </plugin>
 
@@ -592,6 +591,31 @@
                 </plugins>
             </build>
         </profile>
+        <!--<profile>-->
+            <!--<id>wildfly-remote</id>-->
+            <!--<dependencies>-->
+                <!--<dependency>-->
+                    <!--<groupId>org.jboss.as</groupId>-->
+                    <!--<artifactId>wildfly-arquillian-container-remote</artifactId>-->
+                    <!--<scope>test</scope>-->
+                    <!--<version>${wildfly.version}</version>-->
+                <!--</dependency>-->
+            <!--</dependencies>-->
+            <!--<build>-->
+                <!--<plugins>-->
+                    <!--<plugin>-->
+                        <!--<groupId>org.apache.maven.plugins</groupId>-->
+                        <!--<artifactId>maven-surefire-plugin</artifactId>-->
+                        <!--<version>2.16</version>-->
+                        <!--<configuration>-->
+                            <!--<systemPropertyVariables>-->
+                                <!--<arquillian.launch>jboss-remote</arquillian.launch>-->
+                            <!--</systemPropertyVariables>-->
+                        <!--</configuration>-->
+                    <!--</plugin>-->
+                <!--</plugins>-->
+            <!--</build>-->
+        <!--</profile>-->
         <profile>
             <id>glassfish-managed</id>
             <dependencies>
@@ -692,7 +716,7 @@
                             <includes>
                                 <include>**/*At.java</include>
                                 <include>**/*Ft.java</include>
-                                <include>**/*Warp.java</include>
+                                <!--<include>**/*Warp.java</include>-->
                             </includes>
                             <excludes>
                                 <!-- Exclude integration tests within (unit) test phase. -->
@@ -700,7 +724,6 @@
                                 <exclude>**/*BaseWarp.java</exclude>
                                 <exclude>**/*BaseBdd.java</exclude>
                             </excludes>
-                            <encoding>${project.build.sourceEncoding}</encoding>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -723,7 +746,6 @@
                                 <!-- Exclude integration tests within (unit) test phase. -->
                                 <exclude>**/*BaseFt.java</exclude>
                             </excludes>
-                            <encoding>${project.build.sourceEncoding}</encoding>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -746,7 +768,6 @@
                             <excludes>
                                 <exclude>**/*BaseWarp.java</exclude>
                             </excludes>
-                            <encoding>${project.build.sourceEncoding}</encoding>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -770,7 +791,6 @@
                                 <exclude>**/*BaseAt.java</exclude>
                                 <exclude>**/*BaseBdd.java</exclude>
                             </excludes>
-                            <encoding>${project.build.sourceEncoding}</encoding>
                         </configuration>
                     </plugin>
                 </plugins>

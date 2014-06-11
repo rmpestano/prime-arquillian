@@ -23,10 +23,7 @@ Then [value] is displayed in the page
 Examples:
 |value|
 |Primefaces|
-|atmosfere|
 |arquillian|
-|graphene|
-|JSF|
-|CDI|
 |JavaEE|
+|ROCKS!!!!!!|
 

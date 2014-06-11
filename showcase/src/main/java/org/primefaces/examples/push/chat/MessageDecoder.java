@@ -18,7 +18,7 @@ package org.primefaces.examples.push.chat;
 import org.primefaces.push.Decoder;
 
 /**
- * A Simple {@link org.primefaces.push.Decoder} that decode a String into a {@link Message} object.
+ * A Simple {@link org.primefaces.push.Decoder} that decode a String into a {@link org.primefaces.examples.push.chat.Message} object.
  */
 public class MessageDecoder implements Decoder<String,Message> {
 

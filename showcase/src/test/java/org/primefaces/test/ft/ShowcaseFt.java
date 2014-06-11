@@ -15,6 +15,7 @@ import org.primefaces.test.pages.datatable.DatatablePagination;
 import java.util.List;
 
 import static junit.framework.Assert.assertEquals;
+import static org.jboss.arquillian.graphene.Graphene.waitGui;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -71,11 +72,25 @@ public class ShowcaseFt extends BaseFt{
         datatableHome.openDataTablePagination();
         assertTrue(datatablePagination.isPresent());
         assertEquals(datatablePagination.getDatatable().getTableRows().size(), 10);
+        datatablePagination.selectPageByValue("15");
+        assertEquals(datatablePagination.getDatatable().getTableRows().size(), 15);
         datatablePagination.selectPageByValue("5");
         assertEquals(datatablePagination.getDatatable().getTableRows().size(), 5);
         Integer tablePageBefore = datatablePagination.getCurrentPageValue();
-        datatablePagination.goTonextTablePage();
+        datatablePagination.goToNextTablePage();
         assertEquals(++tablePageBefore, datatablePagination.getCurrentPageValue());
+        datatablePagination.goToNextTablePage();
+        assertEquals(++tablePageBefore, datatablePagination.getCurrentPageValue());
+        datatablePagination.goToNextTablePage();
+        assertEquals(++tablePageBefore, datatablePagination.getCurrentPageValue());
+        datatablePagination.goToNextTablePage();
+        assertEquals(++tablePageBefore, datatablePagination.getCurrentPageValue());
+        datatablePagination.goToPreviousTablePage();
+        assertEquals(--tablePageBefore, datatablePagination.getCurrentPageValue());
+        datatablePagination.goToPreviousTablePage();
+        assertEquals(--tablePageBefore, datatablePagination.getCurrentPageValue());
+        datatablePagination.goToPreviousTablePage();
+        assertEquals(--tablePageBefore, datatablePagination.getCurrentPageValue());
     }
 
     @Test
@@ -90,6 +105,12 @@ public class ShowcaseFt extends BaseFt{
             assertTrue(row.getText().contains("1"));
         }
         datatableFiltering.getDatatable().clearColumn("modelColumn");
+        datatableFiltering.filterInput("2");
+        datatableFiltering.filterInput("313");
+        assertTrue(datatableFiltering.getDatatable().getTableRows().isEmpty());
+        datatableFiltering.getDatatable().clearColumn("modelColumn");
+        datatableFiltering.filterInput("a");
+        waitGui();
         datatableFiltering.filterSelect("BMW");
         rows = datatableFiltering.getDatatable().getTableRows();
         for (WebElement row : rows) {
