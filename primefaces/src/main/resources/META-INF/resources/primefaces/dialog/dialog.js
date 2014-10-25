@@ -129,7 +129,22 @@ PrimeFaces.widget.Dialog = PrimeFaces.widget.BaseWidget.extend({
                         var tabbables = $this.content.find(':tabbable').add($this.footer.find(':tabbable'));
                         if(tabbables.length) {
                             var first = tabbables.filter(':first'),
-                            last = tabbables.filter(':last');
+                            last = tabbables.filter(':last'),
+                            focusingRadioItem = null;
+
+                            if(first.is(':radio')) {                                
+                                focusingRadioItem = tabbables.filter('[name="' + first.attr('name') + '"]').filter(':checked');
+                                if(focusingRadioItem.length > 0) {
+                                    first = focusingRadioItem;
+                                }
+                            }
+                            
+                            if(last.is(':radio')) {
+                                focusingRadioItem = tabbables.filter('[name="' + last.attr('name') + '"]').filter(':checked');
+                                if(focusingRadioItem.length > 0) {
+                                    last = focusingRadioItem; 
+                                }
+                            }
                 
                             if(target.is(document.body)) {
                                 first.focus(1);
@@ -269,7 +284,7 @@ PrimeFaces.widget.Dialog = PrimeFaces.widget.BaseWidget.extend({
                 $this.moveToTop();
             }
         });
-
+        
         this.icons.mouseover(function() {
             $(this).addClass('ui-state-hover');
         }).mouseout(function() {
@@ -303,11 +318,25 @@ PrimeFaces.widget.Dialog = PrimeFaces.widget.BaseWidget.extend({
         }
     },
     
-    setupDraggable: function() {    
+    setupDraggable: function() {
+        var $this = this;
+        
         this.jq.draggable({
             cancel: '.ui-dialog-content, .ui-dialog-titlebar-close',
             handle: '.ui-dialog-titlebar',
-            containment : 'document'
+            containment : 'document',
+            stop: function( event, ui ) {
+                if($this.hasBehavior('move')) {
+                    var move = $this.cfg.behaviors['move'];
+                    var ext = {
+                        params: [
+                            {name: $this.id + '_top', value: ui.offset.top},
+                            {name: $this.id + '_left', value: ui.offset.left}
+                        ]
+                    };
+                    move.call($this, ext);
+                }
+            }
         });
     },
     
@@ -566,6 +595,14 @@ PrimeFaces.widget.Dialog = PrimeFaces.widget.BaseWidget.extend({
         });
         
         this.titlebar.children('a.ui-dialog-titlebar-icon').attr('role', 'button');
+    },
+    
+    hasBehavior: function(event) {
+        if(this.cfg.behaviors) {
+            return this.cfg.behaviors[event] != undefined;
+        }
+
+        return false;
     }
     
 });
@@ -595,9 +632,9 @@ PrimeFaces.widget.ConfirmDialog = PrimeFaces.widget.Dialog.extend({
 
             this.jq.find('.ui-confirmdialog-yes').on('click.ui-confirmdialog', function(e) {                
                 if(PrimeFaces.confirmSource) {
-                    var fn = eval('(function(element,event){' + PrimeFaces.confirmSource.data('pfconfirmcommand') + '})');
+                    var fn = new Function('event',PrimeFaces.confirmSource.data('pfconfirmcommand'));
                     
-                    fn.call(PrimeFaces.confirmSource,PrimeFaces.confirmSource.get(0),e);
+                    fn.call(PrimeFaces.confirmSource.get(0),e);
                     PrimeFaces.confirmDialog.hide();
                     PrimeFaces.confirmSource = null;
                 }

@@ -20,6 +20,8 @@ import java.util.List;
 public interface TreeNode {
 		
 	public String getType();
+    
+    public void setType(String type);
 
 	public Object getData();
 	
@@ -52,4 +54,6 @@ public interface TreeNode {
     public void setRowKey(String rowKey);
     
     public String getRowKey();
+    
+    public void clearParent();
 }

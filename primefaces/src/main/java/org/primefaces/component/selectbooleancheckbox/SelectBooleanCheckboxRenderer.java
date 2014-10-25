@@ -97,7 +97,14 @@ public class SelectBooleanCheckboxRenderer extends InputRenderer {
         writer.writeAttribute("name", inputId, null);
         writer.writeAttribute("type", "checkbox", null);
 
-        if(checked) writer.writeAttribute("checked", "checked", null);
+        if(checked) { 
+            writer.writeAttribute("checked", "checked", null);
+            writer.writeAttribute("aria-checked", "true", null);
+        }
+        else {
+            writer.writeAttribute("aria-checked", "false", null);
+        }
+        
         if(disabled) writer.writeAttribute("disabled", "disabled", null);
         if(checkbox.getTabindex() != null) writer.writeAttribute("tabindex", checkbox.getTabindex(), null);
         if(RequestContext.getCurrentInstance().getApplicationContext().getConfig().isClientSideValidationEnabled()) {
@@ -118,8 +125,7 @@ public class SelectBooleanCheckboxRenderer extends InputRenderer {
         styleClass = !checkbox.isValid() ? styleClass + " ui-state-error" : styleClass;
         styleClass = disabled ? styleClass + " ui-state-disabled" : styleClass;
 
-        String iconClass = HTML.CHECKBOX_ICON_CLASS;
-        iconClass = checked ? iconClass + " " + HTML.CHECKBOX_CHECKED_ICON_CLASS : iconClass;
+        String iconClass = checked ? HTML.CHECKBOX_CHECKED_ICON_CLASS : HTML.CHECKBOX_UNCHECKED_ICON_CLASS;
 
         writer.startElement("div", null);
         writer.writeAttribute("class", styleClass, null);

@@ -256,23 +256,53 @@
                 }
                 else {
                     PrimeFaces.widgets[widgetVar] = new PrimeFaces.widget[widgetConstructor](cfg);  //page init
+                    if(PrimeFaces.settings.legacyWidgetNamespace) {
+                        window[widgetVar] = PrimeFaces.widgets[widgetVar]; 
+                    }
                 }
             }
+            // widget script not loaded -> lazy load script + stylesheet
             else {
-                var scriptURI = $('script[src*="/javax.faces.resource/primefaces.js"]').attr('src').replace('primefaces.js', resource + '/' + resource + '.js'),
-                cssURI = $('link[href*="/javax.faces.resource/primefaces.css"]').attr('href').replace('primefaces.css', resource + '/' + resource + '.css'),
-                cssResource = '<link type="text/css" rel="stylesheet" href="' + cssURI + '" />';
+                var scriptURI = PrimeFaces.getFacesResource(resource + '/' + resource + '.js', 'primefaces');
+                var cssURI = PrimeFaces.getFacesResource(resource + '/' + resource + '.css', 'primefaces');
 
                 //load css
+                var cssResource = '<link type="text/css" rel="stylesheet" href="' + cssURI + '" />';      
                 $('head').append(cssResource);
 
                 //load script and initialize widget
-                PrimeFaces.getScript(location.protocol + '//' + location.host + scriptURI, function() {
+                PrimeFaces.getScript(scriptURI, function() {
                     setTimeout(function() {
                         PrimeFaces.widgets[widgetVar] = new PrimeFaces.widget[widgetConstructor](cfg);
                     }, 100);
                 });
             }
+        },
+
+        /**
+         * Builds a resource URL for given parameters.
+         * 
+         * @param {string} name The name of the resource. For example: primefaces.js
+         * @param {string} library The library of the resource. For example: primefaces
+         * @param {string} version The version of the library. For example: 5.1
+         * @returns {string} The resource URL.
+         */
+	getFacesResource : function(name, library, version) {
+            var scriptURI = $('script[src*="/javax.faces.resource/' + PrimeFaces.getCoreScriptName() + '"]').attr('src');
+        
+            scriptURI = scriptURI.replace(PrimeFaces.getCoreScriptName(), name);
+            scriptURI = scriptURI.replace('ln=primefaces', 'ln=' + library);
+
+            if (version) {
+                var extractedVersion = new RegExp('[?&]v=([^&]*)').exec(scriptURI)[1];
+                scriptURI = scriptURI.replace('v=' + extractedVersion, 'v=' + version);
+            }
+
+            return window.location.protocol + '//' + window.location.host + scriptURI;
+	},
+        
+        getCoreScriptName: function() {
+            return 'primefaces.js';
         },
 
         inArray: function(arr, item) {
@@ -409,36 +439,104 @@
         },
         
         //adapted from jquery browser plugin
-        resolveUserAgent: function(ua) {
+        resolveUserAgent: function() {
             if($.browser) {
                 this.browser = $.browser;
             }
             else {
-                ua = ua.toLowerCase();
+                var matched, browser;
 
-                var match = /(chrome)[ \/]([\w.]+)/.exec(ua) ||
-                    /(webkit)[ \/]([\w.]+)/.exec(ua) ||
-                    /(opera)(?:.*version|)[ \/]([\w.]+)/.exec(ua) ||
-                    /(msie) ([\w.]+)/.exec(ua) ||
-                    ua.indexOf("compatible") < 0 && /(mozilla)(?:.*? rv:([\w.]+)|)/.exec(ua) || [],
-                userAgent =  {
-                    browser: match[ 1 ] || "",
-                    version: match[ 2 ] || "0"
-                },
+                jQuery.uaMatch = function( ua ) {
+                  ua = ua.toLowerCase();
+
+                  var match = /(opr)[\/]([\w.]+)/.exec( ua ) ||
+                      /(chrome)[ \/]([\w.]+)/.exec( ua ) ||
+                      /(version)[ \/]([\w.]+).*(safari)[ \/]([\w.]+)/.exec( ua ) ||
+                      /(webkit)[ \/]([\w.]+)/.exec( ua ) ||
+                      /(opera)(?:.*version|)[ \/]([\w.]+)/.exec( ua ) ||
+                      /(msie) ([\w.]+)/.exec( ua ) ||
+                      ua.indexOf("trident") >= 0 && /(rv)(?::| )([\w.]+)/.exec( ua ) ||
+                      ua.indexOf("compatible") < 0 && /(mozilla)(?:.*? rv:([\w.]+)|)/.exec( ua ) ||
+                      [];
+
+                  var platform_match = /(ipad)/.exec( ua ) ||
+                      /(iphone)/.exec( ua ) ||
+                      /(android)/.exec( ua ) ||
+                      /(windows phone)/.exec( ua ) ||
+                      /(win)/.exec( ua ) ||
+                      /(mac)/.exec( ua ) ||
+                      /(linux)/.exec( ua ) ||
+                      /(cros)/i.exec( ua ) ||
+                      [];
+
+                  return {
+                      browser: match[ 3 ] || match[ 1 ] || "",
+                      version: match[ 2 ] || "0",
+                      platform: platform_match[ 0 ] || ""
+                  };
+                };
+
+                matched = jQuery.uaMatch( window.navigator.userAgent );
                 browser = {};
 
-                if(userAgent.browser) {
-                    browser[userAgent.browser] = true;
-                    browser.version = userAgent.version;
+                if ( matched.browser ) {
+                  browser[ matched.browser ] = true;
+                  browser.version = matched.version;
+                  browser.versionNumber = parseInt(matched.version);
                 }
 
-                if (browser.chrome) {
-                    browser.webkit = true;
-                } else if (browser.webkit) {
-                    browser.safari = true;
+                if ( matched.platform ) {
+                  browser[ matched.platform ] = true;
                 }
+
+                // These are all considered mobile platforms, meaning they run a mobile browser
+                if ( browser.android || browser.ipad || browser.iphone || browser[ "windows phone" ] ) {
+                  browser.mobile = true;
+                }
+
+                // These are all considered desktop platforms, meaning they run a desktop browser
+                if ( browser.cros || browser.mac || browser.linux || browser.win ) {
+                  browser.desktop = true;
+                }
+
+                // Chrome, Opera 15+ and Safari are webkit based browsers
+                if ( browser.chrome || browser.opr || browser.safari ) {
+                  browser.webkit = true;
+                }
+
+                // IE11 has a new token so we will assign it msie to avoid breaking changes
+                if ( browser.rv )
+                {
+                  var ie = "msie";
+
+                  matched.browser = ie;
+                  browser[ie] = true;
+                }
+
+                // Opera 15+ are identified as opr
+                if ( browser.opr )
+                {
+                  var opera = "opera";
+
+                  matched.browser = opera;
+                  browser[opera] = true;
+                }
+
+                // Stock Android browsers are marked as Safari on Android.
+                if ( browser.safari && browser.android )
+                {
+                  var android = "android";
+
+                  matched.browser = android;
+                  browser[android] = true;
+                }
+
+                // Assign the name and platform variable
+                browser.name = matched.browser;
+                browser.platform = matched.platform;
 
                 this.browser = browser;
+                $.browser = browser;
             }
         },
 
@@ -526,7 +624,7 @@
             monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' ],
             monthNamesShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ],
             dayNames: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
-            dayNamesShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Tue', 'Fri', 'Sat'],
+            dayNamesShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
             dayNamesMin: ['S', 'M', 'T', 'W ', 'T', 'F ', 'S'],
             weekHeader: 'Week',
             firstDay: 0,
@@ -552,17 +650,13 @@
     	var widgetInstance = PrimeFaces.widgets[widgetVar];
     	
     	if (!widgetInstance) {
-	        if (window.console && console.log) { 
-	            console.log("Widget for var '" + widgetVar + "' not available!");
-	        }
-	        
 	        PrimeFaces.error("Widget for var '" + widgetVar + "' not available!");
     	}
     	
         return widgetInstance;
     };
     
-    PrimeFaces.resolveUserAgent(navigator.userAgent);
+    PrimeFaces.resolveUserAgent();
    
     //expose globally
     window.PrimeFaces = PrimeFaces;

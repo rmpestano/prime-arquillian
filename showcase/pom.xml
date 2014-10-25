@@ -5,23 +5,23 @@
     <groupId>org.primefaces</groupId>
     <artifactId>showcase</artifactId>
     <packaging>war</packaging>
-    <version>5.1-SNAPSHOT</version>
+    <version>5.2-SNAPSHOT</version>
     <name>showcase</name>
     <url>http://www.primefaces.org</url>
 
     <parent>
         <groupId>org.primefaces</groupId>
         <artifactId>prime-arquillian</artifactId>
-        <version>5.1-SNAPSHOT</version>
+        <version>5.2-SNAPSHOT</version>
         <relativePath>../../prime-arquillian</relativePath>
     </parent>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <selenium.version>2.41.0</selenium.version>
-        <drone.version>1.3.0.Final</drone.version>
+        <selenium.version>2.43.1</selenium.version>
+        <drone.version>2.0.0.Alpha2</drone.version>
         <warp.version>1.0.0.Alpha7</warp.version>
-        <arquillian.version>1.1.4.Final</arquillian.version>
-        <graphene.version>2.0.3.Final</graphene.version>
+        <arquillian.version>1.1.5.Final</arquillian.version>
+        <graphene.version>2.1.0.Alpha1</graphene.version>
         <recorder.version>1.0.0.Alpha2</recorder.version>
         <wildfly.version>8.1.0.Final</wildfly.version>
         <jboss.version>7.2.0.Final</jboss.version>
@@ -32,10 +32,8 @@
         <arquillian.chromeDriver>c:\chromedriver.exe</arquillian.chromeDriver>
         <arquillian.localAddress>localhost</arquillian.localAddress>
         <arquillian.remoteAddress>http://localhost:4444/wd/hub</arquillian.remoteAddress>
-        <jboss_as_dist.version>7.2.0.Final</jboss_as_dist.version>
-        <jboss_eap_dist.version>6.2.0.Final</jboss_eap_dist.version>
         <jsfVersion>Mojarra-2.2.4</jsfVersion>
-        <primefacesVersion>PrimeFaces-5.1-SNAPSHOT</primefacesVersion>
+        <primefacesVersion>PrimeFaces-5.2-SNAPSHOT</primefacesVersion>
         <jsf-listener>com.sun.faces.config.ConfigureListener</jsf-listener>
     </properties>
 
@@ -131,8 +129,8 @@
         </dependency>
         <dependency>
             <groupId>org.primefaces.themes</groupId>
-            <artifactId>all-themes</artifactId>
-            <version>1.0.10</version>
+            <artifactId>aristo</artifactId>
+            <version>1.0.1</version>
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -263,7 +261,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.8.2</version>
+            <version>4.11</version>
             <scope>test</scope>
         </dependency>
 
@@ -294,20 +292,6 @@
             <type>pom</type>
             <scope>test</scope>
             <version>${graphene.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.jboss.arquillian.extension</groupId>
-                    <artifactId>arquillian-phantom-driver</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
-        <!-- headless browser phantom.js -->
-        <dependency>
-            <groupId>org.jboss.arquillian.extension</groupId>
-            <artifactId>arquillian-phantom-driver</artifactId>
-            <version>1.1.2.Final</version>
-            <scope>test</scope>
         </dependency>
 
         <!-- arquillian jbehave -->
@@ -349,12 +333,24 @@
             <scope>test</scope>
         </dependency>
 
-        <!--dependency>
+        <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpcore</artifactId>
-            <version>4.2.5</version>
+            <version>4.3.2</version>
             <scope>test</scope>
-        </dependency-->
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.3.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>18.0</version>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>commons-collections</groupId>
             <artifactId>commons-collections</artifactId>
@@ -537,59 +533,7 @@
                 </plugins>
             </build>
         </profile>
-        <profile>
-            <id>jboss-eap-managed</id>
-            <dependencies>
-                <dependency>
-                    <groupId>org.jboss.as</groupId>
-                    <artifactId>jboss-as-arquillian-container-managed</artifactId>
-                    <scope>test</scope>
-                    <version>${jboss.version}</version>
-                </dependency>
-            </dependencies>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-dependency-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>unpack</id>
-                                <phase>process-test-classes</phase>
-                                <goals>
-                                    <goal>unpack</goal>
-                                </goals>
-                                <configuration>
-                                    <artifactItems>
-                                        <artifactItem>
-                                            <groupId>com.googlecode</groupId>
-                                            <artifactId>jboss-eap-dist</artifactId>
-                                            <version>${jboss_eap_dist.version}</version>
-                                            <type>zip</type>
-                                            <overWrite>false</overWrite>
-                                            <outputDirectory>${project.build.directory}</outputDirectory>
-                                        </artifactItem>
-                                    </artifactItems>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-surefire-plugin</artifactId>
-                        <version>2.16</version>
-                        <configuration>
-                            <systemPropertyVariables>
-                                <arquillian.launch>jboss-managed</arquillian.launch>
-                            </systemPropertyVariables>
-                            <environmentVariables>
-                                <JBOSS_HOME>${project.build.directory}/jboss-eap-${jboss_eap_dist.version}</JBOSS_HOME>
-                            </environmentVariables>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
+
         <profile>
             <id>wildfly-remote</id>
             <properties>
@@ -627,7 +571,7 @@
             <dependencies>
                 <dependency>
                     <groupId>org.jboss.arquillian.container</groupId>
-                    <artifactId>arquillian-glassfish-embedded-3.1</artifactId>
+                    <artifactId>arquillian-glassfish-managed-3.1</artifactId>
                     <version>1.0.0.CR4</version>
                     <scope>test</scope>
                 </dependency>
@@ -692,7 +636,7 @@
             </activation>
             <properties>
                 <jsfVersion>Mojarra-2.2.4</jsfVersion>
-                <primefacesVersion>PrimeFaces-5.0-SNAPSHOT</primefacesVersion>
+                <primefacesVersion>PrimeFaces-5.2-SNAPSHOT</primefacesVersion>
                 <jsf-listener>com.sun.faces.config.ConfigureListener</jsf-listener>
             </properties>
         </profile>

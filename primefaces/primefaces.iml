@@ -35,10 +35,15 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: javax.xml.bind:jaxb-api:2.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: javax.xml.bind:jsr173_api:1.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: javax.activation:activation:1.1" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: net.glxn:qrgen:1.4" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: com.google.zxing:javase:3.0.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: com.google.zxing:core:3.0.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: net.sf.barcode4j:barcode4j-light:2.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: xml-apis:xml-apis:1.3.04" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: junit:junit:4.8.2" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.easymock:easymock:2.4" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.apache.shale:shale-test:1.0.5" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.atmosphere:atmosphere-runtime:2.1.3" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.atmosphere:atmosphere-runtime:2.2.2" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.slf4j:slf4j-api:1.6.1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: javax.inject:javax.inject:1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.hazelcast:hazelcast:2.6.5" level="project" />

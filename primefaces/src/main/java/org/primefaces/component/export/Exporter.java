@@ -18,14 +18,17 @@ package org.primefaces.component.export;
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 import javax.el.MethodExpression;
+import javax.faces.FacesException;
 import javax.faces.component.EditableValueHolder;
 import javax.faces.component.UIColumn;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIData;
+import javax.faces.component.UISelectMany;
 import javax.faces.component.ValueHolder;
 import javax.faces.component.html.HtmlCommandLink;
 import javax.faces.component.html.HtmlGraphicImage;
@@ -117,8 +120,9 @@ public abstract class Exporter {
 
 			ValueHolder valueHolder = (ValueHolder) component;
 			Object value = valueHolder.getValue();
-			if(value == null)
+			if(value == null) {
 				return "";
+            }
 			
             Converter converter = valueHolder.getConverter();
             if(converter == null) {
@@ -127,11 +131,42 @@ public abstract class Exporter {
             }
             
             if(converter != null) {
-                return converter.getAsString(context, component, value);
+                if(component instanceof UISelectMany) {
+                    StringBuilder builder = new StringBuilder();
+                    List collection = null;
+                    
+                    if(value instanceof List) {
+                        collection = (List) value;
+                    }
+                    else if(value.getClass().isArray()) {
+                        collection = Arrays.asList(value);
+                    } 
+                    else {
+                        throw new FacesException("Value of " + component.getClientId(context) + " must be a List or an Array.");
+                    }
+                    
+                    int collectionSize = collection.size();
+                    for (int i = 0; i < collectionSize; i++) {
+                        Object object = collection.get(i);
+                        builder.append(converter.getAsString(context, component, object));
+                        
+                        if(i < (collectionSize - 1)) {
+                            builder.append(",");
+                        }
+                    }
+
+                    String valuesAsString = builder.toString();
+                    builder.setLength(0);
+                    
+                    return valuesAsString;
+                }
+                else {
+                    return converter.getAsString(context, component, value);
+                }
             }
-			
-			//No converter found just return the value as string
-			return value.toString();
+            else {
+                return value.toString();
+            }
 		}
         else if (component instanceof CellEditor) {
             return exportValue(context, ((CellEditor) component).getFacet("output"));

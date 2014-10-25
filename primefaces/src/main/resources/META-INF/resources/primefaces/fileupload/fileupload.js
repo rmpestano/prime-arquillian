@@ -1558,6 +1558,7 @@ PrimeFaces.widget.FileUpload = PrimeFaces.widget.BaseWidget.extend({
         this.filesTbody = this.content.find('> table.ui-fileupload-files > tbody');
         this.sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
         this.files = [];
+        this.fileAddIndex = 0;
         this.cfg.invalidFileMessage = this.cfg.invalidFileMessage || 'Invalid file type';
         this.cfg.invalidSizeMessage = this.cfg.invalidSizeMessage || 'Invalid file size';
         this.cfg.fileLimitMessage = this.cfg.fileLimitMessage || 'Maximum number of files exceeded';
@@ -1590,9 +1591,9 @@ PrimeFaces.widget.FileUpload = PrimeFaces.widget.BaseWidget.extend({
             },
             add: function(e, data) {
                 $this.chooseButton.removeClass('ui-state-hover ui-state-focus');
-                if($this.files.length === 0) {
-                    $this.enableButton($this.uploadButton);
-                    $this.enableButton($this.cancelButton);
+
+                if($this.fileAddIndex === 0) {
+                    $this.clearMessages();
                 }
 
                 if($this.cfg.fileLimit && ($this.uploadedFileCount + $this.files.length + 1) > $this.cfg.fileLimit) {
@@ -1616,8 +1617,6 @@ PrimeFaces.widget.FileUpload = PrimeFaces.widget.BaseWidget.extend({
                         });
                     }
                     else {
-                        $this.clearMessages();
-
                         var row = $('<tr></tr>').append('<td class="ui-fileupload-preview"></td>')
                                 .append('<td>' + file.name + '</td>')
                                 .append('<td>' + $this.formatSize(file.size) + '</td>')
@@ -1666,6 +1665,16 @@ PrimeFaces.widget.FileUpload = PrimeFaces.widget.BaseWidget.extend({
                         if($this.cfg.auto) {
                             $this.upload();
                         }
+                    }
+                    
+                    if($this.files.length > 0) {
+                        $this.enableButton($this.uploadButton);
+                        $this.enableButton($this.cancelButton);
+                    }
+
+                    $this.fileAddIndex++;
+                    if($this.fileAddIndex === (data.originalFiles.length)) {
+                        $this.fileAddIndex = 0;
                     }
                 }
             },
@@ -1767,7 +1776,7 @@ PrimeFaces.widget.FileUpload = PrimeFaces.widget.BaseWidget.extend({
                     $(this).addClass('ui-state-hover').removeClass('ui-state-active');
                 })
                 .on('focus.fileupload', this.rowCancelActionSelector, null, function(e) {
-                    $(this).addclass('ui-state-focus');
+                    $(this).addClass('ui-state-focus');
                 })
                 .on('blur.fileupload', this.rowCancelActionSelector, null, function(e) {
                     $(this).removeClass('ui-state-focus');
@@ -1912,4 +1921,36 @@ PrimeFaces.widget.FileUpload = PrimeFaces.widget.BaseWidget.extend({
         return !!(elem.getContext && elem.getContext('2d'));
     }
     
+});
+
+/**
+ * PrimeFaces Simple FileUpload Widget
+ */
+PrimeFaces.widget.SimpleFileUpload = PrimeFaces.widget.BaseWidget.extend({
+   
+    init: function(cfg) {
+        this._super(cfg);
+        
+        if(this.cfg.skinSimple) {
+            this.button = this.jq.children('.ui-button');
+            this.input = $(this.jqId + '_input');
+            this.display = this.jq.children('.ui-fileupload-filename');
+
+            if(!this.input.prop('disabled')) {
+                PrimeFaces.skinButton(this.button);
+                this.bindEvents();
+            }
+        }
+    },
+    
+    bindEvents: function() {
+        var $this = this;
+        
+        this.input.on('change.fileUpload', function() {
+            var filename = $this.input.val().replace(/\\/g, '/').replace(/.*\//, '');
+            $this.display.text(filename);
+        });
+        
+    }
+        
 });

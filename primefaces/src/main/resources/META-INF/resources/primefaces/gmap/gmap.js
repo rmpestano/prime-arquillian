@@ -122,6 +122,82 @@ PrimeFaces.widget.GMap = PrimeFaces.widget.DeferredWidget.extend({
             markerDragBehavior.call(this, ext);
         }
     },
+            
+    geocode: function(address) {
+        var $this = this;
+        
+        if(this.hasBehavior('geocode')) {
+            var geocodeBehavior = this.cfg.behaviors['geocode'],
+                geocoder = new google.maps.Geocoder(),
+                lats = [],
+                lngs = [];
+            
+            geocoder.geocode({'address': address}, function(results, status) {
+                
+                if (status == google.maps.GeocoderStatus.OK) { 
+                    for(var i = 0; i < results.length; i++) {
+                        var location = results[i].geometry.location;
+                        lats[i] = location.lat();
+                        lngs[i] = location.lng();
+                    }
+                    
+                    if(0 < lats.length && 0 < lngs.length) {
+                        var ext = {
+                            params: [
+                                {name: $this.id + '_lat', value: lats.join()},
+                                {name: $this.id + '_lng', value: lngs.join()}
+                            ]
+                        };
+                        
+                        geocodeBehavior.call(this, ext);
+                    }
+                } 
+                else {
+                    PrimeFaces.error('Geocode was not found');
+                }
+            });
+      
+        }
+    },
+        
+    reverseGeocode: function(lat, lng) {
+        var $this = this;
+        
+        if(this.hasBehavior('reverseGeocode')) {
+            var reverseGeocoder = this.cfg.behaviors['reverseGeocode'],
+                geocoder = new google.maps.Geocoder(),
+                latlng = new google.maps.LatLng(lat, lng),
+                addresses = [];
+
+            geocoder.geocode({'latLng': latlng}, function(results, status) {
+                
+                if (status == google.maps.GeocoderStatus.OK) {
+                    for(var i = 0; i < results.length; i++) {
+                        if (results[i]) {
+                            addresses[i] = results[i].formatted_address;
+                        } 
+                    }
+                    
+                    if(0 < addresses.length) {
+                        var ext = {
+                            params: [
+                                {name: $this.id + '_address', value: addresses.join(';')}
+                            ]
+                        };
+
+                        reverseGeocoder.call(this, ext);
+                    }
+                    else {
+                        PrimeFaces.error('No results found');    
+                    }
+                } 
+                else {
+                    PrimeFaces.error('Geocoder failed');
+                }
+           });
+           
+        }
+    },            
     
     configurePolylines: function() {
         this.addOverlays(this.cfg.polylines);

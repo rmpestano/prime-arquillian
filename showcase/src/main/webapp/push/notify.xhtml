@@ -1,10 +1,10 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:p="http://primefaces.org/ui"
-	template="../templates/ui.xhtml">
-    
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
     <ui:define name="head">        
         <script type="text/javascript">
             //<![CDATA[
@@ -16,70 +16,73 @@
             //]]> 
         </script>
     </ui:define>
+    
+    <ui:define name="title">
+        Notify
+    </ui:define>
 
-	<ui:define name="content">
+    <ui:define name="description">
+        This sample demonstrates how to push FacesMessages to all subscribers.
+    </ui:define>
 
-			<h1 class="title ui-widget-header ui-corner-all">PrimePush - FacesMessage</h1>
-			<div class="entry">
-			<p>This sample demonstrates how to push FacesMessages to all subscribers.</p>
-           
-            <p:growl widgetVar="growl" showDetail="true" />
-            
-            <h:form>
-                <p:panel header="Growl">
-                    <h:panelGrid columns="2">
-                        <p:outputLabel for="summary" value="Summary: " /> 
-                        <p:inputText id="summary" value="#{growlBean.summary}" required="true" />
-                        
-                        <p:outputLabel for="detail" value="Detail: " /> 
-                        <p:inputText id="detail" value="#{growlBean.detail}" required="true" />
-                    </h:panelGrid>
+    <ui:define name="implementation">
 
-                    <p:commandButton value="Send" actionListener="#{growlBean.send}" />
-                </p:panel>
-            </h:form>
+        <p:growl widgetVar="growl" showDetail="true" />
             
-            <p:socket onMessage="handleMessage" channel="/notify" />
-            
-            <h3>Source</h3>
-            <p:tabView>
-                <p:tab title="notify.xhtml">
-                    <pre name="code" class="brush:xml">
+        <h:form>   
+            <h:panelGrid columns="2">
+                <p:outputLabel for="summary" value="Summary: " /> 
+                <p:inputText id="summary" value="#{notifyView.summary}" required="true" />
+
+                <p:outputLabel for="detail" value="Detail: " /> 
+                <p:inputText id="detail" value="#{notifyView.detail}" required="true" />
+            </h:panelGrid>
+
+            <p:commandButton value="Send" actionListener="#{notifyView.send}" />     
+        </h:form>
+
+        <p:socket onMessage="handleMessage" channel="/notify" />
+        
+    </ui:define>
+
+    <ui:define name="source">
+        <p:tabView>
+            <p:tab title="notify.xhtml">
+                <pre name="code" class="brush:xml">
 &lt;p:growl widgetVar="growl" showDetail="true" /&gt;
-
+            
 &lt;h:form&gt;
-    &lt;p:panel header="Growl"&gt;
-        &lt;h:panelGrid columns="2"&gt;
-            &lt;p:outputLabel for="summary" value="Summary: " /&gt; 
-            &lt;p:inputText id="summary" value="\#{growlBean.summary}" required="true" /&gt;
+    &lt;h:panelGrid columns="2"&gt;
+        &lt;p:outputLabel for="summary" value="Summary: " /&gt; 
+        &lt;p:inputText id="summary" value="\#{notifyView.summary}" required="true" /&gt;
 
-            &lt;p:outputLabel for="detail" value="Detail: " /&gt; 
-            &lt;p:inputText id="detail" value="\#{growlBean.detail}" required="true" /&gt;
-        &lt;/h:panelGrid&gt;
+        &lt;p:outputLabel for="detail" value="Detail: " /&gt; 
+        &lt;p:inputText id="detail" value="\#{notifyView.detail}" required="true" /&gt;
+    &lt;/h:panelGrid&gt;
 
-        &lt;p:commandButton value="Send" actionListener="\#{growlBean.send}" /&gt;
-    &lt;/p:panel&gt;
+    &lt;p:commandButton value="Send" actionListener="\#{notifyView.send}" /&gt;
 &lt;/h:form&gt;
 
 &lt;p:socket onMessage="handleMessage" channel="/notify" /&gt;
 
 &lt;script type="text/javascript"&gt;
-function handleMessage(facesmessage) {
-    facesmessage.severity = 'info';
+        function handleMessage(facesmessage) {
+            facesmessage.severity = 'info';
 
-    PF('growl').show([facesmessage]);
-}
-&lt;script&gt;
-                    </pre>
-                </p:tab>
-                
-                <p:tab title="NotifyView.java">
-                    <pre name="code" class="brush:java">
-package org.primefaces.examples.push.notify;
+            PF('growl').show([facesmessage]);
+        }
+&lt;/script&gt;
+                </pre>
+            </p:tab>
+
+            <p:tab title="NotifyView.java">
+                <pre name="code" class="brush:java">
+package org.primefaces.showcase.push.notify;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.primefaces.push.EventBus;
 import org.primefaces.push.EventBusFactory;
 
@@ -109,14 +112,15 @@ public class NotifyView {
     
     public void send() {
         EventBus eventBus = EventBusFactory.getDefault().eventBus();
-        eventBus.publish(CHANNEL, new FacesMessage(summary, detail));
+        eventBus.publish(CHANNEL, new FacesMessage(StringEscapeUtils.escapeHtml(summary), StringEscapeUtils.escapeHtml(detail)));
     }
 }
-                    </pre>
-                </p:tab>
-                <p:tab title="NotifyResource.java">
-                    <pre name="code" class="brush:java">
-package org.primefaces.examples.push.notify;
+                </pre>
+            </p:tab>
+            
+            <p:tab title="NotifyResource.java">
+                <pre name="code" class="brush:java">
+package org.primefaces.showcase.push.notify;
 
 import javax.faces.application.FacesMessage;
 import org.primefaces.push.annotation.OnMessage;
@@ -131,11 +135,13 @@ public class NotifyResource {
         return message;
     }
 
-}       
-                    </pre>
-                </p:tab>
-            </p:tabView>
-		
-		</div>
-	</ui:define>
+}
+                </pre>
+            </p:tab>
+            
+            <p:tab title="Documentation" titleStyleClass="tab-doc docslide-526" />
+        </p:tabView>
+
+    </ui:define>
+
 </ui:composition>

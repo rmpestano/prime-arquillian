@@ -17,9 +17,17 @@ import org.primefaces.event.NodeCollapseEvent;
 import org.primefaces.event.ColumnResizeEvent;
 import org.primefaces.component.column.Column;
 import java.lang.StringBuilder;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
+import javax.faces.FacesException;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UINamingContainer;
 import javax.faces.context.FacesContext;
+import org.primefaces.component.api.DynamicColumn;
 import org.primefaces.component.api.UIColumn;
+import org.primefaces.component.columngroup.ColumnGroup;
+import org.primefaces.component.columns.Columns;
 import org.primefaces.util.ComponentUtils;
 
 	public final static String CONTAINER_CLASS = "ui-treetable ui-widget";
@@ -74,7 +82,7 @@ import org.primefaces.util.ComponentUtils;
     public void queueEvent(FacesEvent event) {
         FacesContext context = getFacesContext();
 
-        if(isRequestSource(context)) {
+        if(isRequestSource(context) && (event instanceof AjaxBehaviorEvent)) {
             Map<String,String> params = context.getExternalContext().getRequestParameterMap();
             String eventName = params.get(Constants.RequestParams.PARTIAL_BEHAVIOR_EVENT_PARAM);
             String clientId = this.getClientId(context);
@@ -94,12 +102,13 @@ import org.primefaces.util.ComponentUtils;
                 String nodeKey = params.get(clientId + "_collapse");
                 this.setRowKey(nodeKey);
                 TreeNode node = this.getRowNode();
+                node.setExpanded(false);
 
                 wrapperEvent = new NodeCollapseEvent(this, behaviorEvent.getBehavior(), node);
                 wrapperEvent.setPhaseId(PhaseId.APPLY_REQUEST_VALUES);
             } 
             else if(eventName.equals("select")) {
-                String nodeKey = params.get(clientId + "_instantSelect");
+                String nodeKey = params.get(clientId + "_instantSelection");
                 this.setRowKey(nodeKey);
                 TreeNode node = this.getRowNode();
 
@@ -107,7 +116,7 @@ import org.primefaces.util.ComponentUtils;
                 wrapperEvent.setPhaseId(behaviorEvent.getPhaseId());
             }  
             else if(eventName.equals("unselect")) {
-                String nodeKey = params.get(clientId + "_instantUnselect");
+                String nodeKey = params.get(clientId + "_instantUnselection");
                 this.setRowKey(nodeKey);
                 TreeNode node = this.getRowNode();
 
@@ -138,14 +147,24 @@ import org.primefaces.util.ComponentUtils;
         }
     }
 
-    public Column findColumn(String clientId) {
-        for(UIComponent child : getChildren()) {
-            if(child instanceof Column && child.getClientId().equals(clientId)) {
-                return (Column) child;
+    public UIColumn findColumn(String clientId) {
+        for(UIColumn column : this.getColumns()) {
+            if(column.getColumnKey().equals(clientId)) {
+                return column;
             }
         }
         
-        return null;
+        FacesContext context = this.getFacesContext();
+        ColumnGroup headerGroup = this.getColumnGroup("header");
+        for(UIComponent row : headerGroup.getChildren()) {
+            for(UIComponent col : row.getChildren()) {
+                if(col.getClientId(context).equals(clientId)) {
+                    return (UIColumn) col;
+                }
+            }
+        }
+       
+        throw new FacesException("Cannot find column with key: " + clientId);
     }
 
     public boolean hasFooterColumn() {
@@ -239,4 +258,36 @@ import org.primefaces.util.ComponentUtils;
         else {
             return context.getViewRoot().getLocale();
         }
+    }
+
+    public ColumnGroup getColumnGroup(String target) {
+        for(UIComponent child : this.getChildren()) {
+            if(child instanceof ColumnGroup) {
+                ColumnGroup colGroup = (ColumnGroup) child;
+                String type = colGroup.getType();
+
+                if(type != null && type.equals(target)) {
+                    return colGroup;
+                }
+
+            }
+        }
+
+        return null;
+    }
+
+    private List<UIColumn> columns;
+    
+    public List<UIColumn> getColumns() {
+        if(columns == null) {
+            columns = new ArrayList<UIColumn>();
+            
+            for(UIComponent child : this.getChildren()) {
+                if(child instanceof Column) {
+                    columns.add((UIColumn) child);
+                }
+            }
+        }
+        
+        return columns;
     }

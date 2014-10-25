@@ -46,13 +46,6 @@
 
         </configuration>
     </container>
-    <container qualifier="jboss-remote-domain" >
-        <configuration>
-            <!-- see topics https://community.jboss.org/thread/234070 and https://community.jboss.org/thread/204608 -->
-            <!-- <property name="managementAddress">localhost</property> <property name="managementPort">9999</property>
-                <property name="username">null</property> <property name="password">null</property> -->
-        </configuration>
-    </container>
 
     <!-- extensions config-->
 
@@ -69,9 +62,9 @@
 <!--     </extension> -->
 
 	<extension qualifier="graphene">
-	   <property name="waitGuiInterval">2</property>
-	   <property name="waitAjaxInterval">3</property>
-	   <property name="waitModelInterval">4</property>
+	   <property name="waitGuiInterval">3</property>
+	   <property name="waitAjaxInterval">4</property>
+	   <property name="waitModelInterval">5</property>
 	   
 	</extension>
 	 <extension qualifier="webdriver">

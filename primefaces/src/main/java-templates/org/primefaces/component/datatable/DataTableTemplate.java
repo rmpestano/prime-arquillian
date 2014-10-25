@@ -47,12 +47,16 @@ import org.primefaces.model.SelectableDataModel;
 import org.primefaces.model.SelectableDataModelWrapper;
 import java.lang.reflect.Array;
 import javax.el.ELContext;
+import javax.el.MethodExpression;
 import javax.faces.model.DataModel;
 import javax.faces.FacesException;
 import javax.faces.component.UINamingContainer;
 import org.primefaces.component.api.UIColumn;
 import org.primefaces.component.api.DynamicColumn;
 import javax.faces.context.FacesContext;
+import javax.faces.event.AbortProcessingException;
+import javax.faces.event.ComponentSystemEvent;
+import javax.faces.event.PostRestoreStateEvent;
 import org.primefaces.component.datatable.DataTable;
 import org.primefaces.model.SortMeta;
 import org.primefaces.component.datatable.feature.*;
@@ -113,6 +117,10 @@ import org.primefaces.util.SharedStringBuilder;
     public static final String SUMMARY_ROW_CLASS = "ui-datatable-summaryrow ui-widget-header";
     public static final String EDITING_ROW_CLASS = "ui-row-editing";
     public static final String STICKY_HEADER_CLASS = "ui-datatable-sticky";
+    
+    public static final String MOBILE_TABLE_CLASS = "ui-responsive ui-table ui-table-reflow table-stripe";
+    public static final String MOBILE_COLUMN_HEADER_CLASS = "ui-column-header";
+    public static final String MOBILE_ROW_CLASS = "ui-table-row";
 
     private static final Collection<String> EVENT_NAMES = Collections.unmodifiableCollection(Arrays.asList("page","sort","filter", "rowSelect", 
                                                         "rowUnselect", "rowEdit", "rowEditInit", "rowEditCancel", "colResize", "toggleSelect", "colReorder", "contextMenu"
@@ -264,7 +272,7 @@ import org.primefaces.util.SharedStringBuilder;
                 wrapperEvent = new SortEvent(this, behaviorEvent.getBehavior(), sortColumn, order);
             }
             else if(eventName.equals("filter")) {
-                wrapperEvent = new FilterEvent(this, behaviorEvent.getBehavior(), getFilteredValue(), getFilters());
+                wrapperEvent = new FilterEvent(this, behaviorEvent.getBehavior(), getFilteredValue());
             }
             else if(eventName.equals("rowEdit")||eventName.equals("rowEditCancel")||eventName.equals("rowEditInit")) {
                 int rowIndex = Integer.parseInt(params.get(clientId + "_rowEditIndex"));
@@ -388,6 +396,9 @@ import org.primefaces.util.SharedStringBuilder;
             
             List<?> data = null;
             
+			// #7176
+			calculateFirst();
+			
             if(this.isMultiSort()) {
                 data = lazyModel.load(getFirst(), getRows(), getMultiSortMeta(), getFilters());
             }
@@ -439,13 +450,17 @@ import org.primefaces.util.SharedStringBuilder;
     }
         
     protected String resolveSortField() {
-        UIColumn column = this.getSortColumn();
         String sortField = null;
+        UIColumn column = this.getSortColumn();
         ValueExpression tableSortByVE = this.getValueExpression("sortBy");
         Object tableSortByProperty = this.getSortBy();
         
         if(column == null) {
-            sortField = (tableSortByVE == null) ? (String) tableSortByProperty : resolveStaticField(tableSortByVE);
+            String field = this.getSortField();
+            if(field == null)
+                sortField = (tableSortByVE == null) ? (String) tableSortByProperty : resolveStaticField(tableSortByVE);
+            else
+                sortField = field;
         }
         else {
             ValueExpression columnSortByVE = column.getValueExpression("sortBy");
@@ -523,6 +538,14 @@ import org.primefaces.util.SharedStringBuilder;
         getStateHelper().put("filters", filters);
     }
     
+    public int getScrollOffset() {
+        return (java.lang.Integer) getStateHelper().eval("scrollOffset", 0);
+    }
+    
+    public void setScrollOffset(int scrollOffset) {
+        getStateHelper().put("scrollOffset", scrollOffset);
+    }
+    
     private List filterMetadata;
     public List getFilterMetadata() {
         return filterMetadata;
@@ -547,6 +570,13 @@ import org.primefaces.util.SharedStringBuilder;
         resetValue();
         setFirst(0);
         this.reset = true;
+        this.setValueExpression("sortBy", this.getDefaultSortByVE());
+        this.setSortFunction(this.getDefaultSortFunction());
+        this.setSortOrder(this.getDefaultSortOrder());
+        this.setSortByVE(null);
+        this.setSortColumn(null);
+        this.setSortField(null);
+        this.clearMultiSortMeta();
     }
 
     public boolean isFilteringEnabled() {
@@ -565,37 +595,6 @@ import org.primefaces.util.SharedStringBuilder;
         }
 
         return null;
-    }
-
-    private SelectableDataModelWrapper selectableDataModelWrapper = null;
-
-    /**
-    * Override to support filtering, we return the filtered subset in getValue instead of actual data.
-    * In case selectableDataModel is bound, we wrap it with filtered data.
-    * 
-    */ 
-    @Override
-    public Object getValue() {
-        Object value = super.getValue();
-        List<?> filteredValue = this.getFilteredValue();
-        
-        if(filteredValue != null) {
-            if(value instanceof SelectableDataModel) {
-                return selectableDataModelWrapper == null 
-                                ? (selectableDataModelWrapper = new SelectableDataModelWrapper((SelectableDataModel) value, filteredValue))
-                                : selectableDataModelWrapper;
-            } 
-            else {
-                return filteredValue;
-            }
-        }
-        else {
-            return value;
-        }
-    }
-    
-    public void setSelectableDataModelWrapper(SelectableDataModelWrapper wrapper) {
-        this.selectableDataModelWrapper = wrapper;
     }
 
     public Object getLocalSelection() {
@@ -700,18 +699,24 @@ import org.primefaces.util.SharedStringBuilder;
     protected void addToSelectedRowKeys(Object object, Map<String,Object> map, String var, boolean hasRowKey) {
         if(hasRowKey) {
             map.put(var, object);
-            this.selectedRowKeys.add(this.getRowKey());
+            Object rowKey = this.getRowKey();
+            if (rowKey != null) {
+                this.selectedRowKeys.add(rowKey);
+            }
         }
         else {
-            this.selectedRowKeys.add(this.getRowKeyFromModel(object));
+            Object rowKey = this.getRowKeyFromModel(object);
+            if (rowKey != null) {
+                this.selectedRowKeys.add(rowKey);
+            }
         }
     }
 
-    protected List<Object> getSelectedRowKeys() {
+    public List<Object> getSelectedRowKeys() {
         return selectedRowKeys;
     }
 
-    protected String getSelectedRowKeysAsString() {
+    public String getSelectedRowKeysAsString() {
         StringBuilder builder = SharedStringBuilder.get(SB_GET_SELECTED_ROW_KEYS_AS_STRING);
         for(Iterator<Object> iter = getSelectedRowKeys().iterator(); iter.hasNext();) {
             builder.append(iter.next());
@@ -815,9 +820,21 @@ import org.primefaces.util.SharedStringBuilder;
     
     public void setSortColumn(UIColumn column) {
         this.sortColumn = column;
+        
+        if(column == null)
+            getStateHelper().remove("sortColumnKey");
+        else
+            getStateHelper().put("sortColumnKey", column.getColumnKey());
     }
     public UIColumn getSortColumn() {
-        return this.sortColumn;
+        if(sortColumn == null) {
+            String sortColumnKey = (String) getStateHelper().get("sortColumnKey");
+            if(sortColumnKey != null) {
+                sortColumn = this.findColumn(sortColumnKey);
+            }
+        }
+        
+        return sortColumn;
     }
     
     public boolean isMultiSort() {
@@ -826,21 +843,53 @@ import org.primefaces.util.SharedStringBuilder;
         return (sortMode != null && sortMode.equals("multiple"));
     }
     
-    private List<SortMeta> multiSortMeta;
-    
+    private List<SortMeta> multiSortMeta = null;
+        
     public List<SortMeta> getMultiSortMeta() {
-        if(this.multiSortMeta == null) {
+        if(multiSortMeta != null) {
+            return multiSortMeta;
+        }
+        
+        List<MultiSortState> multiSortStateList = (List<MultiSortState>) this.getStateHelper().get("multiSortState");
+        if(multiSortStateList != null && !multiSortStateList.isEmpty()) {
+            multiSortMeta = new ArrayList<SortMeta>();
+            for(int i = 0; i < multiSortStateList.size(); i++) {
+                MultiSortState multiSortState = multiSortStateList.get(i);
+                SortMeta sortMeta = new SortMeta();
+                sortMeta.setSortBy(this.findColumn(multiSortState.getSortKey()));
+                sortMeta.setSortField(multiSortState.getSortField());
+                sortMeta.setSortOrder(multiSortState.getSortOrder());
+                sortMeta.setSortFunction(multiSortState.getSortFunction());
+
+                multiSortMeta.add(sortMeta);
+            }
+        }
+        else {
             ValueExpression ve = this.getValueExpression("sortBy");
             if(ve != null) {
-                this.multiSortMeta = (List<SortMeta>) ve.getValue(getFacesContext().getELContext());
+                multiSortMeta = (List<SortMeta>) ve.getValue(getFacesContext().getELContext());
             }
         }
         
-        return this.multiSortMeta;
+        return multiSortMeta;
     }
     
     public void setMultiSortMeta(List<SortMeta> value) {
         this.multiSortMeta = value;
+        
+        if(value != null && !value.isEmpty()) {
+            List<MultiSortState> multiSortStateList = new ArrayList<MultiSortState>();
+            for(int i = 0; i < value.size(); i++) {
+                multiSortStateList.add(new MultiSortState(value.get(i)));
+            }
+            
+            this.getStateHelper().put("multiSortState", multiSortStateList);
+        }
+    }
+    
+    private void clearMultiSortMeta() {
+        this.multiSortMeta = null;
+        this.getStateHelper().remove("multiSortState");
     }
     
     public boolean isRTL() {
@@ -908,16 +957,22 @@ import org.primefaces.util.SharedStringBuilder;
                     }
                     else if(child instanceof ColumnGroup) {
                         if(child.getChildCount() > 0) {
-                            for(UIComponent row : child.getChildren()) {
-                                if(row.getChildCount() > 0) {
-                                    for(UIComponent col : row.getChildren()) {
-                                        if(col instanceof Column && col.getFacetCount() > 0) {
-                                            for(UIComponent facet : col.getFacets().values()) {
+                            for(UIComponent columnGroupChild : child.getChildren()) {
+                                if(columnGroupChild instanceof Row && columnGroupChild.getChildCount() > 0) {
+                                    for(UIComponent rowChild : columnGroupChild.getChildren()) {
+                                        if(rowChild instanceof Column && rowChild.getFacetCount() > 0) {
+                                            for(UIComponent facet : rowChild.getFacets().values()) {
                                                 process(context, facet, phaseId);
                                             }
                                         }
+                                        else {
+                                            process(context, rowChild, phaseId);        //e.g ui:repeat
+                                        }
                                     }
-                                }            
+                                }
+                                else {
+                                    process(context, columnGroupChild, phaseId);        //e.g ui:repeat
+                                }         
                             }
                         }
                     }
@@ -932,6 +987,27 @@ import org.primefaces.util.SharedStringBuilder;
     }
     public ValueExpression getSortByVE() {
         return this.sortByVE;
+    }
+    
+    public void setDefaultSortByVE(ValueExpression ve) {
+        this.setValueExpression("defaultSortBy", ve);
+    }
+    public ValueExpression getDefaultSortByVE() {
+        return this.getValueExpression("defaultSortBy");
+    }
+        
+    public void setDefaultSortOrder(String val) {
+        this.getStateHelper().put("defaultSortOrder", val);
+    }
+    public String getDefaultSortOrder() {
+        return (String) this.getStateHelper().get("defaultSortOrder");
+    }
+    
+    public void setDefaultSortFunction(MethodExpression obj) {
+        this.getStateHelper().put("defaultSortFunction", obj);
+    }
+    public MethodExpression getDefaultSortFunction() {
+        return (MethodExpression) this.getStateHelper().get("defaultSortFunction");
     }
     
     public Locale resolveDataLocale() {
@@ -971,3 +1047,42 @@ import org.primefaces.util.SharedStringBuilder;
         return iterableChildren;
     }
     
+    public void processEvent(ComponentSystemEvent event) throws AbortProcessingException {
+        super.processEvent(event);
+        if(!this.isLazy() && event instanceof PostRestoreStateEvent && (this == event.getComponent())) {
+            Object filteredValue = this.getFilteredValue();
+            if(filteredValue != null) {
+                this.updateValue(filteredValue);
+            }
+        }
+    }
+    
+    public void updateFilteredValue(FacesContext context,  List<?> value) {
+        ValueExpression ve = this.getValueExpression("filteredValue");
+        
+        if(ve != null) {
+            ve.setValue(context.getELContext(), value);
+        }
+        else {            
+            this.setFilteredValue(value);
+        }
+    }
+    
+    public void updateValue(Object value) {
+        Object originalValue = this.getValue();
+        if(originalValue instanceof SelectableDataModel)
+            this.setValue(new SelectableDataModelWrapper((SelectableDataModel) originalValue, value));
+        else
+            this.setValue(value);
+    }
+    
+    @Override
+    public Object saveState(FacesContext context) {
+        if(this.isFilteringEnabled()) {
+            this.setValue(null);
+        }
+    
+        return super.saveState(context);
+    } 
+    
+   

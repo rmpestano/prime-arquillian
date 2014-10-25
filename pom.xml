@@ -5,7 +5,7 @@
     <groupId>org.primefaces</groupId>
     <artifactId>prime-arquillian</artifactId>
     <packaging>pom</packaging>
-    <version>5.1-SNAPSHOT</version>
+    <version>5.2-SNAPSHOT</version>
     <name>prime-arquillian</name>
     <url>http://www.primefaces.org</url>
 

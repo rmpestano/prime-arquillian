@@ -128,7 +128,7 @@ import org.primefaces.model.ScheduleEvent;
                 wrapperEvent = new ScheduleEntryResizeEvent(this, behaviorEvent.getBehavior(), resizedEvent, dayDelta, minuteDelta);
             }
             else if(eventName.equals("viewChange")) {
-				wrapperEvent = new SelectEvent(this, behaviorEvent.getBehavior(), params.get(clientId + "_view"));
+				wrapperEvent = new SelectEvent(this, behaviorEvent.getBehavior(), this.getView());
             }
 
             wrapperEvent.setPhaseId(behaviorEvent.getPhaseId());
@@ -147,4 +147,19 @@ import org.primefaces.model.ScheduleEvent;
     @Override
     public Collection<String> getEventNames() {
         return EVENT_NAMES;
+    }
+
+    @Override
+    public void processUpdates(FacesContext context) {
+        if(!isRendered()) {
+            return;
+        }
+
+        super.processUpdates(context);
+
+        ValueExpression expr = this.getValueExpression("view");
+        if(expr != null) {
+            expr.setValue(getFacesContext().getELContext(), this.getView());
+            getStateHelper().remove(PropertyKeys.view);
+        }
     }

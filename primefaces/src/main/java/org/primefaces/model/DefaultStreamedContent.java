@@ -16,12 +16,11 @@
 package org.primefaces.model;
 
 import java.io.InputStream;
-import java.io.Serializable;
 
 /**
  * Default implementation of a StreamedContent
  */
-public class DefaultStreamedContent implements StreamedContent, Serializable {
+public class DefaultStreamedContent implements StreamedContent {
 	
 	private InputStream stream;
 	
@@ -33,25 +32,22 @@ public class DefaultStreamedContent implements StreamedContent, Serializable {
 	
 	public DefaultStreamedContent() {}
 	
-	public DefaultStreamedContent(InputStream stream) {
+    public DefaultStreamedContent(InputStream stream) {
 		this.stream = stream;
 	}
 	
 	public DefaultStreamedContent(InputStream stream, String contentType) {
+        this(stream);
 		this.contentType = contentType;
-		this.stream = stream;
 	}
 	
 	public DefaultStreamedContent(InputStream stream, String contentType, String name) {
-		this.contentType = contentType;
-		this.stream = stream;
+		this(stream, contentType);
 		this.name = name;
 	}
     
     public DefaultStreamedContent(InputStream stream, String contentType, String name, String contentEncoding) {
-		this.contentType = contentType;
-		this.stream = stream;
-		this.name = name;
+		this(stream, contentType, name);
         this.contentEncoding = contentEncoding;
 	}
 

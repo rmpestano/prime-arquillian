@@ -37,6 +37,15 @@ public class ScheduleRenderer extends CoreRenderer {
 
     @Override
 	public void decode(FacesContext context, UIComponent component) {
+        Schedule schedule = (Schedule) component;
+        String clientId = schedule.getClientId(context);
+        String viewId = clientId + "_view";
+        Map<String,String> params = context.getExternalContext().getRequestParameterMap();
+        
+        if(params.containsKey(viewId)) {
+            schedule.setView(params.get(viewId));
+        }
+        
         decodeBehaviors(context, component);
 	}
 
@@ -175,6 +184,8 @@ public class ScheduleRenderer extends CoreRenderer {
 		writer.startElement("div", null);
 		writer.writeAttribute("id", clientId + "_container", null);
 		writer.endElement("div");
+        
+        encodeStateParam(context, schedule);
 		
 		writer.endElement("div");
 	}
@@ -188,4 +199,20 @@ public class ScheduleRenderer extends CoreRenderer {
 	public boolean getRendersChildren() {
 		return true;
 	}
+
+    protected void encodeStateParam(FacesContext context, Schedule schedule) throws IOException {
+        ResponseWriter writer = context.getResponseWriter();
+        String id = schedule.getClientId(context) + "_view";
+        String view = schedule.getView();
+        
+		writer.startElement("input", null);
+		writer.writeAttribute("type", "hidden", null);
+		writer.writeAttribute("id", id, null);
+		writer.writeAttribute("name", id, null);
+        writer.writeAttribute("autocomplete", "off", null);
+        if(view != null) {
+            writer.writeAttribute("value", view, null);
+        }
+		writer.endElement("input");
+    }
 }

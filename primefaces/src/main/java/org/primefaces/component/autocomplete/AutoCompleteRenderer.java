@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import javax.faces.application.ProjectStage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
@@ -251,13 +250,17 @@ public class AutoCompleteRenderer extends InputRenderer {
     protected void encodeDropDown(FacesContext context, AutoComplete ac) throws IOException {
         ResponseWriter writer = context.getResponseWriter();
         String dropdownClass = AutoComplete.DROPDOWN_CLASS;
-        if(ac.isDisabled()) {
+        boolean disabled = ac.isDisabled();
+        if(disabled) {
             dropdownClass += " ui-state-disabled";
         }
         
         writer.startElement("button", ac);
         writer.writeAttribute("class", dropdownClass, null);
         writer.writeAttribute("type", "button", null);
+        if(disabled) {
+            writer.writeAttribute("disabled", "disabled", null);
+        }
         if(ac.getTabindex() != null) {
             writer.writeAttribute("tabindex", ac.getTabindex(), null);
         }
@@ -298,6 +301,7 @@ public class AutoCompleteRenderer extends InputRenderer {
         List values = (List) ac.getValue();
         List<String> stringValues = new ArrayList<String>();
         boolean disabled = ac.isDisabled();
+        String tabindex = ac.getTabindex();
         
         String styleClass = ac.getStyleClass();
         styleClass = styleClass == null ? AutoComplete.MULTIPLE_STYLE_CLASS : AutoComplete.MULTIPLE_STYLE_CLASS + " " + styleClass;
@@ -361,14 +365,9 @@ public class AutoCompleteRenderer extends InputRenderer {
         writer.writeAttribute("id", inputId, null);
         writer.writeAttribute("name", inputId, null);
         writer.writeAttribute("autocomplete", "off", null);
-        if(disabled) {
-            writer.writeAttribute("disabled", "disabled", "disabled");
-        }
-        
-        if(ac.getMaxlength() != Integer.MIN_VALUE)
-        {
-            writer.writeAttribute("maxlength", ""+ac.getMaxlength(),null);
-        }
+        if(disabled) writer.writeAttribute("disabled", "disabled", "disabled");
+        if(tabindex != null) writer.writeAttribute("tabindex", tabindex, null);
+        if(ac.getMaxlength() != Integer.MIN_VALUE)writer.writeAttribute("maxlength", ""+ac.getMaxlength(),null);
         
         writer.endElement("input");
         writer.endElement("li");
@@ -450,6 +449,7 @@ public class AutoCompleteRenderer extends InputRenderer {
                 String value = converter == null ? (String) ac.getItemValue() : converter.getAsString(context, ac, ac.getItemValue());
                 writer.writeAttribute("data-item-value", value, null);
                 writer.writeAttribute("data-item-label", ac.getItemLabel(), null);
+                writer.writeAttribute("data-item-group", ac.getGroupBy(), null);
             }
             
             for(Column column : ac.getColums()) {
@@ -497,6 +497,7 @@ public class AutoCompleteRenderer extends InputRenderer {
                 String value = converter == null ? (String) ac.getItemValue() : converter.getAsString(context, ac, ac.getItemValue());
                 writer.writeAttribute("data-item-value", value, null);
                 writer.writeAttribute("data-item-label", ac.getItemLabel(), null);
+                writer.writeAttribute("data-item-group", ac.getGroupBy(), null);
                 
                 writer.writeText(ac.getItemLabel(), null);
             }
@@ -528,15 +529,6 @@ public class AutoCompleteRenderer extends InputRenderer {
         String clientId = ac.getClientId(context);
         WidgetBuilder wb = getWidgetBuilder(context);
         wb.initWithDomReady("AutoComplete", ac.resolveWidgetVar(), clientId);
-
-        if (context.isProjectStage(ProjectStage.Development)) {
-	        if (ac.getAttributes().containsKey("process")
-	        		|| ac.getAttributes().containsKey("global")
-	        		|| ac.getAttributes().containsKey("onstart")
-	        		|| ac.getAttributes().containsKey("oncomplete")) {
-	        	LOG.warning("The process/global/onstart/oncomplete attribute of AutoComplete was removed. Please use p:ajax with the query event now");
-	        }
-        }
         
         wb.attr("minLength", ac.getMinQueryLength(), 1)
             .attr("delay", ac.getQueryDelay())
@@ -544,7 +536,10 @@ public class AutoCompleteRenderer extends InputRenderer {
             .attr("forceSelection", ac.isForceSelection(), false)
             .attr("scrollHeight", ac.getScrollHeight(), Integer.MAX_VALUE)
             .attr("multiple", ac.isMultiple(), false)
-            .attr("appendTo", SearchExpressionFacade.resolveComponentForClient(context, ac, ac.getAppendTo()), null);
+            .attr("appendTo", SearchExpressionFacade.resolveComponentForClient(context, ac, ac.getAppendTo()), null)
+            .attr("grouping", ac.getValueExpression("groupBy") != null, false)
+            .attr("queryEvent", ac.getQueryEvent(), null)
+            .attr("dropdownMode", ac.getDropdownMode(), null);
         
         if(ac.isCache()) {
             wb.attr("cache", true).attr("cacheTimeout", ac.getCacheTimeout());            
@@ -556,10 +551,8 @@ public class AutoCompleteRenderer extends InputRenderer {
                 .attr("effectDuration", ac.getEffectDuration(), Integer.MAX_VALUE);
         }
         
-        String emptyMessage = ac.getEmptyMessage();
-        if(emptyMessage != null) {
-            wb.attr("emptyMessage", emptyMessage, null);
-        }
+        wb.attr("emptyMessage", ac.getEmptyMessage(), null)
+            .attr("resultsMesage", ac.getResultsMessage(), null);
         
         if(ac.getFacet("itemtip") != null) {
             wb.attr("itemtip", true, false)

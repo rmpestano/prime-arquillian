@@ -20,6 +20,8 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import org.primefaces.component.chart.Chart;
 import org.primefaces.model.chart.ChartModel;
+import org.primefaces.model.chart.LegendPlacement;
+import org.primefaces.util.ComponentUtils;
 
 public abstract class BasePlotRenderer {
     
@@ -36,25 +38,33 @@ public abstract class BasePlotRenderer {
         String legendPosition = model.getLegendPosition();
         String title = model.getTitle();
         String seriesColors = model.getSeriesColors();
+        String negativeSeriesColors = model.getNegativeSeriesColors();
         String extender = model.getExtender();
 
         if(title != null)
-            writer.write(",title:'" + title + "'");
+            writer.write(",title:\"" + ComponentUtils.escapeText(title) + "\"");
         
         if(!model.isShadow())
             writer.write(",shadow:false");
         
         if(seriesColors != null)
-            writer.write(",seriesColors:['#" +  seriesColors.replaceAll("[ ]*,[ ]*", "','#") + "']");
+            writer.write(",seriesColors:[\"#" +  seriesColors.replaceAll("[ ]*,[ ]*", "\",\"#") + "\"]");
+        
+        if(negativeSeriesColors != null)
+            writer.write(",negativeSeriesColors:[\"#" +  negativeSeriesColors.replaceAll("[ ]*,[ ]*", "\",\"#") + "\"]");
         
         if(legendPosition != null) {
-            writer.write(",legendPosition:'" + legendPosition + "'");
+            LegendPlacement legendPlacement = model.getLegendPlacement();
+            writer.write(",legendPosition:\"" + legendPosition + "\"");
             
             if(model.getLegendCols() != 0)
                 writer.write(",legendCols:" + model.getLegendCols());
             
             if(model.getLegendRows() != 0)
                 writer.write(",legendRows:" + model.getLegendRows());
+            
+            if(legendPlacement != null)
+                writer.write(",legendPlacement:\"" + legendPlacement + "\"");
         }
         
         if(!model.isMouseoverHighlight())

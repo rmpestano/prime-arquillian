@@ -46,12 +46,14 @@ public class NativeFileUploadDecoder {
     }
     
     private static void decodeSimple(FacesContext context, FileUpload fileUpload, HttpServletRequest request) throws IOException, ServletException {
-        String clientId = fileUpload.getClientId(context);
-        Part part = request.getPart(clientId);
+        Part part = request.getPart(fileUpload.getSimpleInputDecodeId(context));
         
         if(part != null) {
             fileUpload.setTransient(true);
             fileUpload.setSubmittedValue(new NativeUploadedFile(part));
+        }
+        else {
+            fileUpload.setSubmittedValue("");
         }
 	}
     

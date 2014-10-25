@@ -162,7 +162,6 @@
             <name>emptyMessage</name>
             <required>false</required>
             <type>java.lang.String</type>
-            <defaultValue></defaultValue>
             <description>Text to display when there is no data to display.</description>
         </attribute>
         <attribute>
@@ -170,6 +169,31 @@
             <required>false</required>
             <type>java.lang.String</type>
             <description>Appends the overlay to the element defined by search expression. Defaults to document body.</description>
+        </attribute>
+        <attribute>
+            <name>resultsMessage</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+            <description>Hint text for screen readers to provide information about the search results. Default is "{0} results found, use arrow keys to navigate".</description>
+        </attribute>
+        <attribute>
+            <name>groupBy</name>
+            <required>false</required>
+            <type>java.lang.Object</type>
+            <description>Value to group items in categories.</description>
+        </attribute>
+        <attribute>
+            <name>queryEvent</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+            <description>Event to initiate the query, valid values are "keyup" and "enter".</description>
+        </attribute>
+        <attribute>
+            <name>dropdownMode</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+            <description>Specifies the behavior dropdown button. Default "blank" mode
+            sends an empty string and "current" mode sends the input value.</description>
         </attribute>
     </attributes>
     <resources>
